@@ -1,18 +1,16 @@
 import React from "react";
+import CardBarChart from "../../components/Cards/CardBarChart";
+import CardLineChart from "../../components/Cards/CardLineChart";
+import CardPageVisits from "../../components/Cards/CardPageVisits";
+import CardSocialTraffic from "../../components/Cards/CardSocialTraffic";
 
 // components
 
-import CardLineChart from "components/Cards/CardLineChart.js";
-import CardBarChart from "components/Cards/CardBarChart.js";
-import CardPageVisits from "components/Cards/CardPageVisits.js";
-import CardSocialTraffic from "components/Cards/CardSocialTraffic.js";
+import Admin from "../../layouts/Admin";
 
 // layout for page
 
-import Admin from "layouts/Admin.js";
-
-export default function Dashboard() {
-  const [session, loading] = useSession();
+export default function Yonetim() {
   return (
     <>
       <div className="flex flex-wrap">
@@ -35,4 +33,4 @@ export default function Dashboard() {
   );
 }
 
-Dashboard.layout = Admin;
+Yonetim.layout = Admin;

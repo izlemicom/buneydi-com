@@ -2,7 +2,7 @@ import React from "react";
 
 // components
 
-import CardStats from "components/Cards/CardStats.js";
+import CardStats from "../Cards/CardStats.jsx";
 
 export default function HeaderStats() {
   return (

@@ -5,7 +5,7 @@ import Head from "next/head";
 import Router from "next/router";
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import "styles/tailwind.css";
+import "../styles/tailwind.css";
 import PageChange from "../components/PageChange/PageChange";
 
 Router.events.on("routeChangeStart", (url) => {
@@ -38,7 +38,7 @@ export default class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props;
 
-    const Layout = Component.layout || (({ children }) => <>{children}</>);
+    const Layout: any = Component.layout || (({ children }) => <>{children}</>);
 
     return (
       <React.Fragment>
