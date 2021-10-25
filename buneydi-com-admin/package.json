@@ -1,10 +1,10 @@
 {
-  "name": "notus-nextjs",
-  "homepage": "https://demos.creative-tim.com/notus-nextjs",
+  "name": "buneydi-com-admin",
+  "homepage": "https://www.buneydi.com",
   "version": "1.1.0",
-  "description": "Notus NextJS - A free Tailwind CSS, NextJS and React Ui Kit and Admin by Creative Tim.",
-  "repository": "https://github.com/creativetimofficial/notus-nextjs",
-  "license": "MIT",
+  "description": "",
+  "repository": "",
+  "license": "",
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^3.0.3",
     "@fortawesome/fontawesome-free": "5.15.3",
