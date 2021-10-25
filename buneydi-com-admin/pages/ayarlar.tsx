@@ -1,13 +1,11 @@
 import React from "react";
+import CardProfile from "../components/Cards/CardProfile";
+import CardSettings from "../components/Cards/CardSettings";
+import Admin from "../layouts/Admin";
 
 // components
 
-import CardSettings from "components/Cards/CardSettings.js";
-import CardProfile from "components/Cards/CardProfile.js";
-
 // layout for page
-
-import Admin from "layouts/Admin.js";
 
 export default function Settings() {
   return (
