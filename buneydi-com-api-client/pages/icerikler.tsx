@@ -8,8 +8,8 @@ import PostCardWide from "../components/PostCardWide";
 function Icerikler({ data }) {
   let { posts, postCount } = data;
   let a = "";
-  if (postCount > 4) {
-    a = posts[3].id;
+  if (postCount > 5) {
+    a = posts[4].id;
   }
   let mainOption = "getlatestposts";
   const [allPosts, setAllPosts] = useState(posts);
@@ -23,9 +23,13 @@ function Icerikler({ data }) {
     }).then(function (response) {
       return response.data;
     });
-    if (morePosts.length === 4) setCursor(morePosts[3].id);
-    morePosts = allPosts.concat(morePosts);
-    setAllPosts(morePosts);
+    let newPosts = morePosts.posts;
+    postCount = morePosts.postCount;
+    if (newPosts.length === 5) setCursor(newPosts[4].id);
+    console.log(newPosts);
+    newPosts = allPosts.concat(newPosts);
+    console.log(newPosts);
+    setAllPosts(newPosts);
   }
   async function getFirstPosts(option) {
     const data: any = await axios({
@@ -37,8 +41,8 @@ function Icerikler({ data }) {
     posts = data.posts;
     postCount = data.postCount;
     let a = "";
-    if (postCount > 4) {
-      a = posts[3].id;
+    if (postCount > 5) {
+      a = posts[4].id;
     }
     mainOption = option;
     setAllPosts(posts);

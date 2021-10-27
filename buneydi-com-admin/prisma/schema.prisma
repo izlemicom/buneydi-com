@@ -1,14 +1,17 @@
-generator client {
-  provider = "prisma-client-js"
-}
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+generator client {
+  provider = "prisma-client-js"
+}
+
 model Account {
-  id                 String    @id
+  id                 String    @id @default(cuid())
   userId             String
   providerType       String
   providerId         String
@@ -17,170 +20,174 @@ model Account {
   accessToken        String?
   accessTokenExpires DateTime?
   createdAt          DateTime  @default(now())
-  updatedAt          DateTime
-  User               User      @relation(fields: [userId], references: [id])
+  updatedAt          DateTime  @updatedAt
+  user               User      @relation(fields: [userId], references: [id])
 
   @@unique([providerId, providerAccountId])
 }
 
-model Ad {
-  id          String  @id
-  imageUrl    String
-  redirectUrl String
-  state       AdState @default(NOTPUBLISHED)
-}
-
-model Comment {
-  id             String           @id
-  content        String
-  userId         String
-  postId         String
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime
-  Post           Post             @relation(fields: [postId], references: [id])
-  User           User             @relation(fields: [userId], references: [id])
-  CommentDislike CommentDislike[]
-  CommentLike    CommentLike[]
-}
-
-model CommentDislike {
-  id        String   @id
-  commentId String
-  userId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime
-  Comment   Comment  @relation(fields: [commentId], references: [id])
-  User      User     @relation(fields: [userId], references: [id])
-}
-
-model CommentLike {
-  id        String   @id
-  commentId String
-  userId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime
-  Comment   Comment  @relation(fields: [commentId], references: [id])
-  User      User     @relation(fields: [userId], references: [id])
-}
-
-model Image {
-  id     String @id
-  url    String
-  postId String
-  userId String
-  Post   Post   @relation(fields: [postId], references: [id])
-  User   User   @relation(fields: [userId], references: [id])
-}
-
-model Post {
-  id          String        @id
-  title       String
-  content     String
-  slug        String        @unique
-  mainImage   String
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime
-  state       State         @default(DRAFT)
-  userId      String
-  User        User          @relation(fields: [userId], references: [id])
-  Comment     Comment[]
-  Image       Image[]
-  PostDislike PostDislike[]
-  PostLike    PostLike[]
-  PostViews   PostViews[]
-  Tag         Tag[]
-}
-
-model PostDislike {
-  id        String   @id
-  userId    String
-  postId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime
-  Post      Post     @relation(fields: [postId], references: [id])
-  User      User     @relation(fields: [userId], references: [id])
-}
-
-model PostLike {
-  id        String   @id
-  userId    String
-  postId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime
-  Post      Post     @relation(fields: [postId], references: [id])
-  User      User     @relation(fields: [userId], references: [id])
-}
-
-model PostViews {
-  id     String @id
-  ip     String
-  postId String
-  Post   Post   @relation(fields: [postId], references: [id])
-}
-
 model Session {
-  id           String   @id
+  id           String   @id @default(cuid())
   userId       String
   expires      DateTime
   sessionToken String   @unique
   accessToken  String   @unique
   createdAt    DateTime @default(now())
-  updatedAt    DateTime
-  User         User     @relation(fields: [userId], references: [id])
-}
-
-model Tag {
-  id        String   @id
-  content   String   @unique
-  slug      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime
-  userId    String
-  User      User     @relation(fields: [userId], references: [id])
-  Post      Post[]
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id])
 }
 
 model User {
-  id             String           @id
-  name           String?
-  email          String?          @unique
-  emailVerified  DateTime?
-  image          String?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime
-  role           Role             @default(USER)
-  Account        Account[]
-  Comment        Comment[]
-  CommentDislike CommentDislike[]
-  CommentLike    CommentLike[]
-  Image          Image[]
-  Post           Post[]
-  PostDislike    PostDislike[]
-  PostLike       PostLike[]
-  Session        Session[]
-  Tag            Tag[]
+  id              String           @id @default(cuid())
+  name            String?
+  email           String?          @unique
+  emailVerified   DateTime?
+  image           String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  accounts        Account[]
+  sessions        Session[]
+  posts           Post[]
+  comments        Comment[]
+  postlikes       PostLike[]
+  postDislikes    PostDislike[]
+  commentLikes    CommentLike[]
+  commentDislikes CommentDislike[]
+  role            Role             @default(USER)
+  tags            Tag[]
+  addedImages     Image[]
+  PostViews       PostViews[]
 }
 
 model VerificationRequest {
-  id         String   @id
+  id         String   @id @default(cuid())
   identifier String
   token      String   @unique
   expires    DateTime
   createdAt  DateTime @default(now())
-  updatedAt  DateTime
+  updatedAt  DateTime @updatedAt
 
   @@unique([identifier, token])
 }
 
-enum AdState {
-  NOTPUBLISHED
-  PUBLISHED
+model Post {
+  id           String        @id @default(cuid())
+  title        String
+  content      String
+  slug         String        @unique
+  mainImage    String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  state        State         @default(DRAFT)
+  user         User          @relation(fields: [userId], references: [id])
+  userId       String
+  comments     Comment[]
+  postViews    PostViews[]
+  postLikes    PostLike[]
+  postDislikes PostDislike[]
+  tags         Tag[]
+  images       Image[]
+}
+
+model Comment {
+  id              String           @id @default(cuid())
+  content         String
+  user            User             @relation(fields: [userId], references: [id])
+  userId          String
+  post            Post             @relation(fields: [postId], references: [id])
+  postId          String
+  commentLikes    CommentLike[]
+  commentDislikes CommentDislike[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model PostViews {
+  id        String   @id @default(cuid())
+  ip        String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+}
+
+model PostLike {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PostDislike {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CommentLike {
+  id        String   @id @default(cuid())
+  comment   Comment  @relation(fields: [commentId], references: [id])
+  commentId String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CommentDislike {
+  id        String   @id @default(cuid())
+  comment   Comment  @relation(fields: [commentId], references: [id])
+  commentId String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  content   String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy User     @relation(fields: [userId], references: [id])
+  userId    String
+  posts     Post[]
+}
+
+model Image {
+  id      String @id @default(cuid())
+  url     String
+  post    Post   @relation(fields: [postId], references: [id])
+  postId  String
+  addedBy User   @relation(fields: [userId], references: [id])
+  userId  String
+}
+
+model Ad {
+  id          String  @id @default(cuid())
+  imageUrl    String
+  redirectUrl String
+  state       AdState @default(NOTPUBLISHED)
 }
 
 enum Role {
   USER
   AUTHOR
   ADMIN
+}
+
+enum AdState {
+  NOTPUBLISHED
+  PUBLISHED
 }
 
 enum State {

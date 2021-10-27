@@ -1,35 +1,28 @@
 import React from "react";
 import Chart from "chart.js";
+import { getAllDaysFrom } from "../../lib/week";
 
-export default function CardBarChart() {
+export default function CardBarChart({ type, title, fvalues, lvalues }) {
   React.useEffect(() => {
     let config = {
       type: "bar",
       data: {
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-        ],
+        labels: getAllDaysFrom(7),
         datasets: [
           {
-            label: new Date().getFullYear(),
+            label: "Bu Hafta",
             backgroundColor: "#ed64a6",
             borderColor: "#ed64a6",
-            data: [30, 78, 56, 34, 100, 45, 13],
+            data: lvalues,
             fill: false,
             barThickness: 8,
           },
           {
-            label: new Date().getFullYear() - 1,
+            label: "Geçen Hafta",
             fill: false,
             backgroundColor: "#4c51bf",
             borderColor: "#4c51bf",
-            data: [27, 68, 86, 74, 10, 4, 87],
+            data: fvalues,
             barThickness: 8,
           },
         ],
@@ -95,8 +88,8 @@ export default function CardBarChart() {
         },
       },
     };
-    let ctx = document.getElementById("bar-chart").getContext("2d");
-    window.myBar = new Chart(ctx, config);
+    let ctx = document.getElementById(type).getContext("2d");
+    window.type = new Chart(ctx, config);
   }, []);
   return (
     <>
@@ -104,11 +97,8 @@ export default function CardBarChart() {
         <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
           <div className="flex flex-wrap items-center">
             <div className="relative w-full max-w-full flex-grow flex-1">
-              <h6 className="uppercase text-blueGray-400 mb-1 text-xs font-semibold">
-                Performance
-              </h6>
               <h2 className="text-blueGray-700 text-xl font-semibold">
-                Total orders
+                {title}
               </h2>
             </div>
           </div>
@@ -116,7 +106,7 @@ export default function CardBarChart() {
         <div className="p-4 flex-auto">
           {/* Chart */}
           <div className="relative h-350-px">
-            <canvas id="bar-chart"></canvas>
+            <canvas id={type}></canvas>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import Auth from "../layouts/Auth";
 
 // layout for page
 
-export default function Register() {
+export default function KayitOl() {
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -119,4 +119,4 @@ export default function Register() {
   );
 }
 
-Register.layout = Auth;
+KayitOl.layout = Auth;

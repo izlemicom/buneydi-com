@@ -32,6 +32,7 @@ function PostPage({ post, relatedPosts, firstComments }) {
       data: {
         ip: result.ip,
         postid: post.id,
+        userid: post.user.id,
       },
     })
       .then(function (response) {

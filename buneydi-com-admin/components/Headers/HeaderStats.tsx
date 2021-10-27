@@ -1,9 +1,16 @@
+import { useSession } from "next-auth/client";
 import React from "react";
+import {
+  arrowsColorHelper,
+  arrowsHelper,
+  percentageHelper,
+} from "../../lib/statshelper";
 import CardStats from "../Cards/CardStats";
 
 // components
 
-export default function HeaderStats() {
+export default function HeaderStats({ total, firstWeek, lastWeek }) {
+  const [session, loading] = useSession();
   return (
     <>
       {/* Header */}
@@ -15,11 +22,20 @@ export default function HeaderStats() {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="KAZANÇ"
-                  statTitle="50"
-                  statArrow="up"
-                  statPercent="3.48"
-                  statPercentColor="text-emerald-500"
-                  statDescripiron="Since last month"
+                  statTitle={(total.viewCount * 0.1).toString()}
+                  statArrow={arrowsHelper(
+                    firstWeek.viewCount,
+                    lastWeek.viewCount
+                  )}
+                  statPercent={percentageHelper(
+                    firstWeek.viewCount,
+                    lastWeek.viewCount
+                  )}
+                  statPercentColor={arrowsColorHelper(
+                    firstWeek.viewCount,
+                    lastWeek.viewCount
+                  )}
+                  statDescripiron="Geçen haftadan itibaren"
                   statIconName="fas fa-lira-sign"
                   statIconColor="bg-emerald-500"
                 />
@@ -27,11 +43,20 @@ export default function HeaderStats() {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="GÖRÜNTÜLENME SAYISI"
-                  statTitle="2356"
-                  statArrow="down"
-                  statPercent="3.48"
-                  statPercentColor="text-red-500"
-                  statDescripiron="Since last week"
+                  statTitle={total.viewCount.toString()}
+                  statArrow={arrowsHelper(
+                    firstWeek.viewCount,
+                    lastWeek.viewCount
+                  )}
+                  statPercent={percentageHelper(
+                    firstWeek.viewCount,
+                    lastWeek.viewCount
+                  )}
+                  statPercentColor={arrowsColorHelper(
+                    firstWeek.viewCount,
+                    lastWeek.viewCount
+                  )}
+                  statDescripiron="Geçen haftadan itibaren"
                   statIconName="fas fa-eye"
                   statIconColor="bg-orange-500"
                 />
@@ -39,25 +64,43 @@ export default function HeaderStats() {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="YORUM SAYISI"
-                  statTitle="924"
-                  statArrow="down"
-                  statPercent="1.10"
-                  statPercentColor="text-orange-500"
-                  statDescripiron="Since yesterday"
+                  statTitle={total.commentCount.toString()}
+                  statArrow={arrowsHelper(
+                    firstWeek.commentCount,
+                    lastWeek.commentCount
+                  )}
+                  statPercent={percentageHelper(
+                    firstWeek.commentCount,
+                    lastWeek.commentCount
+                  )}
+                  statPercentColor={arrowsColorHelper(
+                    firstWeek.commentCount,
+                    lastWeek.commentCount
+                  )}
+                  statDescripiron="Geçen haftadan itibaren"
                   statIconName="fas fa-comment"
-                  statIconColor="bg-pink-500"
+                  statIconColor="bg-lightBlue-500"
                 />
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="BEĞENİ SAYISI"
-                  statTitle="125"
-                  statArrow="up"
-                  statPercent="12"
-                  statPercentColor="text-emerald-500"
-                  statDescripiron="Since last month"
+                  statTitle={total.likeCount.toString()}
+                  statArrow={arrowsHelper(
+                    firstWeek.likeCount,
+                    lastWeek.likeCount
+                  )}
+                  statPercent={percentageHelper(
+                    firstWeek.likeCount,
+                    lastWeek.likeCount
+                  )}
+                  statPercentColor={arrowsColorHelper(
+                    firstWeek.likeCount,
+                    lastWeek.likeCount
+                  )}
+                  statDescripiron="Geçen haftadan itibaren"
                   statIconName="fas fa-heart"
-                  statIconColor="bg-lightBlue-500"
+                  statIconColor="bg-red-500"
                 />
               </div>
             </div>

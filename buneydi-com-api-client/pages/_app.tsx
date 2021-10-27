@@ -1,8 +1,6 @@
 import "tailwindcss/tailwind.css";
 import "../styles/font-awesome/css/all.min.css";
 import { Provider } from "next-auth/client";
-import Script from "next/script";
-import Head from "next/head";
 
 // import App from "next/app";
 import type { AppProps /*, AppContext */ } from "next/app";

@@ -7,7 +7,7 @@ export default async function setView(
 ) {
   if (req.method !== "POST")
     return res.status(400).json({ err: "Gönderim metodu yanlış." });
-  const { ip, postid } = req.body;
+  const { ip, postid, userid } = req.body;
   if (!ip) return res.status(400).json({ err: "Slug eklenmemiş." });
 
   const views = await prisma.postViews.count({
@@ -34,6 +34,11 @@ export default async function setView(
       post: {
         connect: {
           id: postid.toString(),
+        },
+      },
+      user: {
+        connect: {
+          id: userid.toString(),
         },
       },
     },

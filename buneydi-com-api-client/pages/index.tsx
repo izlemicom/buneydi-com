@@ -62,7 +62,15 @@ export default function Home({
             {mostLikedPostsData.posts.map((post) => (
               <PostCardText key={post.id} post={post} />
             ))}
-            {mostLikedPostsData.posts.map((post) => (
+            <div className="py-2 border-b-4 ">
+              <Link href="/icerikler">
+                <a className="flex text-3xl font-bold items-center space-x-2">
+                  <i className="fas fa-hourglass-end text-4xl"></i>
+                  <h1 className="hover:underline">En Son Yayınlananlar</h1>
+                </a>
+              </Link>
+            </div>
+            {latestPostsData.posts.map((post) => (
               <PostCardText key={post.id} post={post} />
             ))}
           </div>
@@ -75,25 +83,29 @@ export default function Home({
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const latestPostsData = await axios({
     method: "GET",
-    url: `http://localhost:3000/api/getlatestposts?a=${5}&isfirst=${true}`,
+    url: `/getlatestposts?a=${5}&isfirst=${true}`,
+    baseURL: process.env.BASE_API_URL,
   }).then(function (response) {
     return response.data;
   });
   const mostViewedPostsData = await axios({
     method: "GET",
-    url: `http://localhost:3000/api/getmostviewedposts?a=${5}&isfirst=${true}`,
+    url: `/getmostviewedposts?a=${5}&isfirst=${true}`,
+    baseURL: process.env.BASE_API_URL,
   }).then(function (response) {
     return response.data;
   });
   const mostLikedPostsData = await axios({
     method: "GET",
-    url: `http://localhost:3000/api/getmostlikedposts?a=${15}&isfirst=${true}`,
+    url: `/getmostlikedposts?a=${10}&isfirst=${true}`,
+    baseURL: process.env.BASE_API_URL,
   }).then(function (response) {
     return response.data;
   });
   const mostTalkedPostsData = await axios({
     method: "GET",
-    url: `http://localhost:3000/api/getmosttalkedposts?a=${4}&isfirst=${true}`,
+    url: `/getmosttalkedposts?a=${4}&isfirst=${true}`,
+    baseURL: process.env.BASE_API_URL,
   }).then(function (response) {
     return response.data;
   });

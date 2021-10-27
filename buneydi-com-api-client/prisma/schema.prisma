@@ -38,24 +38,23 @@ model Session {
 }
 
 model User {
-  id              String           @id @default(cuid())
-  name            String?
-  email           String?          @unique
-  emailVerified   DateTime?
-  image           String?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  accounts        Account[]
-  sessions        Session[]
-  posts           Post[]
-  comments        Comment[]
-  postlikes       PostLike[]
-  postDislikes    PostDislike[]
-  commentLikes    CommentLike[]
-  commentDislikes CommentDislike[]
-  role            Role             @default(USER)
-  tags            Tag[]
-  addedImages     Image[]
+  id            String        @id @default(cuid())
+  name          String?
+  email         String?       @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+  posts         Post[]
+  comments      Comment[]
+  postlikes     PostLike[]
+  commentLikes  CommentLike[]
+  role          Role          @default(USER)
+  tags          Tag[]
+  addedImages   Image[]
+  postViews     PostViews[]
 }
 
 model VerificationRequest {
@@ -70,42 +69,43 @@ model VerificationRequest {
 }
 
 model Post {
-  id           String        @id @default(cuid())
-  title        String
-  content      String
-  slug         String        @unique
-  mainImage    String
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  state        State         @default(DRAFT)
-  user         User          @relation(fields: [userId], references: [id])
-  userId       String
-  comments     Comment[]
-  postViews    PostViews[]
-  postLikes    PostLike[]
-  postDislikes PostDislike[]
-  tags         Tag[]
-  images       Image[]
+  id        String      @id @default(cuid())
+  title     String
+  content   String
+  slug      String      @unique
+  mainImage String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  state     State       @default(DRAFT)
+  user      User        @relation(fields: [userId], references: [id])
+  userId    String
+  comments  Comment[]
+  postViews PostViews[]
+  postLikes PostLike[]
+  tags      Tag[]
+  images    Image[]
 }
 
 model Comment {
-  id              String           @id @default(cuid())
-  content         String
-  user            User             @relation(fields: [userId], references: [id])
-  userId          String
-  post            Post             @relation(fields: [postId], references: [id])
-  postId          String
-  commentLikes    CommentLike[]
-  commentDislikes CommentDislike[]
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  id           String        @id @default(cuid())
+  content      String
+  user         User          @relation(fields: [userId], references: [id])
+  userId       String
+  post         Post          @relation(fields: [postId], references: [id])
+  postId       String
+  commentLikes CommentLike[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
 model PostViews {
-  id     String @id @default(cuid())
-  ip     String
-  post   Post   @relation(fields: [postId], references: [id])
-  postId String
+  id        String   @id @default(cuid())
+  ip        String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
 }
 
 model PostLike {
@@ -118,27 +118,7 @@ model PostLike {
   updatedAt DateTime @updatedAt
 }
 
-model PostDislike {
-  id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 model CommentLike {
-  id        String   @id @default(cuid())
-  comment   Comment  @relation(fields: [commentId], references: [id])
-  commentId String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model CommentDislike {
   id        String   @id @default(cuid())
   comment   Comment  @relation(fields: [commentId], references: [id])
   commentId String

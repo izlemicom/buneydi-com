@@ -3,10 +3,12 @@ import ReactDOM from "react-dom";
 import App from "next/app";
 import Head from "next/head";
 import Router from "next/router";
+import { RecoilRoot } from "recoil";
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "../styles/tailwind.css";
 import PageChange from "../components/PageChange/PageChange";
+import { Provider } from "next-auth/client";
 
 Router.events.on("routeChangeStart", (url) => {
   console.log(`Yükleniyor: ${url}`);
@@ -49,9 +51,13 @@ export default class MyApp extends App {
           />
           <title>Bu Neydi?</title>
         </Head>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <Provider session={pageProps.session}>
+          <RecoilRoot>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </RecoilRoot>
+        </Provider>
       </React.Fragment>
     );
   }

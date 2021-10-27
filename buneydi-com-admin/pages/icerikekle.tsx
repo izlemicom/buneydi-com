@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-import CardProfile from "../components/Cards/CardProfile";
-import CardSettings from "../components/Cards/CardSettings";
 import FooterAdmin from "../components/Footers/FooterAdmin";
 import HeaderStats from "../components/Headers/HeaderStats";
 import Sidebar from "../components/Sidebar/Sidebar";
@@ -10,12 +8,12 @@ import { authorStats } from "../atoms/recoil";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/client";
 import axios from "axios";
-
+import CardContentAdd from "../components/Cards/CardContentAdd";
 // components
 
 // layout for page
 
-export default function Ayarlar() {
+export default function IcerikEkle() {
   const router = useRouter();
   const [session, loading] = useSession();
   const [stats, setStats] = useRecoilState(authorStats);
@@ -31,9 +29,13 @@ export default function Ayarlar() {
     }).then(function (response) {
       return response.data;
     });
+    return data;
+  }
+  if (!stats) {
+    console.log("Girdi");
+    const data = getData();
     setStats(data);
   }
-  if (!stats) getData();
   const { total, firstWeek, lastWeek } = stats;
   useEffect(() => {
     if (!session) {
@@ -49,13 +51,11 @@ export default function Ayarlar() {
         <HeaderStats total={total} firstWeek={firstWeek} lastWeek={lastWeek} />
         <div className="px-4 md:px-10 mx-auto w-full -m-24">
           <div className="flex flex-wrap">
-            <div className="w-full lg:w-8/12 px-4">
-              <CardSettings />
-            </div>
-            <div className="w-full lg:w-4/12 px-4">
-              <CardProfile />
+            <div className="w-full px-4">
+              <CardContentAdd />
             </div>
           </div>
+
           <FooterAdmin />
         </div>
       </div>

@@ -1,10 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import Auth from "../layouts/Auth";
+import { getProviders, signIn } from "next-auth/client";
 
 // layout for page
 
-export default function Login() {
+export default function Giris({ providers }) {
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -25,13 +26,21 @@ export default function Login() {
                     <img alt="..." className="w-5 mr-1" src="/img/github.svg" />
                     Github
                   </button>
-                  <button
-                    className="bg-white active:bg-blueGray-50 text-blueGray-700 px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
-                    type="button"
-                  >
-                    <img alt="..." className="w-5 mr-1" src="/img/google.svg" />
-                    Google
-                  </button>
+                  {Object.values(providers).map((provider: any) => (
+                    <button
+                      onClick={() => signIn(provider.id)}
+                      key={provider.name}
+                      className="bg-white active:bg-blueGray-50 text-blueGray-700 px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
+                      type="button"
+                    >
+                      <img
+                        alt="..."
+                        className="w-5 mr-1"
+                        src="/img/google.svg"
+                      />
+                      {provider.name}
+                    </button>
+                  ))}
                 </div>
                 <hr className="mt-6 border-b-1 border-blueGray-300" />
               </div>
@@ -116,4 +125,13 @@ export default function Login() {
   );
 }
 
-Login.layout = Auth;
+Giris.layout = Auth;
+
+export async function getServerSideProps() {
+  const providers = await getProviders();
+  return {
+    props: {
+      providers,
+    },
+  };
+}
