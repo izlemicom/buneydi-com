@@ -16,23 +16,19 @@ import { authorStats } from "../atoms/recoil";
 
 // layout for page
 
-export default function Home({ session, data }) {
+export default function Home({ session, data, isAuthor }) {
   const router = useRouter();
   const [authorstats, setAllAuthorStats] = useState(data);
-  const [stats, setStats] = useRecoilState(authorStats);
   const { total, firstWeek, lastWeek } = authorstats;
 
   useEffect(() => {
-    setStats(authorstats);
-    if (!session) {
-      console.log("session yok");
-      router.push("/giris");
-    }
+    if (!session) router.push("/giris");
+    if (!isAuthor) router.push("/kayitol");
   }, []);
 
   return (
     <>
-      {session && (
+      {session && isAuthor && (
         <div>
           <Sidebar />
           <div className="relative md:ml-64 bg-blueGray-100">
@@ -97,7 +93,24 @@ export default function Home({ session, data }) {
 }
 export async function getServerSideProps(ctx) {
   const session = await getSession(ctx);
+  let isAuthor: boolean = false;
   let data = {};
+  if (!session)
+    return {
+      props: {
+        isAuthor,
+        session,
+        data,
+      },
+    };
+  if (session.role !== "AUTHOR")
+    return {
+      props: {
+        isAuthor,
+        session,
+        data,
+      },
+    };
   if (session) {
     data = await axios({
       data: {
@@ -111,9 +124,10 @@ export async function getServerSideProps(ctx) {
       return response.data;
     });
   }
-
+  isAuthor = true;
   return {
     props: {
+      isAuthor,
       session,
       data,
     },

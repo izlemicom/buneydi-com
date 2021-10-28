@@ -22,7 +22,9 @@ export default function HeaderStats({ total, firstWeek, lastWeek }) {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="KAZANÇ"
-                  statTitle={(total.viewCount * 0.1).toString()}
+                  statTitle={
+                    (total.viewCount * 0.0001).toFixed(4).toString() + " ₺"
+                  }
                   statArrow={arrowsHelper(
                     firstWeek.viewCount,
                     lastWeek.viewCount
