@@ -22,7 +22,6 @@ function ArticleTextEditor() {
           config={{
             toolbar: {
               items: [
-                "|",
                 "heading",
                 "|",
                 "link",
@@ -30,36 +29,23 @@ function ArticleTextEditor() {
                 "italic",
                 "underline",
                 "strikethrough",
-                "|",
                 "numberedList",
                 "bulletedList",
                 "todoList",
                 "insertTable",
                 "|",
-                "specialCharacters",
-                "superscript",
-                "subscript",
-                "code",
-                "codeBlock",
-                "|",
-                "-",
-                "|",
-                "blockQuote",
-                "horizontalLine",
                 "indent",
                 "outdent",
                 "alignment",
                 "|",
+                "blockQuote",
+                "horizontalLine",
                 "fontColor",
                 "fontBackgroundColor",
                 "highlight",
                 "|",
-                "imageInsert",
-                "mediaEmbed",
-                "|",
                 "undo",
                 "redo",
-                "|",
               ],
               shouldNotGroupWhenFull: true,
             },
@@ -70,7 +56,6 @@ function ArticleTextEditor() {
                 "imageStyle:inline",
                 "imageStyle:block",
                 "imageStyle:side",
-                "linkImage",
               ],
             },
             table: {
@@ -88,7 +73,13 @@ function ArticleTextEditor() {
           data={data}
           onReady={(editor) => {
             // You can store the "editor" and use when it is needed.
-            console.log(editor);
+            editor.editing.view.change((writer) => {
+              writer.setStyle(
+                "height",
+                "300px",
+                editor.editing.view.document.getRoot()
+              );
+            });
           }}
           onChange={(event, editor) => {
             const data = editor.getData();

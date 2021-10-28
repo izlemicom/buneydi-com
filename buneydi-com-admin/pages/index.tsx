@@ -20,7 +20,6 @@ export default function Home({ session, data, isAuthor }) {
   const router = useRouter();
   const [authorstats, setAllAuthorStats] = useState(data);
   const { total, firstWeek, lastWeek } = authorstats;
-
   useEffect(() => {
     if (!session) router.push("/giris");
     if (!isAuthor) router.push("/kayitol");
@@ -47,10 +46,10 @@ export default function Home({ session, data, isAuthor }) {
                       type="kazanc"
                       title="Kazanç"
                       fvalues={firstWeek.viewCount.map(function (x) {
-                        return x * 0.1;
+                        return (x * 0.0001).toFixed(4);
                       })}
                       lvalues={lastWeek.viewCount.map(function (x) {
-                        return x * 0.1;
+                        return (x * 0.0001).toFixed(4);
                       })}
                     />
                   </div>

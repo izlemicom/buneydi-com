@@ -42,8 +42,6 @@ function ArticleTextEditor() {
                 "code",
                 "codeBlock",
                 "|",
-                "-",
-                "|",
                 "blockQuote",
                 "horizontalLine",
                 "indent",

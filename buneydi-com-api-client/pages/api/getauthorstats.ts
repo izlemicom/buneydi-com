@@ -102,8 +102,16 @@ export default async function getAuthorStats(
       },
     },
   });
+  const postCountTotal = await prisma.post.count({
+    where: {
+      user: {
+        id: userId,
+      },
+    },
+  });
   res.status(200).json({
     total: {
+      postCount: postCountTotal,
       viewCount: viewCountTotal,
       commentCount: commentCountTotal,
       likeCount: likeCountTotal,

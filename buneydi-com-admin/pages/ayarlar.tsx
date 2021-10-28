@@ -38,10 +38,10 @@ export default function Ayarlar({ session, data, isAuthor }) {
             <div className="px-4 md:px-10 mx-auto w-full -m-24">
               <div className="flex flex-wrap">
                 <div className="w-full lg:w-8/12 px-4">
-                  <CardSettings />
+                  <CardSettings user={session.user} />
                 </div>
                 <div className="w-full lg:w-4/12 px-4">
-                  <CardProfile />
+                  <CardProfile user={session.user} total={total} />
                 </div>
               </div>
               <FooterAdmin />
