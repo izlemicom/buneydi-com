@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { articleData } from "../../atoms/recoil";
 
 function ArticleTextEditor() {
   const editorRef = useRef();
@@ -13,59 +15,25 @@ function ArticleTextEditor() {
     setEditorLoaded(true);
   }, []);
 
-  const [data, setData] = useState("");
+  const [data, setData] = useRecoilState(articleData);
 
   return (
     <div className="flex flex-col my-2">
       {editorLoaded ? (
         <CKEditor
           config={{
-            toolbar: {
-              items: [
-                "heading",
-                "|",
-                "link",
-                "bold",
-                "italic",
-                "underline",
-                "strikethrough",
-                "numberedList",
-                "bulletedList",
-                "todoList",
-                "insertTable",
-                "|",
-                "indent",
-                "outdent",
-                "alignment",
-                "|",
-                "blockQuote",
-                "horizontalLine",
-                "fontColor",
-                "fontBackgroundColor",
-                "highlight",
-                "|",
-                "undo",
-                "redo",
-              ],
-              shouldNotGroupWhenFull: true,
-            },
-            language: "tr",
-            image: {
-              toolbar: [
-                "imageTextAlternative",
-                "imageStyle:inline",
-                "imageStyle:block",
-                "imageStyle:side",
-              ],
-            },
-            table: {
-              contentToolbar: [
-                "tableColumn",
-                "tableRow",
-                "mergeTableCells",
-                "tableCellProperties",
-                "tableProperties",
-              ],
+            simpleUpload: {
+              // The URL that the images are uploaded to.
+              uploadUrl: "./api/upload",
+
+              // Enable the XMLHttpRequest.withCredentials property.
+              //withCredentials: false,
+
+              // Headers sent along with the XMLHttpRequest to the upload server.
+              //headers: {
+              //"X-File-Name": "img",
+              //Authorization: "Bearer <JSON Web Token>",
+              // },
             },
             licenseKey: "",
           }}
@@ -75,7 +43,7 @@ function ArticleTextEditor() {
             // You can store the "editor" and use when it is needed.
             editor.editing.view.change((writer) => {
               writer.setStyle(
-                "height",
+                "min-height",
                 "300px",
                 editor.editing.view.document.getRoot()
               );
@@ -83,19 +51,13 @@ function ArticleTextEditor() {
           }}
           onChange={(event, editor) => {
             const data = editor.getData();
-            setData(data);
             console.log(data);
+            setData(data);
           }}
         />
       ) : (
         <p>Yükleniyor...</p>
       )}
-      <div>
-        <article
-          className="prose prose-lg"
-          dangerouslySetInnerHTML={{ __html: data }}
-        ></article>
-      </div>
     </div>
   );
 }

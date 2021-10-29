@@ -1,9 +1,33 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import { useRecoilState } from "recoil";
+import { articleData } from "../../atoms/recoil";
 import ArticleTextEditor from "./ArticleTextEditor";
-
+import { UiFileInputButton } from "./UiFileInputButton";
+import Image from "next/image";
 // components
 
 export default function CardContentAdd() {
+  const [data, setData] = useRecoilState(articleData);
+  const [progress, setProgress] = useState(0);
+  const [url, setUrl] = useState("");
+  const onChange = async (formData) => {
+    const config = {
+      headers: { "content-type": "multipart/form-data" },
+      onUploadProgress: (event) => {
+        setProgress(Math.round((event.loaded * 100) / event.total));
+        console.log(
+          `Current progress:`,
+          Math.round((event.loaded * 100) / event.total)
+        );
+      },
+    };
+
+    const response = await axios.post("/api/upload", formData, config);
+    setUrl(response.data.url);
+    console.log("response", response.data);
+  };
+
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
@@ -19,68 +43,117 @@ export default function CardContentAdd() {
           </div>
         </div>
         <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
-          <form>
-            <h6 className="text-blueGray-600 text-sm mt-3 mb-6 font-bold uppercase">
-              Başlık
-            </h6>
-            <div className="flex flex-wrap">
-              <div className="w-full lg:w-12/12 px-4">
-                <div className="relative w-full mb-3">
-                  <input
-                    type="text"
-                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    defaultValue=""
-                    required
-                  />
+          <h6 className="text-blueGray-600 text-sm mt-3 mb-6 font-bold uppercase">
+            Başlık
+          </h6>
+          <div className="flex flex-wrap">
+            <div className="w-full lg:w-12/12 px-4">
+              <div className="relative w-full mb-3">
+                <input
+                  type="text"
+                  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  defaultValue=""
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <hr className="mt-6 border-b-1 border-blueGray-300" />
+
+          <h6 className="text-blueGray-600 text-sm mt-3 mb-6 font-bold uppercase">
+            Etiketler
+          </h6>
+          <div className="flex flex-wrap">
+            <div className="w-full lg:w-12/12 px-4">
+              <div className="relative w-full mb-3">
+                <input
+                  type="text"
+                  placeholder="Etiketleri virgül ile ayırınız..."
+                  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  defaultValue=""
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <hr className="mt-6 border-b-1 border-blueGray-300" />
+
+          <h6 className="text-blueGray-600 text-sm mt-3 mb-6 font-bold uppercase">
+            Kapak Fotoğrafı
+          </h6>
+          <div className="flex flex-wrap">
+            <div className="w-full lg:w-12/12 px-4">
+              <div className="relative w-full mb-3">
+                <div className="flex items-center text-center justify-between w-full">
+                  <div>
+                    <Image
+                      width="620"
+                      height="350"
+                      src={url ? url : "/img/placeholder.png"}
+                      alt=""
+                    />
+                    <div className="relative pt-1">
+                      <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-lightBlue-200">
+                        <div
+                          style={{ width: `${progress}%` }}
+                          className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-lightBlue-500"
+                        ></div>
+                      </div>
+                    </div>
+                    <div className="bg-emerald-500 rounded text-white font-bold">
+                      <UiFileInputButton
+                        acceptedFileTypes="image/*"
+                        label="Kapak Fotoğrafı Seç"
+                        uploadFileName="upload"
+                        onChange={onChange}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <hr className="mt-6 border-b-1 border-blueGray-300" />
+          </div>
 
-            <h6 className="text-blueGray-600 text-sm mt-3 mb-6 font-bold uppercase">
-              Etiketler
-            </h6>
-            <div className="flex flex-wrap">
-              <div className="w-full lg:w-12/12 px-4">
-                <div className="relative w-full mb-3">
-                  <input
-                    type="text"
-                    placeholder="Etiketleri virgül ile ayırınız..."
-                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    defaultValue=""
-                    required
-                  />
-                </div>
+          <hr className="mt-6 border-b-1 border-blueGray-300" />
+
+          <div className="flex flex-wrap">
+            <div className="w-full lg:w-12/12 px-4">
+              <div className="relative w-full mb-3">
+                <ArticleTextEditor />
               </div>
             </div>
+          </div>
 
-            <hr className="mt-6 border-b-1 border-blueGray-300" />
+          <hr className="mt-6 border-b-1 border-blueGray-300" />
 
-            <h6 className="text-blueGray-600 text-sm mt-3 mb-6 font-bold uppercase">
-              Kapak Fotoğrafı
-            </h6>
-            <div className="flex flex-wrap">
-              <div className="w-full lg:w-12/12 px-4">
-                <div className="relative w-full mb-3">
-                  <input
-                    type="file"
-                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    required
-                  />
-                </div>
+          <h6 className="text-blueGray-600 text-sm mt-3 mb-6 font-bold uppercase">
+            Önizleme
+          </h6>
+          <div className="flex flex-wrap">
+            <div className="w-full mx-auto lg:w-12/12 px-4">
+              <div className="relative mb-3">
+                <button className="w-full bg-lightBlue-500 rounded text-white font-bold focus:outline-none px-3 py-3">
+                  ÖNİZLE
+                </button>
               </div>
             </div>
+          </div>
 
-            <hr className="mt-6 border-b-1 border-blueGray-300" />
+          <hr className="mt-6 border-b-1 border-blueGray-300" />
 
-            <div className="flex flex-wrap">
-              <div className="w-full lg:w-12/12 px-4">
-                <div className="relative w-full mb-3">
-                  <ArticleTextEditor />
-                </div>
+          <h6 className="text-blueGray-600 text-sm mt-3 mb-6 font-bold uppercase">
+            İçeriği Yükle
+          </h6>
+          <div className="flex flex-wrap">
+            <div className="w-full mx-auto lg:w-12/12 px-4">
+              <div className="relative mb-3">
+                <button className="w-full bg-emerald-500 rounded text-white font-bold focus:outline-none px-3 py-3">
+                  İÇERİĞİ YÜKLE
+                </button>
               </div>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </>
