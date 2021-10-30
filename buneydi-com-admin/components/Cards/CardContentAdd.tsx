@@ -7,25 +7,39 @@ import { UiFileInputButton } from "./UiFileInputButton";
 import Image from "next/image";
 // components
 
-export default function CardContentAdd() {
+export default function CardContentAdd({ user }) {
   const [data, setData] = useRecoilState(articleData);
   const [progress, setProgress] = useState(0);
   const [url, setUrl] = useState("");
+  const [title, setTitle] = useState("");
+  const [tags, setTags] = useState("");
+
+  function onIzle() {
+    const post = {
+      title: title,
+      content: data,
+      createdAt: new Date(),
+      mainImage: url,
+      user: user,
+      _count: {
+        postLikes: 0,
+        comments: 0,
+        postViews: 0,
+      },
+    };
+    var encoded = btoa(JSON.stringify(post));
+    window.open(`http://localhost:3000/onizle?post=${encoded}`, "_blank");
+  }
   const onChange = async (formData) => {
     const config = {
       headers: { "content-type": "multipart/form-data" },
       onUploadProgress: (event) => {
         setProgress(Math.round((event.loaded * 100) / event.total));
-        console.log(
-          `Current progress:`,
-          Math.round((event.loaded * 100) / event.total)
-        );
       },
     };
 
     const response = await axios.post("/api/upload", formData, config);
     setUrl(response.data.url);
-    console.log("response", response.data);
   };
 
   return (
@@ -34,12 +48,6 @@ export default function CardContentAdd() {
         <div className="rounded-t bg-white mb-0 px-6 py-6">
           <div className="text-center flex justify-between">
             <h6 className="text-blueGray-700 text-xl font-bold">İçerik Ekle</h6>
-            <button
-              className="bg-blueGray-700 active:bg-blueGray-600 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-              type="button"
-            >
-              Ekle
-            </button>
           </div>
         </div>
         <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
@@ -50,7 +58,9 @@ export default function CardContentAdd() {
             <div className="w-full lg:w-12/12 px-4">
               <div className="relative w-full mb-3">
                 <input
+                  onChange={(e) => setTitle(e.target.value)}
                   type="text"
+                  placeholder="Başlığınızı yazınız..."
                   className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                   defaultValue=""
                   required
@@ -67,6 +77,7 @@ export default function CardContentAdd() {
             <div className="w-full lg:w-12/12 px-4">
               <div className="relative w-full mb-3">
                 <input
+                  onChange={(e) => setTags(e.target.value)}
                   type="text"
                   placeholder="Etiketleri virgül ile ayırınız..."
                   className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
@@ -85,19 +96,19 @@ export default function CardContentAdd() {
           <div className="flex flex-wrap">
             <div className="w-full lg:w-12/12 px-4">
               <div className="relative w-full mb-3">
-                <div className="flex items-center text-center justify-between w-full">
+                <div className="flex items-center text-center justify-center w-full">
                   <div>
                     <Image
-                      width="620"
-                      height="350"
+                      width="960"
+                      height="540"
                       src={url ? url : "/img/placeholder.png"}
                       alt=""
                     />
                     <div className="relative pt-1">
-                      <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-lightBlue-200">
+                      <div className="overflow-hidden h-2 mb-4 text-lg flex rounded bg-indigo-200">
                         <div
                           style={{ width: `${progress}%` }}
-                          className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-lightBlue-500"
+                          className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-indigo-500"
                         ></div>
                       </div>
                     </div>
@@ -133,7 +144,10 @@ export default function CardContentAdd() {
           <div className="flex flex-wrap">
             <div className="w-full mx-auto lg:w-12/12 px-4">
               <div className="relative mb-3">
-                <button className="w-full bg-lightBlue-500 rounded text-white font-bold focus:outline-none px-3 py-3">
+                <button
+                  onClick={onIzle}
+                  className="w-full bg-lightBlue-500 rounded text-white font-bold focus:outline-none px-3 py-3"
+                >
                   ÖNİZLE
                 </button>
               </div>

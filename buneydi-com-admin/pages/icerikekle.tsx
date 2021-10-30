@@ -36,7 +36,7 @@ export default function IcerikEkle({ session, data, isAuthor }) {
             <div className="px-4 md:px-10 mx-auto w-full -m-24">
               <div className="flex flex-wrap">
                 <div className="w-full px-4">
-                  <CardContentAdd />
+                  <CardContentAdd user={session.user} />
                 </div>
               </div>
 
