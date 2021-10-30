@@ -34,7 +34,7 @@ apiRoute.use(upload.single("upload"));
 
 apiRoute.post((req, res) => {
   res.status(200).json({
-    url: "/images/" + fileName,
+    url: process.env.BASE_IMAGE_URL + "/images/" + fileName,
   });
 });
 

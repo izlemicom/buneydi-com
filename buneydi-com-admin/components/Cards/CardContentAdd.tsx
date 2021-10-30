@@ -5,6 +5,9 @@ import { articleData } from "../../atoms/recoil";
 import ArticleTextEditor from "./ArticleTextEditor";
 import { UiFileInputButton } from "./UiFileInputButton";
 import Image from "next/image";
+import CryptoJS from "crypto-js";
+import { Encrypt } from "../../lib/CRYPT";
+
 // components
 
 export default function CardContentAdd({ user }) {
@@ -27,7 +30,7 @@ export default function CardContentAdd({ user }) {
         postViews: 0,
       },
     };
-    var encoded = btoa(JSON.stringify(post));
+    const encoded = Encrypt(post);
     window.open(`http://localhost:3000/onizle?post=${encoded}`, "_blank");
   }
   const onChange = async (formData) => {

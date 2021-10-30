@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import ArticleContent from "../components/ArticleContent";
-import decodeBase64 from "../lib/decodeBase64";
+import CryptoJS from "crypto-js";
+import { Decrypt } from "../lib/CRYPT";
+
 function OnIzle({ lastData }) {
   const data = {
     title: "",
@@ -20,8 +22,8 @@ function OnIzle({ lastData }) {
 
   const [post, setPost] = useState(data);
   useEffect(() => {
-    console.log(lastData);
-    setPost(JSON.parse(atob(lastData)));
+    const decryptedData = Decrypt(lastData);
+    setPost(decryptedData);
   }, []);
   return (
     <div>

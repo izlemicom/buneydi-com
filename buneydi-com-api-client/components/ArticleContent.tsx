@@ -18,7 +18,7 @@ function ArticleContent({ post }) {
           />
         </div>
         <div
-          className="prose prose-lg md:prose-xl max-w-none py-2"
+          className="prose prose-lg max-w-none py-2"
           dangerouslySetInnerHTML={{ __html: post.content }}
         ></div>
       </div>
