@@ -1,14 +1,9 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../lib/db";
+import { prisma } from "../../../lib/db";
 
-export default async function getAuthors(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== "GET")
-    return res.status(400).json({ err: "Gönderim metodu yanlış." });
+import handler from "../../../lib/api/handler";
 
-  const { a, cursor, isfirst } = req.query;
+handler.get(async (req, res) => {
+  const { a, cursor, isfirst } = req.body;
   const b = a.toString();
   const take = parseInt(b);
   if (!take) return res.status(400).json({ err: "Slug eklenmemiş." });
@@ -77,4 +72,6 @@ export default async function getAuthors(
     },
   });
   return res.status(200).json({ authors, authorCount });
-}
+});
+
+export default handler;

@@ -6,6 +6,6 @@ export default async function authorizeAuthor(
   res: NextApiResponse,
   next
 ) {
-  if (req.role !== "AUTHOR") return new Error("Yetkiniz yok.");
+  if (req.role !== "AUTHOR") return next(new Error("Yetkiniz yok."));
   next();
 }

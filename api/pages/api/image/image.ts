@@ -1,9 +1,9 @@
 import multer from "multer";
-import cuuid from "../../lib/cuuid";
+import cuuid from "../../../lib/cuuid";
 import path from "path";
-import authorize from "../../lib/api/authorize";
-import authorizeAuthor from "../../lib/api/authorizeauthor";
-import apiRoute from "../../lib/api/handler";
+import authorize from "../../../lib/api/authorize";
+import authorizeAuthor from "../../../lib/api/authorizeauthor";
+import handler from "../../../lib/api/handler";
 
 let fileName = "";
 function isFileImage(file) {
@@ -23,17 +23,17 @@ const upload = multer({
   }),
 });
 
-apiRoute.use(authorize);
-apiRoute.use(authorizeAuthor);
-apiRoute.use(upload.single("upload"));
+handler.use(authorize);
+handler.use(authorizeAuthor);
+handler.use(upload.single("upload"));
 
-apiRoute.post((req, res) => {
+handler.post((req, res) => {
   res.status(200).json({
     url: process.env.BASE_IMAGE_URL + "/images/" + fileName,
   });
 });
 
-export default apiRoute;
+export default handler;
 
 export const config = {
   api: {

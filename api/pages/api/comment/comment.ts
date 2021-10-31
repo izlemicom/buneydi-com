@@ -1,16 +1,13 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/client";
-import { prisma } from "../../lib/db";
+import { prisma } from "../../../lib/db";
 
-export default async function setComment(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== "POST")
-    return res.status(400).json({ err: "Gönderim metodu yanlış." });
+import authorize from "../../../lib/api/authorize";
+import handler from "../../../lib/api/handler";
+
+handler.use(authorize);
+
+handler.post(async (req, res) => {
   const { content, postId, userId } = req.body;
-  if (!content && !postId && !userId)
-    return res.status(400).json({ err: "Slug eklenmemiş." });
+  if (!content && !postId && !userId) new Error("Slug eklenmemiş.");
   const user = await prisma.user.findUnique({
     where: {
       id: userId,
@@ -47,4 +44,6 @@ export default async function setComment(
     },
   });
   res.status(200).json(comment);
-}
+});
+
+export default handler;

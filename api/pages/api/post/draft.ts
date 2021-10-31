@@ -1,23 +1,50 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/client";
-import { prisma } from "../../lib/db";
-import slugGenerator from "../../lib/slugGenerator";
+import { prisma } from "../../../lib/db";
+import handler from "../../../lib/api/handler";
+import slugGenerator from "../../../lib/slugGenerator";
+import authorize from "../../../lib/api/authorize";
+import authorizeAuthor from "../../../lib/api/authorizeauthor";
 
-export default async function saveDraft(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== "POST")
-    return res.status(400).json({ err: "Gönderim metodu yanlış." });
-  const session = getSession({ req });
-  console.log(session);
-  if (!session) return res.status(401).json({ err: "Yetkiniz yok." });
-  const role = session.role;
-  if (role !== "AUTHOR") return res.status(401).json({ err: "Yetkiniz yok." });
-  const userId = session.id;
-  const { title, content, mainImage, tags } = req.body;
+handler.get(async (req, res) => {
+  const slug = req.body.slug;
+  if (typeof slug == "undefined" && slug == null) new Error("Slug eklenmemiş.");
+
+  const post = await prisma.post.findUnique({
+    where: {
+      slug: slug,
+    },
+    include: {
+      _count: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
+      },
+      tags: {
+        select: {
+          id: true,
+          content: true,
+          slug: true,
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
+    },
+  });
+  res.status(200).json(post);
+});
+
+handler.use(authorize);
+handler.use(authorizeAuthor);
+
+handler.post(async (req, res) => {
+  const { title, content, mainImage, tags, userId } = req.body;
+
   if (!title || !content || !mainImage || !userId)
-    return res.status(400).json({ err: "Veri eklenmemiş." });
+    return new Error("Veri eklenmemiş.");
+
   let tagArray = tags.lowerCase().split(",");
   let slug = slugGenerator(title);
   const findSlug = prisma.post.findUnique({
@@ -82,4 +109,6 @@ export default async function saveDraft(
     console.log(results);
   });
   res.status(200).json(post);
-}
+});
+
+export default handler;

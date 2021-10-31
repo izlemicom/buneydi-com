@@ -1,12 +1,15 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../lib/db";
-import { getAllDaysFrom } from "../../lib/week";
+import { prisma } from "../../../lib/db";
+import { getAllDaysFrom } from "../../../lib/week";
 
-export default async function getAuthorStats(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+import authorize from "../../../lib/api/authorize";
+import authorizeAuthor from "../../../lib/api/authorizeauthor";
+import handler from "../../../lib/api/handler";
+
+handler.use(authorize);
+handler.use(authorizeAuthor);
+
+handler.get(async (req, res) => {
   const { userId, days } = req.body;
   if (!userId && !days)
     res.status(400).json({ err: "Kullanıcı bilgileri hatalı" });
@@ -127,4 +130,6 @@ export default async function getAuthorStats(
       likeCount: slikeCountValues,
     },
   });
-}
+});
+
+export default handler;
