@@ -1,4 +1,4 @@
-export default function slugGenerator(str: String) {
+export default function slugGenerator(str: string) {
   str = str.replace(/^\s+|\s+$/g, ""); // trim
   str = str.toLowerCase();
 

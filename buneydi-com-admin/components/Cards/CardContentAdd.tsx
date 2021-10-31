@@ -17,20 +17,25 @@ export default function CardContentAdd({ user }) {
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState("");
 
-  function onIzle() {
+  async function onIzle() {
     const post = {
       title: title,
       content: data,
-      createdAt: new Date(),
       mainImage: url,
-      user: user,
-      _count: {
-        postLikes: 0,
-        comments: 0,
-        postViews: 0,
-      },
     };
-    const encoded = Encrypt(post);
+    console.log(process.env.BASE_API_URL);
+    const draft = await axios({
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST",
+      },
+      data: post,
+      method: "POST",
+      url: "http://localhost:3000/api/savedraft",
+    }).then(function (response) {
+      return response.data;
+    });
+    const encoded = Encrypt(draft);
     window.open(`http://localhost:3000/onizle?post=${encoded}`, "_blank");
   }
   const onChange = async (formData) => {
