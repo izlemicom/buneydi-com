@@ -3,6 +3,7 @@ import multer from "multer";
 import cuuid from "../../lib/cuuid";
 import path from "path";
 import { getSession } from "next-auth/client";
+import { NextApiRequest, NextApiResponse } from "next";
 
 let fileName = "";
 function isFileImage(file) {
@@ -12,7 +13,7 @@ function isFileImage(file) {
 const upload = multer({
   storage: multer.diskStorage({
     destination: "./public/images",
-    filename: function (req, file, cb) {
+    filename: function (req: NextApiRequest, file, cb) {
       if (!isFileImage(file))
         return cb(new Error("Sadece fotoğraf yükleyebilirsiniz."));
       const uniqueSuffix = cuuid();
@@ -23,16 +24,16 @@ const upload = multer({
 });
 
 const apiRoute = nextConnect({
-  onError(error, req, res) {
+  onError(error, req: NextApiRequest, res: NextApiResponse) {
     res.status(501).json({ error: `Bir şeyler ters gitti! ${error.message}` });
   },
-  onNoMatch(req, res) {
+  onNoMatch(req: NextApiRequest, res: NextApiResponse) {
     res.status(405).json({ error: `Metoda '${req.method}' izin verilmiyor` });
   },
 });
 apiRoute.use(upload.single("upload"));
 
-apiRoute.post((req, res) => {
+apiRoute.post((req: NextApiRequest, res: NextApiResponse) => {
   res.status(200).json({
     url: process.env.BASE_IMAGE_URL + "/images/" + fileName,
   });
