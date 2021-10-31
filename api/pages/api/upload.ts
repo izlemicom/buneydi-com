@@ -1,9 +1,9 @@
-import nextConnect from "next-connect";
 import multer from "multer";
 import cuuid from "../../lib/cuuid";
 import path from "path";
-import { getSession } from "next-auth/client";
-import { NextApiRequest, NextApiResponse } from "next";
+import authorize from "../../lib/api/authorize";
+import authorizeAuthor from "../../lib/api/authorizeauthor";
+import apiRoute from "../../lib/api/handler";
 
 let fileName = "";
 function isFileImage(file) {
@@ -13,7 +13,7 @@ function isFileImage(file) {
 const upload = multer({
   storage: multer.diskStorage({
     destination: "./public/images",
-    filename: function (req: NextApiRequest, file, cb) {
+    filename: function (req, file, cb) {
       if (!isFileImage(file))
         return cb(new Error("Sadece fotoğraf yükleyebilirsiniz."));
       const uniqueSuffix = cuuid();
@@ -23,17 +23,11 @@ const upload = multer({
   }),
 });
 
-const apiRoute = nextConnect({
-  onError(error, req: NextApiRequest, res: NextApiResponse) {
-    res.status(501).json({ error: `Bir şeyler ters gitti! ${error.message}` });
-  },
-  onNoMatch(req: NextApiRequest, res: NextApiResponse) {
-    res.status(405).json({ error: `Metoda '${req.method}' izin verilmiyor` });
-  },
-});
+apiRoute.use(authorize);
+apiRoute.use(authorizeAuthor);
 apiRoute.use(upload.single("upload"));
 
-apiRoute.post((req: NextApiRequest, res: NextApiResponse) => {
+apiRoute.post((req, res) => {
   res.status(200).json({
     url: process.env.BASE_IMAGE_URL + "/images/" + fileName,
   });
@@ -43,6 +37,6 @@ export default apiRoute;
 
 export const config = {
   api: {
-    bodyParser: false, // Disallow body parsing, consume as stream
+    bodyParser: false,
   },
 };
