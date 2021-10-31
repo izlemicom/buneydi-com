@@ -3,13 +3,35 @@ import handler from "../../../lib/api/handler";
 let posts = [];
 let postCount = 0;
 
-handler.get(async (req, res) => {});
+handler.get(async (req, res) => {
+  const { isfirst, take, cursor, tagSlug, postId, type } = req.body;
+  switch (type) {
+    case "related":
+      res.status(200).send(await relatedPosts(tagSlug, postId, take));
+      break;
+    case "latest":
+      res.status(200).send(await latestPosts(isfirst, take, cursor));
+      break;
+    case "mostLiked":
+      res.status(200).send(await mostLikedPosts(isfirst, take, cursor));
+      break;
+    case "mostViewed":
+      res.status(200).send(await mostViewedPosts(isfirst, take, cursor));
+      break;
+    case "mostTalked":
+      res.status(200).send(await mostTalkedPosts(isfirst, take, cursor));
+      break;
+    default:
+      res.status(200).send(await latestPosts(isfirst, take, cursor));
+  }
+});
 
 export default handler;
 
-async function relatedPosts(tagSlug: string, postId: string) {
+async function relatedPosts(tagSlug: string, postId: string, take: number) {
+  if (!tagSlug || !postId || !take) throw new Error("Veri eklenmemiş.");
   posts = await prisma.post.findMany({
-    take: 6,
+    take: take,
     where: {
       tags: {
         some: {
@@ -34,9 +56,12 @@ async function relatedPosts(tagSlug: string, postId: string) {
       },
     },
   });
+  return posts;
 }
 
 async function latestPosts(isfirst: boolean, take: number, cursor: string) {
+  if (!isfirst || !cursor || !take) throw new Error("Veri eklenmemiş.");
+
   if (!isfirst)
     posts = await prisma.post.findMany({
       take: take,
@@ -94,9 +119,12 @@ async function latestPosts(isfirst: boolean, take: number, cursor: string) {
       state: "PUBLISHED",
     },
   });
+  return { posts, postCount };
 }
 
 async function mostLikedPosts(isfirst: boolean, take: number, cursor: string) {
+  if (!isfirst || !cursor || !take) throw new Error("Veri eklenmemiş.");
+
   if (!isfirst)
     posts = await prisma.post.findMany({
       take: take,
@@ -158,9 +186,12 @@ async function mostLikedPosts(isfirst: boolean, take: number, cursor: string) {
       state: "PUBLISHED",
     },
   });
+  return { posts, postCount };
 }
 
 async function mostTalkedPosts(isfirst: boolean, take: number, cursor: string) {
+  if (!isfirst || !cursor || !take) throw new Error("Veri eklenmemiş.");
+
   if (!isfirst)
     posts = await prisma.post.findMany({
       take: take,
@@ -223,9 +254,12 @@ async function mostTalkedPosts(isfirst: boolean, take: number, cursor: string) {
       state: "PUBLISHED",
     },
   });
+  return { posts, postCount };
 }
 
 async function mostViewedPosts(isfirst: boolean, take: number, cursor: string) {
+  if (!isfirst || !cursor || !take) throw new Error("Veri eklenmemiş.");
+
   if (!isfirst)
     posts = await prisma.post.findMany({
       take: take,
@@ -287,4 +321,5 @@ async function mostViewedPosts(isfirst: boolean, take: number, cursor: string) {
       state: "PUBLISHED",
     },
   });
+  return { posts, postCount };
 }

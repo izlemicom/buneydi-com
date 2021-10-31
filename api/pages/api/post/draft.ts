@@ -5,8 +5,8 @@ import authorize from "../../../lib/api/authorize";
 import authorizeAuthor from "../../../lib/api/authorizeauthor";
 
 handler.get(async (req, res) => {
-  const slug = req.body.slug;
-  if (typeof slug == "undefined" && slug == null) new Error("Slug eklenmemiş.");
+  const { slug } = req.body;
+  if (!slug) throw new Error("Veri eklenmemiş.");
 
   const post = await prisma.post.findUnique({
     where: {
@@ -43,7 +43,7 @@ handler.post(async (req, res) => {
   const { title, content, mainImage, tags, userId } = req.body;
 
   if (!title || !content || !mainImage || !userId)
-    return new Error("Veri eklenmemiş.");
+    throw new Error("Veri eklenmemiş.");
 
   let tagArray = tags.lowerCase().split(",");
   let slug = slugGenerator(title);
