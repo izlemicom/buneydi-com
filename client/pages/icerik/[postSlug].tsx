@@ -27,14 +27,14 @@ function PostPage({ post, relatedPosts, firstComments }) {
       "https://api64.ipify.org/?format=json"
     );
     const response = await axios({
+      baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
       method: "POST",
-      url: "/post/view",
+      url: `/post/view`,
       data: {
         ip: result.ip,
         postid: post.id,
         userid: post.user.id,
       },
-      baseURL: process.env.BASE_API_URL,
     })
       .then(function (response) {
         return response.data;

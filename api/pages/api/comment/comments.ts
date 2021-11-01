@@ -5,7 +5,6 @@ const api = handler();
 
 api.get(async (req, res) => {
   const { take, cursor, postId, isfirst } = req.body;
-  console.log(req.body);
 
   if (!take || !postId || !cursor) throw new Error("Veri eklenmemiş.");
   let comments;

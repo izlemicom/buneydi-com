@@ -20,9 +20,9 @@ function CommentsPostPage({ commentsCount, firstComments, postId }) {
         cursor: cursor,
         postId: postId,
       },
-      method: "POST",
+      method: "GET",
       url: `/comment/comments`,
-      baseURL: process.env.BASE_API_URL,
+      baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
     }).then(function (response) {
       return response.data;
     });

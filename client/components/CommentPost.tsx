@@ -9,9 +9,11 @@ function CommentPost({ postid, addComment }) {
     const content = e.target.elements.body.value;
     const userId = session.id;
     const postId = postid;
+    console.log("fetch");
     const response = await axios({
+      baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
       method: "POST",
-      url: "http://localhost:3000/api/setcomment",
+      url: "/comment/comment",
       data: {
         content: content,
         postId: postId,
@@ -19,6 +21,7 @@ function CommentPost({ postid, addComment }) {
       },
     })
       .then(function (response) {
+        console.log(response);
         return response.data;
       })
       .catch(function (err) {

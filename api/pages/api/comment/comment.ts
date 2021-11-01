@@ -9,7 +9,7 @@ api.use(authorize);
 
 api.post(async (req, res) => {
   const { content, postId, userId } = req.body;
-  if (!content || !postId || !userId) throw new Error("Slug eklenmemiş.");
+  if (!content || !postId || !userId) throw new Error("Veri eklenmemiş.");
   const user = await prisma.user.findUnique({
     where: {
       id: userId,
