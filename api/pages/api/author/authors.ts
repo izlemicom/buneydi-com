@@ -1,8 +1,9 @@
 import { prisma } from "../../../lib/db";
 
 import handler from "../../../lib/api/handler";
+const api = handler();
 
-handler.get(async (req, res) => {
+api.get(async (req, res) => {
   const { a, cursor, isfirst } = req.body;
   const b = a.toString();
   const take = parseInt(b);
@@ -74,4 +75,4 @@ handler.get(async (req, res) => {
   return res.status(200).json({ authors, authorCount });
 });
 
-export default handler;
+export default api;

@@ -64,12 +64,13 @@ export async function getServerSideProps(ctx) {
     };
   if (session) {
     data = await axios({
+      headers: ctx.req.headers,
       data: {
         userId: session.id,
         days: 14,
       },
       method: "GET",
-      url: `/getauthorstats`,
+      url: `/author/stats`,
       baseURL: process.env.BASE_API_URL,
     }).then(function (response) {
       return response.data;

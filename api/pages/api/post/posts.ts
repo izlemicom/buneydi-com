@@ -1,9 +1,11 @@
 import handler from "../../../lib/api/handler";
+import { prisma } from "../../../lib/db";
 
 let posts = [];
 let postCount = 0;
+const api = handler();
 
-handler.get(async (req, res) => {
+api.get(async (req, res) => {
   const { isfirst, take, cursor, tagSlug, postId, type } = req.body;
   switch (type) {
     case "related":
@@ -21,12 +23,10 @@ handler.get(async (req, res) => {
     case "mostTalked":
       res.status(200).send(await mostTalkedPosts(isfirst, take, cursor));
       break;
-    default:
-      res.status(200).send(await latestPosts(isfirst, take, cursor));
   }
 });
 
-export default handler;
+export default api;
 
 async function relatedPosts(tagSlug: string, postId: string, take: number) {
   if (!tagSlug || !postId || !take) throw new Error("Veri eklenmemiş.");
@@ -60,7 +60,7 @@ async function relatedPosts(tagSlug: string, postId: string, take: number) {
 }
 
 async function latestPosts(isfirst: boolean, take: number, cursor: string) {
-  if (!isfirst || !cursor || !take) throw new Error("Veri eklenmemiş.");
+  if (!cursor || !take) throw new Error("Veri eklenmemiş.");
 
   if (!isfirst)
     posts = await prisma.post.findMany({
@@ -123,7 +123,7 @@ async function latestPosts(isfirst: boolean, take: number, cursor: string) {
 }
 
 async function mostLikedPosts(isfirst: boolean, take: number, cursor: string) {
-  if (!isfirst || !cursor || !take) throw new Error("Veri eklenmemiş.");
+  if (!cursor || !take) throw new Error("Veri eklenmemiş.");
 
   if (!isfirst)
     posts = await prisma.post.findMany({
@@ -190,7 +190,7 @@ async function mostLikedPosts(isfirst: boolean, take: number, cursor: string) {
 }
 
 async function mostTalkedPosts(isfirst: boolean, take: number, cursor: string) {
-  if (!isfirst || !cursor || !take) throw new Error("Veri eklenmemiş.");
+  if (!cursor || !take) throw new Error("Veri eklenmemiş.");
 
   if (!isfirst)
     posts = await prisma.post.findMany({
@@ -258,7 +258,7 @@ async function mostTalkedPosts(isfirst: boolean, take: number, cursor: string) {
 }
 
 async function mostViewedPosts(isfirst: boolean, take: number, cursor: string) {
-  if (!isfirst || !cursor || !take) throw new Error("Veri eklenmemiş.");
+  if (!cursor || !take) throw new Error("Veri eklenmemiş.");
 
   if (!isfirst)
     posts = await prisma.post.findMany({

@@ -3,11 +3,13 @@ import { prisma } from "../../../lib/db";
 import authorize from "../../../lib/api/authorize";
 import handler from "../../../lib/api/handler";
 
-handler.use(authorize);
+const api = handler();
 
-handler.post(async (req, res) => {
+api.use(authorize);
+
+api.post(async (req, res) => {
   const { content, postId, userId } = req.body;
-  if (!content && !postId && !userId) new Error("Slug eklenmemiş.");
+  if (!content || !postId || !userId) throw new Error("Slug eklenmemiş.");
   const user = await prisma.user.findUnique({
     where: {
       id: userId,
@@ -46,4 +48,4 @@ handler.post(async (req, res) => {
   res.status(200).json(comment);
 });
 
-export default handler;
+export default api;

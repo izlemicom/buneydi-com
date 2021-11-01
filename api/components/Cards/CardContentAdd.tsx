@@ -46,7 +46,7 @@ export default function CardContentAdd({ user }) {
       },
     };
 
-    const response = await axios.post("/api/upload", formData, config);
+    const response = await axios.post("/api/image/image", formData, config);
     setUrl(response.data.url);
   };
 

@@ -4,6 +4,7 @@ import path from "path";
 import authorize from "../../../lib/api/authorize";
 import authorizeAuthor from "../../../lib/api/authorizeauthor";
 import handler from "../../../lib/api/handler";
+const api = handler();
 
 let fileName = "";
 function isFileImage(file) {
@@ -23,17 +24,17 @@ const upload = multer({
   }),
 });
 
-handler.use(authorize);
-handler.use(authorizeAuthor);
-handler.use(upload.single("upload"));
+api.use(authorize);
+api.use(authorizeAuthor);
+api.use(upload.single("upload"));
 
-handler.post((req, res) => {
+api.post((req, res) => {
   res.status(200).json({
     url: process.env.BASE_IMAGE_URL + "/images/" + fileName,
   });
 });
 
-export default handler;
+export default api;
 
 export const config = {
   api: {

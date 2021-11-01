@@ -82,29 +82,53 @@ export default function Home({
 }
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const latestPostsData = await axios({
+    data: {
+      take: 5,
+      cursor: "pointer",
+      isfirst: true,
+      type: "latest",
+    },
     method: "GET",
-    url: `/getlatestposts?a=${5}&isfirst=${true}`,
+    url: `/post/posts`,
     baseURL: process.env.BASE_API_URL,
   }).then(function (response) {
     return response.data;
   });
   const mostViewedPostsData = await axios({
+    data: {
+      take: 5,
+      cursor: "pointer",
+      isfirst: true,
+      type: "mostViewed",
+    },
     method: "GET",
-    url: `/getmostviewedposts?a=${5}&isfirst=${true}`,
+    url: `/post/posts`,
     baseURL: process.env.BASE_API_URL,
   }).then(function (response) {
     return response.data;
   });
   const mostLikedPostsData = await axios({
+    data: {
+      take: 10,
+      cursor: "pointer",
+      isfirst: true,
+      type: "mostLiked",
+    },
     method: "GET",
-    url: `/getmostlikedposts?a=${10}&isfirst=${true}`,
+    url: `/post/posts`,
     baseURL: process.env.BASE_API_URL,
   }).then(function (response) {
     return response.data;
   });
   const mostTalkedPostsData = await axios({
+    data: {
+      take: 4,
+      cursor: "pointer",
+      isfirst: true,
+      type: "mostTalked",
+    },
     method: "GET",
-    url: `/getmosttalkedposts?a=${4}&isfirst=${true}`,
+    url: `/post/posts`,
     baseURL: process.env.BASE_API_URL,
   }).then(function (response) {
     return response.data;

@@ -1,20 +1,20 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { prisma } from "../../../lib/db";
-import { getAllDaysFrom } from "../../../lib/week";
+import { getAllDaysFromDB } from "../../../lib/week";
 
 import authorize from "../../../lib/api/authorize";
 import authorizeAuthor from "../../../lib/api/authorizeauthor";
 import handler from "../../../lib/api/handler";
+const api = handler();
 
-handler.use(authorize);
-handler.use(authorizeAuthor);
+api.use(authorize);
+api.use(authorizeAuthor);
 
-handler.get(async (req, res) => {
+api.get(async (req, res) => {
   const { userId, days } = req.body;
-  if (!userId && !days)
-    res.status(400).json({ err: "Kullanıcı bilgileri hatalı" });
+  if (!userId || !days) throw new Error("Kullanıcı bilgileri hatalı");
 
-  const list = getAllDaysFrom(days);
+  const list = getAllDaysFromDB(days);
 
   let fviewCountValues: Array<number> = [];
   let fcommentCountValues: Array<number> = [];
@@ -132,4 +132,4 @@ handler.get(async (req, res) => {
   });
 });
 
-export default handler;
+export default api;

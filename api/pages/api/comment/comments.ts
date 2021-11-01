@@ -1,23 +1,22 @@
 import { prisma } from "../../../lib/db";
 
 import handler from "../../../lib/api/handler";
+const api = handler();
 
-handler.get(async (req, res) => {
-  const { a, cursor, postid, isfirst } = req.body;
-  const b = a.toString();
-  const take = parseInt(b);
-  if (!take && !postid)
-    return res.status(400).json({ err: "Slug eklenmemiş." });
+api.get(async (req, res) => {
+  const { take, cursor, postId, isfirst } = req.body;
+  console.log(req.body);
+
+  if (!take || !postId || !cursor) throw new Error("Veri eklenmemiş.");
   let comments;
-  if (!isfirst && !cursor)
-    return res.status(400).json({ err: "Slug eklenmemiş." });
+
   if (!isfirst)
     comments = await prisma.comment.findMany({
       take: take,
       skip: 1,
-      cursor: { id: cursor.toString() },
+      cursor: { id: cursor },
       where: {
-        postId: postid.toString(),
+        postId: postId,
       },
       select: {
         _count: true,
@@ -46,7 +45,7 @@ handler.get(async (req, res) => {
     comments = await prisma.comment.findMany({
       take: take,
       where: {
-        postId: postid.toString(),
+        postId: postId,
       },
       select: {
         _count: true,
@@ -74,4 +73,4 @@ handler.get(async (req, res) => {
   return res.status(200).json(comments);
 });
 
-export default handler;
+export default api;

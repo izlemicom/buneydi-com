@@ -24,7 +24,7 @@ function ArticleTextEditor() {
           config={{
             simpleUpload: {
               // The URL that the images are uploaded to.
-              uploadUrl: "./api/upload",
+              uploadUrl: "./api/image/image",
 
               // Enable the XMLHttpRequest.withCredentials property.
               //withCredentials: false,

@@ -15,8 +15,14 @@ function CommentsPostPage({ commentsCount, firstComments, postId }) {
   async function moreComments() {
     if (comments.length >= commentsCount) return;
     let moreComments: any = await axios({
-      method: "GET",
-      url: `http://localhost:3000/api/getpostcomments?a=${4}&cursor=${cursor}&postid=${postId}`,
+      data: {
+        take: 4,
+        cursor: cursor,
+        postId: postId,
+      },
+      method: "POST",
+      url: `/comment/comments`,
+      baseURL: process.env.BASE_API_URL,
     }).then(function (response) {
       return response.data;
     });

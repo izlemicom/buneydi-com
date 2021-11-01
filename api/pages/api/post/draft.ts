@@ -3,8 +3,9 @@ import handler from "../../../lib/api/handler";
 import slugGenerator from "../../../lib/slugGenerator";
 import authorize from "../../../lib/api/authorize";
 import authorizeAuthor from "../../../lib/api/authorizeauthor";
+const api = handler();
 
-handler.get(async (req, res) => {
+api.get(async (req, res) => {
   const { slug } = req.body;
   if (!slug) throw new Error("Veri eklenmemiş.");
 
@@ -36,10 +37,10 @@ handler.get(async (req, res) => {
   res.status(200).json(post);
 });
 
-handler.use(authorize);
-handler.use(authorizeAuthor);
+api.use(authorize);
+api.use(authorizeAuthor);
 
-handler.post(async (req, res) => {
+api.post(async (req, res) => {
   const { title, content, mainImage, tags, userId } = req.body;
 
   if (!title || !content || !mainImage || !userId)
@@ -111,4 +112,4 @@ handler.post(async (req, res) => {
   res.status(200).json(post);
 });
 
-export default handler;
+export default api;

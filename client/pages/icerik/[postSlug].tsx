@@ -28,12 +28,13 @@ function PostPage({ post, relatedPosts, firstComments }) {
     );
     const response = await axios({
       method: "POST",
-      url: "http://localhost:3000/api/setview",
+      url: "/post/view",
       data: {
         ip: result.ip,
         postid: post.id,
         userid: post.user.id,
       },
+      baseURL: process.env.BASE_API_URL,
     })
       .then(function (response) {
         return response.data;
@@ -73,8 +74,12 @@ function PostPage({ post, relatedPosts, firstComments }) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const post: any = await axios({
+    data: {
+      slug: context.query.postSlug,
+    },
     method: "GET",
-    url: `http://localhost:3000/api/getpost?slug=${context.query.postSlug}`,
+    url: `/post/post`,
+    baseURL: process.env.BASE_API_URL,
   }).then(function (response) {
     return response.data;
   });
@@ -89,18 +94,30 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let relatedPosts;
   if (!post.tags) {
     relatedPosts = await axios({
+      data: {
+        tagSlug: post.tags[0].slug ? post.tags[0].slug : new Date().toISOString,
+        postId: post.id,
+        take: 6,
+        type: "related",
+      },
       method: "GET",
-      url: `http://localhost:3000/api/getrelatedposts?slug=${post.tags[0].slug}&postid=${post.id}`,
+      url: `/post/posts`,
+      baseURL: process.env.BASE_API_URL,
     }).then(function (response) {
       return response.data;
     });
   } else relatedPosts = null;
 
   const firstComments = await axios({
+    data: {
+      take: 4,
+      postId: post.id,
+      isfirst: true,
+      cursor: "pointer",
+    },
     method: "GET",
-    url: `http://localhost:3000/api/getpostcomments?a=${4}&postid=${
-      post.id
-    }&isfirst=${true}`,
+    url: `/comment/comments`,
+    baseURL: process.env.BASE_API_URL,
   }).then(function (response) {
     return response.data;
   });

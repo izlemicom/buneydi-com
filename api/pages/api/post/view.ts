@@ -1,8 +1,9 @@
 import { prisma } from "../../../lib/db";
 
 import handler from "../../../lib/api/handler";
+const api = handler();
 
-handler.post(async (req, res) => {
+api.post(async (req, res) => {
   const { ip, postid, userid } = req.body;
   if (!ip) throw new Error("Veri eklenmemiş.");
 
@@ -41,4 +42,4 @@ handler.post(async (req, res) => {
   res.status(200).json(view);
 });
 
-export default handler;
+export default api;
