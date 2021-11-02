@@ -15,7 +15,7 @@ function CommentsPostPage({ commentsCount, firstComments, postId }) {
   async function moreComments() {
     if (comments.length >= commentsCount) return;
     let moreComments: any = await axios({
-      data: {
+      params: {
         take: 4,
         cursor: cursor,
         postId: postId,

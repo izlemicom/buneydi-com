@@ -11,10 +11,10 @@ api.use(authorize);
 api.use(authorizeAuthor);
 
 api.get(async (req, res) => {
-  const { userId, days } = req.body;
+  const { userId, days } = req.query;
   if (!userId || !days) throw new Error("Kullanıcı bilgileri hatalı");
 
-  const list = getAllDaysFromDB(days);
+  const list = getAllDaysFromDB(parseInt(days.toString()));
 
   let fviewCountValues: Array<number> = [];
   let fcommentCountValues: Array<number> = [];
@@ -31,7 +31,7 @@ api.get(async (req, res) => {
     const viewCountWeek = await prisma.postViews.count({
       where: {
         user: {
-          id: userId,
+          id: userId.toString(),
         },
         createdAt: {
           gte: new Date(firstDate),
@@ -44,7 +44,7 @@ api.get(async (req, res) => {
       where: {
         post: {
           user: {
-            id: userId,
+            id: userId.toString(),
           },
         },
         createdAt: {
@@ -58,7 +58,7 @@ api.get(async (req, res) => {
       where: {
         post: {
           user: {
-            id: userId,
+            id: userId.toString(),
           },
         },
         createdAt: {
@@ -81,7 +81,7 @@ api.get(async (req, res) => {
   const viewCountTotal = await prisma.postViews.count({
     where: {
       user: {
-        id: userId,
+        id: userId.toString(),
       },
     },
   });
@@ -90,7 +90,7 @@ api.get(async (req, res) => {
     where: {
       post: {
         user: {
-          id: userId,
+          id: userId.toString(),
         },
       },
     },
@@ -100,7 +100,7 @@ api.get(async (req, res) => {
     where: {
       post: {
         user: {
-          id: userId,
+          id: userId.toString(),
         },
       },
     },
@@ -108,7 +108,7 @@ api.get(async (req, res) => {
   const postCountTotal = await prisma.post.count({
     where: {
       user: {
-        id: userId,
+        id: userId.toString(),
       },
     },
   });

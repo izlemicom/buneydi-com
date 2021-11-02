@@ -1,9 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
-import Cors from "cors";
-const cors = Cors({
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"],
-});
+import cors from "cors";
+
+const corsOptions = {
+  origin: "http://localhost:3005",
+  credentials: true, //access-control-allow-credentials:true
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+  optionSuccessStatus: 200,
+};
+
 export default function handler() {
   return nextConnect<NextApiRequest, NextApiResponse>({
     onError(error, req, res) {
@@ -15,5 +20,5 @@ export default function handler() {
     onNoMatch(req, res) {
       res.status(405).json({ error: `Metoda '${req.method}' izin verilmiyor` });
     },
-  }).use(cors);
+  }).use(cors(corsOptions));
 }

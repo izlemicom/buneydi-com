@@ -4,16 +4,15 @@ import handler from "../../../lib/api/handler";
 const api = handler();
 
 api.get(async (req, res) => {
-  const { a, cursor, isfirst } = req.body;
-  const b = a.toString();
-  const take = parseInt(b);
+  const { take, cursor, isfirst } = req.query;
+
   if (!take) return res.status(400).json({ err: "Slug eklenmemiş." });
   let authors;
   if (!isfirst && !cursor)
     return res.status(400).json({ err: "Slug eklenmemiş." });
   if (!isfirst)
     authors = await prisma.user.findMany({
-      take: take,
+      take: parseInt(take.toString()),
       skip: 1,
       cursor: { id: cursor.toString() },
       where: {
@@ -42,7 +41,7 @@ api.get(async (req, res) => {
     });
   if (isfirst)
     authors = await prisma.user.findMany({
-      take: take,
+      take: parseInt(take.toString()),
       where: {
         role: "AUTHOR",
       },

@@ -82,7 +82,7 @@ export default function Home({
 }
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const latestPostsData = await axios({
-    data: {
+    params: {
       take: 5,
       cursor: "pointer",
       isfirst: true,
@@ -95,7 +95,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return response.data;
   });
   const mostViewedPostsData = await axios({
-    data: {
+    params: {
       take: 5,
       cursor: "pointer",
       isfirst: true,
@@ -108,7 +108,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return response.data;
   });
   const mostLikedPostsData = await axios({
-    data: {
+    params: {
       take: 10,
       cursor: "pointer",
       isfirst: true,
@@ -121,7 +121,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return response.data;
   });
   const mostTalkedPostsData = await axios({
-    data: {
+    params: {
       take: 4,
       cursor: "pointer",
       isfirst: true,

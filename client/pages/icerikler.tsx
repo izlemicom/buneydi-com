@@ -11,15 +11,21 @@ function Icerikler({ data }) {
   if (postCount > 5) {
     a = posts[4].id;
   }
-  let mainOption = "getlatestposts";
+  let mainOption = "latest";
   const [allPosts, setAllPosts] = useState(posts);
   const [cursor, setCursor] = useState(a);
 
   async function morePosts() {
     if (allPosts.length >= postCount) return;
     let morePosts: any = await axios({
+      params: {
+        take: 5,
+        cursor: cursor,
+        type: mainOption,
+      },
       method: "GET",
-      url: `http://localhost:3000/api/${mainOption}?a=${5}&cursor=${cursor}`,
+      url: `/post/posts`,
+      baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
     }).then(function (response) {
       return response.data;
     });
@@ -33,8 +39,15 @@ function Icerikler({ data }) {
   }
   async function getFirstPosts(option) {
     const data: any = await axios({
+      params: {
+        take: 5,
+        cursor: "pointer",
+        isfirst: true,
+        type: option,
+      },
       method: "GET",
-      url: `http://localhost:3000/api/${option}?a=${5}&isfirst=${true}`,
+      url: `/post/posts`,
+      baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
     }).then(function (response) {
       return response.data;
     });
@@ -52,19 +65,17 @@ function Icerikler({ data }) {
   function handleChange(e) {
     switch (e.target.value) {
       case "1":
-        getFirstPosts("getlatestposts");
+        getFirstPosts("latest");
         break;
       case "2":
-        getFirstPosts("getmostviewedposts");
+        getFirstPosts("mostViewed");
         break;
       case "3":
-        getFirstPosts("getmostlikedposts");
+        getFirstPosts("mostLiked");
         break;
       case "4":
-        getFirstPosts("getmosttalkedposts");
+        getFirstPosts("mostTalked");
         break;
-      default:
-        getFirstPosts("getlatestposts");
     }
   }
 
@@ -156,8 +167,15 @@ function Icerikler({ data }) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const data = await axios({
+    params: {
+      take: 5,
+      cursor: "pointer",
+      isfirst: true,
+      type: "latest",
+    },
     method: "GET",
-    url: `http://localhost:3000/api/getlatestposts?a=${5}&isfirst=${true}`,
+    url: `/post/posts`,
+    baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
   }).then(function (response) {
     return response.data;
   });

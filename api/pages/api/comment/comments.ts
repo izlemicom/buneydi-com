@@ -2,20 +2,19 @@ import { prisma } from "../../../lib/db";
 
 import handler from "../../../lib/api/handler";
 const api = handler();
-
 api.get(async (req, res) => {
-  const { take, cursor, postId, isfirst } = req.body;
+  let { take, cursor, postId, isfirst } = req.query;
 
   if (!take || !postId || !cursor) throw new Error("Veri eklenmemiş.");
   let comments;
 
   if (!isfirst)
     comments = await prisma.comment.findMany({
-      take: take,
+      take: parseInt(take.toString()),
       skip: 1,
-      cursor: { id: cursor },
+      cursor: { id: cursor.toString() },
       where: {
-        postId: postId,
+        postId: postId.toString(),
       },
       select: {
         _count: true,
@@ -42,9 +41,9 @@ api.get(async (req, res) => {
     });
   if (isfirst)
     comments = await prisma.comment.findMany({
-      take: take,
+      take: parseInt(take.toString()),
       where: {
-        postId: postId,
+        postId: postId.toString(),
       },
       select: {
         _count: true,

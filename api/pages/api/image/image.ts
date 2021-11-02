@@ -29,6 +29,7 @@ api.use(authorizeAuthor);
 api.use(upload.single("upload"));
 
 api.post((req, res) => {
+  console.log(req.headers);
   res.status(200).json({
     url: process.env.BASE_IMAGE_URL + "/images/" + fileName,
   });

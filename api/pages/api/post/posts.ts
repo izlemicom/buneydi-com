@@ -6,7 +6,8 @@ let postCount = 0;
 const api = handler();
 
 api.get(async (req, res) => {
-  const { isfirst, take, cursor, tagSlug, postId, type } = req.body;
+  console.log(req.query);
+  let { isfirst, take, cursor, tagSlug, postId, type } = req.query;
   switch (type) {
     case "related":
       res.status(200).send(await relatedPosts(tagSlug, postId, take));
@@ -28,10 +29,10 @@ api.get(async (req, res) => {
 
 export default api;
 
-async function relatedPosts(tagSlug: string, postId: string, take: number) {
+async function relatedPosts(tagSlug, postId, take) {
   if (!tagSlug || !postId || !take) throw new Error("Veri eklenmemiş.");
   posts = await prisma.post.findMany({
-    take: take,
+    take: parseInt(take.toString()),
     where: {
       tags: {
         some: {
@@ -59,14 +60,14 @@ async function relatedPosts(tagSlug: string, postId: string, take: number) {
   return posts;
 }
 
-async function latestPosts(isfirst: boolean, take: number, cursor: string) {
+async function latestPosts(isfirst, take, cursor) {
   if (!cursor || !take) throw new Error("Veri eklenmemiş.");
 
   if (!isfirst)
     posts = await prisma.post.findMany({
-      take: take,
+      take: parseInt(take.toString()),
       skip: 1,
-      cursor: { id: cursor },
+      cursor: { id: cursor.toString() },
       where: {
         state: "PUBLISHED",
       },
@@ -91,7 +92,7 @@ async function latestPosts(isfirst: boolean, take: number, cursor: string) {
     });
   if (isfirst)
     posts = await prisma.post.findMany({
-      take: take,
+      take: parseInt(take.toString()),
       where: {
         state: "PUBLISHED",
       },
@@ -122,14 +123,14 @@ async function latestPosts(isfirst: boolean, take: number, cursor: string) {
   return { posts, postCount };
 }
 
-async function mostLikedPosts(isfirst: boolean, take: number, cursor: string) {
+async function mostLikedPosts(isfirst, take, cursor) {
   if (!cursor || !take) throw new Error("Veri eklenmemiş.");
 
   if (!isfirst)
     posts = await prisma.post.findMany({
-      take: take,
+      take: parseInt(take.toString()),
       skip: 1,
-      cursor: { id: cursor },
+      cursor: { id: cursor.toString() },
       where: {
         state: "PUBLISHED",
       },
@@ -156,7 +157,7 @@ async function mostLikedPosts(isfirst: boolean, take: number, cursor: string) {
     });
   if (isfirst)
     posts = await prisma.post.findMany({
-      take: take,
+      take: parseInt(take.toString()),
       where: {
         state: "PUBLISHED",
       },
@@ -189,14 +190,14 @@ async function mostLikedPosts(isfirst: boolean, take: number, cursor: string) {
   return { posts, postCount };
 }
 
-async function mostTalkedPosts(isfirst: boolean, take: number, cursor: string) {
+async function mostTalkedPosts(isfirst, take, cursor) {
   if (!cursor || !take) throw new Error("Veri eklenmemiş.");
 
   if (!isfirst)
     posts = await prisma.post.findMany({
-      take: take,
+      take: parseInt(take.toString()),
       skip: 1,
-      cursor: { id: cursor },
+      cursor: { id: cursor.toString() },
       where: {
         state: "PUBLISHED",
       },
@@ -223,7 +224,7 @@ async function mostTalkedPosts(isfirst: boolean, take: number, cursor: string) {
     });
   if (isfirst)
     posts = await prisma.post.findMany({
-      take: take,
+      take: parseInt(take.toString()),
       where: {
         state: "PUBLISHED",
       },
@@ -257,14 +258,14 @@ async function mostTalkedPosts(isfirst: boolean, take: number, cursor: string) {
   return { posts, postCount };
 }
 
-async function mostViewedPosts(isfirst: boolean, take: number, cursor: string) {
+async function mostViewedPosts(isfirst, take, cursor) {
   if (!cursor || !take) throw new Error("Veri eklenmemiş.");
 
   if (!isfirst)
     posts = await prisma.post.findMany({
-      take: take,
+      take: parseInt(take.toString()),
       skip: 1,
-      cursor: { id: cursor },
+      cursor: { id: cursor.toString() },
       where: {
         state: "PUBLISHED",
       },
@@ -291,7 +292,7 @@ async function mostViewedPosts(isfirst: boolean, take: number, cursor: string) {
     });
   if (isfirst)
     posts = await prisma.post.findMany({
-      take: take,
+      take: parseInt(take.toString()),
       where: {
         state: "PUBLISHED",
       },

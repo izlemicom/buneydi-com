@@ -74,7 +74,7 @@ function PostPage({ post, relatedPosts, firstComments }) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const post: any = await axios({
-    data: {
+    params: {
       slug: context.query.postSlug,
     },
     method: "GET",
@@ -94,7 +94,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let relatedPosts;
   if (!post.tags) {
     relatedPosts = await axios({
-      data: {
+      params: {
         tagSlug: post.tags[0].slug ? post.tags[0].slug : new Date().toISOString,
         postId: post.id,
         take: 6,
@@ -109,7 +109,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } else relatedPosts = null;
 
   const firstComments = await axios({
-    data: {
+    params: {
       take: 4,
       postId: post.id,
       isfirst: true,

@@ -6,11 +6,11 @@ import authorizeAuthor from "../../../lib/api/authorizeauthor";
 const api = handler();
 
 api.get(async (req, res) => {
-  const { slug } = req.body;
+  const { slug } = req.query;
   if (!slug) throw new Error("Veri eklenmemiş.");
   const post = await prisma.post.findUnique({
     where: {
-      slug: slug,
+      slug: slug.toString(),
     },
     include: {
       _count: true,
