@@ -114,7 +114,7 @@ export async function getServerSideProps(ctx) {
   if (session) {
     data = await axios({
       headers: ctx.req.headers,
-      data: {
+      params: {
         userId: session.id,
         days: 14,
       },

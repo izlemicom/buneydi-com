@@ -7,6 +7,7 @@ import { UiFileInputButton } from "./UiFileInputButton";
 import Image from "next/image";
 import CryptoJS from "crypto-js";
 import { Encrypt } from "../../lib/CRYPT";
+import { Post } from ".prisma/client";
 
 // components
 
@@ -16,37 +17,111 @@ export default function CardContentAdd({ user }) {
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState("");
-
+  const [draft, setDraft] = useState<any>();
+  let cDraft: any;
   async function onIzle() {
     const post = {
       title: title,
       content: data,
       mainImage: url,
+      tags: tags,
+      userId: user.id,
     };
-    console.log(process.env.BASE_API_URL);
-    const draft = await axios({
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST",
-      },
-      data: post,
-      method: "POST",
-      url: "http://localhost:3000/api/savedraft",
-    }).then(function (response) {
-      return response.data;
-    });
-    const encoded = Encrypt(draft);
-    window.open(`http://localhost:3000/onizle?post=${encoded}`, "_blank");
+    if (draft) {
+      cDraft = await axios({
+        withCredentials: true,
+        data: {
+          title: title,
+          content: data,
+          mainImage: url,
+          tags: tags,
+          userId: user.id,
+          id: draft.id,
+        },
+        method: "PATCH",
+        url: "/api/post/draft",
+      }).then(function (response) {
+        return response.data;
+      });
+      console.log(cDraft);
+      setDraft(cDraft);
+      console.log(draft);
+    } else {
+      cDraft = await axios({
+        withCredentials: true,
+        data: post,
+        method: "POST",
+        url: "/api/post/draft",
+      }).then(function (response) {
+        return response.data;
+      });
+      console.log(cDraft);
+      setDraft(cDraft);
+      console.log(draft);
+    }
+    console.log(draft);
+    const encoded = Encrypt({ slug: cDraft.slug });
+    console.log(draft);
+    window.open(`http://localhost:3005/onizle?post=${encoded}`, "_blank");
+  }
+  async function publishPost() {
+    const post = {
+      title: title,
+      content: data,
+      mainImage: url,
+      tags: tags,
+      userId: user.id,
+    };
+    if (draft) {
+      cDraft = await axios({
+        withCredentials: true,
+        data: {
+          title: title,
+          content: data,
+          mainImage: url,
+          tags: tags,
+          userId: user.id,
+          id: draft.id,
+        },
+        method: "PATCH",
+        url: "/api/post/post",
+      }).then(function (response) {
+        return response.data;
+      });
+      console.log(cDraft);
+      setDraft(cDraft);
+      console.log(draft);
+    } else {
+      cDraft = await axios({
+        withCredentials: true,
+        data: post,
+        method: "POST",
+        url: "/api/post/post",
+      }).then(function (response) {
+        return response.data;
+      });
+      console.log(cDraft);
+      setDraft(cDraft);
+      console.log(draft);
+    }
+    console.log(draft);
+    console.log(draft);
+    window.open(`http://localhost:3005/icerik/${cDraft.slug}`, "_blank");
   }
   const onChange = async (formData) => {
     const config = {
+      withCredentials: true,
       headers: { "content-type": "multipart/form-data" },
       onUploadProgress: (event) => {
         setProgress(Math.round((event.loaded * 100) / event.total));
       },
     };
 
-    const response = await axios.post("/api/image/image", formData, config);
+    const response: any = await axios.post(
+      "/api/image/image",
+      formData,
+      config
+    );
     setUrl(response.data.url);
   };
 
@@ -170,7 +245,10 @@ export default function CardContentAdd({ user }) {
           <div className="flex flex-wrap">
             <div className="w-full mx-auto lg:w-12/12 px-4">
               <div className="relative mb-3">
-                <button className="w-full bg-emerald-500 rounded text-white font-bold focus:outline-none px-3 py-3">
+                <button
+                  onClick={publishPost}
+                  className="w-full bg-emerald-500 rounded text-white font-bold focus:outline-none px-3 py-3"
+                >
                   İÇERİĞİ YÜKLE
                 </button>
               </div>

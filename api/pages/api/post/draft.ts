@@ -46,9 +46,9 @@ api.post(async (req, res) => {
   if (!title || !content || !mainImage || !userId)
     throw new Error("Veri eklenmemiş.");
 
-  let tagArray = tags.lowerCase().split(",");
+  let tagArray = tags.toLowerCase().split(",");
   let slug = slugGenerator(title);
-  const findSlug = prisma.post.findUnique({
+  const findSlug = await prisma.post.findUnique({
     where: { slug: slug },
     select: { slug: true },
   });
@@ -66,49 +66,144 @@ api.post(async (req, res) => {
         },
       },
     },
-    select: { id: true },
+    select: { slug: true, id: true },
   });
 
   const promises = tagArray.map((tag) => {
     const slug = slugGenerator(tag);
-    const findSlug = prisma.tag.findUnique({
-      where: { slug: slug },
-    });
-    if (findSlug) {
-      const updated = prisma.tag.update({
+    if (!slug) return;
+    const findSlug = prisma.tag
+      .findUnique({
         where: { slug: slug },
-        data: {
-          posts: {
-            connect: {
-              id: post.id,
-            },
-          },
-        },
+      })
+      .then((findSlug) => {
+        if (findSlug) {
+          const updated = prisma.tag
+            .update({
+              where: { slug: slug },
+              data: {
+                posts: {
+                  connect: {
+                    id: post.id,
+                  },
+                },
+              },
+            })
+            .then((data) => {
+              return data;
+            });
+          return updated;
+        } else {
+          const added = prisma.tag
+            .create({
+              data: {
+                content: tag,
+                slug: slug,
+                createdBy: {
+                  connect: {
+                    id: userId,
+                  },
+                },
+                posts: {
+                  connect: {
+                    id: post.id,
+                  },
+                },
+              },
+            })
+            .then((data) => {
+              return data;
+            });
+          return added;
+        }
       });
-      return updated;
-    } else {
-      const added = prisma.tag.create({
-        data: {
-          content: tag,
-          slug: slug,
-          createdBy: {
-            connect: {
-              id: userId,
-            },
-          },
-          posts: {
-            connect: {
-              id: post.id,
-            },
-          },
+    console.log(findSlug);
+  });
+  await Promise.all(promises).then(function (results) {});
+  res.status(200).json(post);
+});
+
+api.patch(async (req, res) => {
+  const { title, content, mainImage, tags, userId, id } = req.body;
+
+  if (!title || !content || !mainImage || !userId || !id)
+    throw new Error("Veri eklenmemiş.");
+
+  let tagArray = tags.toLowerCase().split(",");
+  let slug = slugGenerator(title);
+  const findSlug = await prisma.post.findUnique({
+    where: { id: id },
+    select: { slug: true },
+  });
+  if (!findSlug) throw new Error("Taslak bulunamadı.");
+
+  const post = await prisma.post.update({
+    where: { id: id },
+    data: {
+      title: title,
+      content: content,
+      slug: slug,
+      mainImage: mainImage,
+      user: {
+        connect: {
+          id: userId,
         },
+      },
+    },
+    select: { slug: true, id: true },
+  });
+
+  const promises = tagArray.map((tag) => {
+    const slug = slugGenerator(tag);
+    if (!slug) return;
+    const findSlug = prisma.tag
+      .findUnique({
+        where: { slug: slug },
+      })
+      .then((findSlug) => {
+        if (findSlug) {
+          const updated = prisma.tag
+            .update({
+              where: { slug: slug },
+              data: {
+                posts: {
+                  connect: {
+                    id: post.id,
+                  },
+                },
+              },
+            })
+            .then((data) => {
+              return data;
+            });
+          return updated;
+        } else {
+          const added = prisma.tag
+            .create({
+              data: {
+                content: tag,
+                slug: slug,
+                createdBy: {
+                  connect: {
+                    id: userId,
+                  },
+                },
+                posts: {
+                  connect: {
+                    id: post.id,
+                  },
+                },
+              },
+            })
+            .then((data) => {
+              return data;
+            });
+          return added;
+        }
       });
-      return added;
-    }
+    console.log(findSlug);
   });
-  Promise.all(promises).then(function (results) {
-    console.log(results);
-  });
+  await Promise.all(promises).then(function (results) {});
   res.status(200).json(post);
 });
 

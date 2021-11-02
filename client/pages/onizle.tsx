@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ArticleContent from "../components/ArticleContent";
-import CryptoJS from "crypto-js";
 import { Decrypt } from "../lib/CRYPT";
+import axios from "axios";
 
 function OnIzle({ lastData }) {
   const data = {
@@ -20,11 +20,8 @@ function OnIzle({ lastData }) {
     },
   };
 
-  const [post, setPost] = useState(data);
-  useEffect(() => {
-    const decryptedData = Decrypt(lastData);
-    setPost(decryptedData);
-  }, []);
+  const [post, setPost] = useState(lastData);
+
   return (
     <div>
       <main className="mx-10 xl:w-4/5 md:mx-32 lg:mx-5 xl:mx-auto">
@@ -39,8 +36,19 @@ function OnIzle({ lastData }) {
     </div>
   );
 }
-export function getServerSideProps({ query }) {
-  const lastData = query.post.toString();
+export async function getServerSideProps({ query }) {
+  const decryptedData = Decrypt(query.post.toString());
+  console.log(decryptedData);
+  const lastData = await axios({
+    params: {
+      slug: decryptedData.slug,
+    },
+    method: "GET",
+    url: `/post/draft`,
+    baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
+  }).then(function (response) {
+    return response.data;
+  });
   return {
     props: {
       lastData,
