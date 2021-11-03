@@ -1,17 +1,78 @@
+import axios from "axios";
+import { GetServerSideProps } from "next";
+import { useState } from "react";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import Tag from "../components/Tag";
 
-function Etiketler() {
-  function handleChange(e) {}
+function Etiketler({ data }) {
+  let { tags, tagsCount } = data;
+  let a = "";
+  if (tagsCount > 20) {
+    a = tags[19].id;
+  }
+  let mainOption = "latest";
+  const [allTags, setAllTags] = useState(tags);
+  const [cursor, setCursor] = useState(a);
 
-  const tags = [
-    {
-      id: "1",
-      slug: "1",
-      content: "1",
-    },
-  ];
+  async function moreTags() {
+    if (allTags.length >= tagsCount) return;
+    let morePosts: any = await axios({
+      params: {
+        take: 20,
+        cursor: cursor,
+        type: mainOption,
+      },
+      method: "GET",
+      url: `/tag/tags`,
+      baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
+    }).then(function (response) {
+      return response.data;
+    });
+    let newPosts = morePosts.posts;
+    tagsCount = morePosts.tagsCount;
+    if (newPosts.length === 5) setCursor(newPosts[4].id);
+    console.log(newPosts);
+    newPosts = allTags.concat(newPosts);
+    console.log(newPosts);
+    setAllTags(newPosts);
+  }
+  async function getFirstTags(option) {
+    const data: any = await axios({
+      params: {
+        take: 20,
+        cursor: "pointer",
+        isfirst: true,
+        type: option,
+      },
+      method: "GET",
+      url: `/tag/tags`,
+      baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
+    }).then(function (response) {
+      return response.data;
+    });
+    tags = data.tags;
+    tagsCount = data.tagsCount;
+    let a = "";
+    if (tagsCount > 20) {
+      a = tags[19].id;
+    }
+    mainOption = option;
+    setAllTags(tags);
+    setCursor(a);
+  }
+
+  function handleChange(e) {
+    switch (e.target.value) {
+      case "1":
+        getFirstTags("latest");
+        break;
+      case "2":
+        getFirstTags("mostMentioned");
+        break;
+    }
+  }
+
   return (
     <div>
       <NavBar />
@@ -54,16 +115,43 @@ function Etiketler() {
           </div>
           <div className="lg:col-span-3">
             <div className="flex flex-wrap py-2 rounded-lg border-2">
-              {tags.map((tag) => (
+              {allTags.map((tag) => (
                 <Tag key={tag.id} tag={tag} />
               ))}
             </div>
           </div>
         </div>
+        <button
+          onClick={moreTags}
+          className="flex items-center justify-center rounded-lg py-1 my-2 text-white text-lg font-medium bg-indigo-500 w-full hover:bg-indigo-400 active:translate-y-0.5"
+        >
+          Daha Fazla Etiket Yükle
+        </button>
       </main>
       <Footer />
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const data = await axios({
+    params: {
+      take: 20,
+      cursor: "pointer",
+      isfirst: true,
+      type: "latest",
+    },
+    method: "GET",
+    url: `/tag/tags`,
+    baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
+  }).then(function (response) {
+    return response.data;
+  });
+  return {
+    props: {
+      data,
+    },
+  };
+};
 
 export default Etiketler;

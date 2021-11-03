@@ -9,8 +9,8 @@ function Yazarlar({ data }) {
   const { authors, authorCount } = data;
 
   let a = "";
-  if (authorCount > 4) {
-    a = authors[3].id;
+  if (authorCount > 20) {
+    a = authors[19].id;
   }
 
   const [allAuthors, setAllAuthors] = useState(authors);
@@ -19,12 +19,14 @@ function Yazarlar({ data }) {
   async function moreAuthors() {
     if (allAuthors.length >= authorCount) return;
     let moreAuthors: any = await axios({
+      params: { take: 20, cursor: cursor },
       method: "GET",
-      url: `http://localhost:3000/api/getauthors?a=${4}&cursor=${cursor}`,
+      url: `/author/authors`,
+      baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
     }).then(function (response) {
       return response.data;
     });
-    if (moreAuthors.length === 4) setCursor(moreAuthors[3].id);
+    if (moreAuthors.length === 20) setCursor(moreAuthors[19].id);
     moreAuthors = allAuthors.concat(moreAuthors);
     setAllAuthors(moreAuthors);
   }
@@ -53,8 +55,10 @@ function Yazarlar({ data }) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const data = await axios({
+    params: { take: 20, isfirst: true, cursor: false },
     method: "GET",
-    url: `http://localhost:3000/api/getauthors?a=${20}&isfirst=${true}`,
+    url: `/author/authors`,
+    baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
   }).then(function (response) {
     return response.data;
   });

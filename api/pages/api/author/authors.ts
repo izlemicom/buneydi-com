@@ -6,10 +6,10 @@ const api = handler();
 api.get(async (req, res) => {
   const { take, cursor, isfirst } = req.query;
 
-  if (!take) return res.status(400).json({ err: "Slug eklenmemiş." });
+  if (!take || !cursor) throw new Error("Veri eklenmemiş.");
+
   let authors;
-  if (!isfirst && !cursor)
-    return res.status(400).json({ err: "Slug eklenmemiş." });
+
   if (!isfirst)
     authors = await prisma.user.findMany({
       take: parseInt(take.toString()),
