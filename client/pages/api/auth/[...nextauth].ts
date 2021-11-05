@@ -13,7 +13,7 @@ export default NextAuth({
   adapter: PrismaAdapter(prisma),
   callbacks: {
     async session(session, user) {
-      session.id = user.id;
+      session.id = user.id.toString();
       session.role = user.role;
       session.user = user;
       return session;

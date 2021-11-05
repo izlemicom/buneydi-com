@@ -9,8 +9,9 @@ import SimilarPosts from "../../components/SimilarPosts";
 import { useState } from "react";
 import CommentsPostPage from "../../components/CommentsPostPage";
 import Head from "next/head";
+import { getSession } from "next-auth/client";
 
-function PostPage({ post, relatedPosts, firstComments }) {
+function PostPage({ post, relatedPosts, firstComments, session }) {
   const isServer = typeof window === "undefined";
 
   async function getClientIp(url: string) {
@@ -54,11 +55,12 @@ function PostPage({ post, relatedPosts, firstComments }) {
         <div className="lg:grid lg:grid-cols-4 lg:space-x-4">
           <div className="hidden lg:grid lg:col-span-1 lg:pt-14"></div>
           <div className="lg:col-span-2">
-            <ArticleContent post={post} />
+            <ArticleContent post={post} session={session} />
             <CommentsPostPage
               commentsCount={post._count.comments}
               firstComments={firstComments}
               postId={post.id}
+              session={session}
             />
           </div>
           <div className="lg:col-span-1 lg:pt-14">
@@ -73,6 +75,7 @@ function PostPage({ post, relatedPosts, firstComments }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
   const post: any = await axios({
     params: {
       slug: context.query.postSlug,
@@ -126,6 +129,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       post,
       relatedPosts,
       firstComments,
+      session,
     },
   };
 };

@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
+import { useRecoilState } from "recoil";
+import { commentsAdd } from "../atoms/recoil";
 import CommentByUser from "./CommentByUser";
 import CommentPost from "./CommentPost";
 
-function CommentsPostPage({ commentsCount, firstComments, postId }) {
+function CommentsPostPage({ commentsCount, firstComments, postId, session }) {
   let a = "";
   if (commentsCount > 4) {
     a = firstComments[3].id;
@@ -11,6 +13,7 @@ function CommentsPostPage({ commentsCount, firstComments, postId }) {
 
   const [comments, setComments] = useState(firstComments);
   const [cursor, setCursor] = useState(a);
+  const [addedComments, setAddedComments] = useRecoilState(commentsAdd);
 
   async function moreComments() {
     if (comments.length >= commentsCount) return;
@@ -31,12 +34,6 @@ function CommentsPostPage({ commentsCount, firstComments, postId }) {
     setComments(moreComments);
   }
 
-  function addComment(comment) {
-    let addedComments = comments;
-    addedComments.unshift(comment);
-    setComments(addedComments);
-  }
-
   return (
     <div>
       {comments.length > 0 && (
@@ -46,8 +43,20 @@ function CommentsPostPage({ commentsCount, firstComments, postId }) {
             <span>Yorumlar</span>
           </div>
           <div className="py-2">
+            {addedComments &&
+              addedComments.map((comment) => (
+                <CommentByUser
+                  key={comment.id}
+                  comment={comment}
+                  session={session}
+                />
+              ))}
             {comments.map((comment) => (
-              <CommentByUser key={comment.id} comment={comment} />
+              <CommentByUser
+                key={comment.id}
+                comment={comment}
+                session={session}
+              />
             ))}
           </div>
           <button
@@ -58,7 +67,7 @@ function CommentsPostPage({ commentsCount, firstComments, postId }) {
           </button>
         </div>
       )}
-      <CommentPost postid={postId} addComment={addComment} />
+      <CommentPost postid={postId} session={session} />
     </div>
   );
 }

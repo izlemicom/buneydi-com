@@ -1,6 +1,7 @@
 import "tailwindcss/tailwind.css";
 import "../styles/font-awesome/css/all.min.css";
 import { Provider } from "next-auth/client";
+import { RecoilRoot } from "recoil";
 
 // import App from "next/app";
 import type { AppProps /*, AppContext */ } from "next/app";
@@ -8,7 +9,9 @@ import type { AppProps /*, AppContext */ } from "next/app";
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider session={pageProps.session}>
-      <Component {...pageProps} />
+      <RecoilRoot>
+        <Component {...pageProps} />
+      </RecoilRoot>
     </Provider>
   );
 }

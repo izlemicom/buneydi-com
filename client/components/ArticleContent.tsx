@@ -1,8 +1,10 @@
+import { useSession } from "next-auth/client";
 import PostPageTopBar from "./PostPageTopBar";
 
-function ArticleContent({ post }) {
+function ArticleContent({ post, session }) {
   const content = post.content;
   let isRender = content.search("<h1>") < 0 ? true : false;
+
   return (
     <article>
       <div className="flex flex-col items-center">
@@ -12,6 +14,8 @@ function ArticleContent({ post }) {
             createdAt={post.createdAt}
             user={post.user}
             _count={post._count}
+            postId={post.id}
+            session={session}
           />
           <img
             className="mb-2 mt-4 rounded-lg"

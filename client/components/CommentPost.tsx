@@ -1,11 +1,14 @@
 import axios from "axios";
 import { useSession } from "next-auth/client";
+import { useRecoilState } from "recoil";
+import { commentsAdd } from "../atoms/recoil";
 
-function CommentPost({ postid, addComment }) {
-  const [session, loading] = useSession();
+function CommentPost({ postid, session }) {
+  const [addedComments, setAddedComments] = useRecoilState(commentsAdd);
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!session) return;
     const content = e.target.elements.body.value;
     const userId = session.id;
     const postId = postid;
@@ -26,7 +29,12 @@ function CommentPost({ postid, addComment }) {
       .catch(function (err) {
         console.log(err);
       });
-    addComment(response);
+    let newComments = [];
+    newComments.push(response);
+    if (addedComments) {
+      newComments = newComments.concat(addedComments);
+    }
+    setAddedComments(newComments);
   }
   return (
     <form className="w-full" onSubmit={handleSubmit}>
