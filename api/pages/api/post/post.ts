@@ -1,3 +1,4 @@
+import { unlink } from "fs/promises";
 import { prisma } from "../../../lib/db";
 import handler from "../../../lib/api/handler";
 import slugGenerator from "../../../lib/slugGenerator";
@@ -241,6 +242,14 @@ api.delete(async (req, res) => {
   const post = await prisma.post.delete({
     where: { id: postId },
   });
+  const url = post.mainImage;
+  const arr = url.split("/");
+  const file = arr[arr.length - 1];
+  try {
+    await unlink(`./public/images/${file}`);
+  } catch (error) {
+    throw new Error("Bir şeyler ters gitti." + error);
+  }
   res.status(200).json(post);
 });
 export default api;

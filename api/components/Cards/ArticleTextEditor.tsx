@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { articleData } from "../../atoms/recoil";
 
-function ArticleTextEditor() {
+function ArticleTextEditor({ initData }) {
   const editorRef = useRef();
   const [editorLoaded, setEditorLoaded] = useState(false);
   const { CKEditor, ClassicEditor } = editorRef.current || {};
@@ -38,7 +38,7 @@ function ArticleTextEditor() {
             licenseKey: "",
           }}
           editor={ClassicEditor}
-          data={data}
+          data={initData}
           onReady={(editor) => {
             // You can store the "editor" and use when it is needed.
             editor.editing.view.change((writer) => {

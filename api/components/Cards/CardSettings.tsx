@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { authorInfo } from "../../atoms/recoil";
@@ -7,13 +8,36 @@ import RedAlert from "../Alerts/RedAlert";
 // components
 
 export default function CardSettings({ user }) {
-  let { mahlas, name, city, bio } = user;
-  let newUser = { mahlas: mahlas, name: name, city: city, bio: bio };
+  let { mahlas, userName, adress, name, iban, city, country, bio, postalCode } =
+    user;
+  let newUser = {
+    userId: user.id,
+    mahlas: mahlas,
+    userName: userName,
+    adress: adress,
+    iban: iban,
+    name: name,
+    city: city,
+    bio: bio,
+    country: country,
+    postalCode: postalCode,
+  };
 
   const [authorinfo, setAuthorInfo] = useRecoilState(authorInfo);
   useEffect(() => {
     setAuthorInfo(newUser);
   }, []);
+
+  async function Guncelle() {
+    const userBio = await axios({
+      withCredentials: true,
+      data: authorinfo,
+      method: "PATCH",
+      url: "/api/author/author",
+    }).then(function (response) {
+      return response.data;
+    });
+  }
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
@@ -21,7 +45,8 @@ export default function CardSettings({ user }) {
           <div className="text-center flex justify-between">
             <h6 className="text-blueGray-700 text-xl font-bold">Hesabım</h6>
             <button
-              className="bg-blueGray-700 active:bg-blueGray-600 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+              onClick={Guncelle}
+              className="bg-emerald-500 active:bg-emerald-800 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
               type="button"
             >
               Güncelle
@@ -43,6 +68,21 @@ export default function CardSettings({ user }) {
                     Kullanıcı Adı
                   </label>
                   <input
+                    onChange={(e) => {
+                      const changedUser = {
+                        userId: user.id,
+                        userName: e.target.value,
+                        mahlas: authorinfo.mahlas,
+                        adress: authorinfo.adress,
+                        iban: authorinfo.iban,
+                        name: authorinfo.name,
+                        city: authorinfo.city,
+                        bio: authorinfo.bio,
+                        postalCode: authorinfo.postalCode,
+                        country: authorinfo.country,
+                      };
+                      setAuthorInfo(changedUser);
+                    }}
                     type="text"
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     defaultValue={user.userName}
@@ -60,10 +100,16 @@ export default function CardSettings({ user }) {
                   <input
                     onChange={(e) => {
                       const changedUser = {
+                        userId: user.id,
+                        userName: authorinfo.userName,
                         mahlas: e.target.value,
+                        adress: authorinfo.adress,
+                        iban: authorinfo.iban,
                         name: authorinfo.name,
                         city: authorinfo.city,
                         bio: authorinfo.bio,
+                        postalCode: authorinfo.postalCode,
+                        country: authorinfo.country,
                       };
                       setAuthorInfo(changedUser);
                     }}
@@ -84,10 +130,16 @@ export default function CardSettings({ user }) {
                   <input
                     onChange={(e) => {
                       const changedUser = {
+                        userId: user.id,
+                        userName: authorinfo.userName,
                         mahlas: authorinfo.mahlas,
+                        adress: authorinfo.adress,
+                        iban: authorinfo.iban,
                         name: e.target.value,
                         city: authorinfo.city,
                         bio: authorinfo.bio,
+                        postalCode: authorinfo.postalCode,
+                        country: authorinfo.country,
                       };
                       setAuthorInfo(changedUser);
                     }}
@@ -115,6 +167,21 @@ export default function CardSettings({ user }) {
                     Adres
                   </label>
                   <input
+                    onChange={(e) => {
+                      const changedUser = {
+                        userId: user.id,
+                        userName: authorinfo.userName,
+                        mahlas: authorinfo.mahlas,
+                        adress: e.target.value,
+                        iban: authorinfo.iban,
+                        name: authorinfo.name,
+                        city: authorinfo.city,
+                        bio: authorinfo.bio,
+                        postalCode: authorinfo.postalCode,
+                        country: authorinfo.country,
+                      };
+                      setAuthorInfo(changedUser);
+                    }}
                     type="text"
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     defaultValue={user.adress}
@@ -132,10 +199,16 @@ export default function CardSettings({ user }) {
                   <input
                     onChange={(e) => {
                       const changedUser = {
+                        userId: user.id,
+                        userName: authorinfo.userName,
                         mahlas: authorinfo.mahlas,
+                        adress: authorinfo.adress,
+                        iban: authorinfo.iban,
                         name: authorinfo.name,
                         city: e.target.value,
                         bio: authorinfo.bio,
+                        postalCode: authorinfo.postalCode,
+                        country: authorinfo.country,
                       };
                       setAuthorInfo(changedUser);
                     }}
@@ -154,6 +227,21 @@ export default function CardSettings({ user }) {
                     Ülke
                   </label>
                   <input
+                    onChange={(e) => {
+                      const changedUser = {
+                        userId: user.id,
+                        userName: authorinfo.userName,
+                        mahlas: authorinfo.mahlas,
+                        adress: authorinfo.adress,
+                        iban: authorinfo.iban,
+                        name: authorinfo.name,
+                        city: authorinfo.city,
+                        bio: authorinfo.bio,
+                        postalCode: authorinfo.postalCode,
+                        country: e.target.value,
+                      };
+                      setAuthorInfo(changedUser);
+                    }}
                     type="text"
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     defaultValue={user.country}
@@ -169,6 +257,21 @@ export default function CardSettings({ user }) {
                     Posta Kodu
                   </label>
                   <input
+                    onChange={(e) => {
+                      const changedUser = {
+                        userId: user.id,
+                        userName: authorinfo.userName,
+                        mahlas: authorinfo.mahlas,
+                        adress: authorinfo.adress,
+                        iban: authorinfo.iban,
+                        name: authorinfo.name,
+                        city: authorinfo.city,
+                        bio: authorinfo.bio,
+                        postalCode: e.target.value,
+                        country: authorinfo.country,
+                      };
+                      setAuthorInfo(changedUser);
+                    }}
                     type="text"
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     defaultValue={user.postalCode}
@@ -184,6 +287,21 @@ export default function CardSettings({ user }) {
                     IBAN
                   </label>
                   <input
+                    onChange={(e) => {
+                      const changedUser = {
+                        userId: user.id,
+                        userName: authorinfo.userName,
+                        mahlas: authorinfo.mahlas,
+                        adress: authorinfo.adress,
+                        iban: e.target.value,
+                        name: authorinfo.name,
+                        city: authorinfo.city,
+                        bio: authorinfo.bio,
+                        postalCode: authorinfo.postalCode,
+                        country: authorinfo.country,
+                      };
+                      setAuthorInfo(changedUser);
+                    }}
                     type="text"
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     defaultValue={user.iban}
@@ -209,10 +327,16 @@ export default function CardSettings({ user }) {
                   <textarea
                     onChange={(e) => {
                       const changedUser = {
+                        userId: user.id,
+                        userName: authorinfo.userName,
                         mahlas: authorinfo.mahlas,
+                        adress: authorinfo.adress,
+                        iban: authorinfo.iban,
                         name: authorinfo.name,
                         city: authorinfo.city,
                         bio: e.target.value,
+                        postalCode: authorinfo.postalCode,
+                        country: authorinfo.country,
                       };
                       setAuthorInfo(changedUser);
                     }}

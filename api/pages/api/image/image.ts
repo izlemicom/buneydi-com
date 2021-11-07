@@ -4,6 +4,8 @@ import path from "path";
 import authorize from "../../../lib/api/authorize";
 import authorizeAuthor from "../../../lib/api/authorizeauthor";
 import handler from "../../../lib/api/handler";
+import { unlink } from "fs/promises";
+
 const api = handler();
 
 let fileName = "";
@@ -26,6 +28,19 @@ const upload = multer({
 
 api.use(authorize);
 api.use(authorizeAuthor);
+
+api.delete(async (req, res) => {
+  const { url } = req.query;
+  const arr = url.toString().split("/");
+  const file = arr[arr.length - 1];
+  try {
+    await unlink(`./public/images/${file}`);
+  } catch (error) {
+    throw new Error("Bir şeyler ters gitti." + error);
+  }
+  res.status(200).json({ success: "Başarılı bir şekilde silindi." });
+});
+
 api.use(upload.single("upload"));
 
 api.post((req, res) => {

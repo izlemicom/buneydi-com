@@ -150,7 +150,11 @@ export default function CardTable({ color, title, firstPosts, session, type }) {
                     </td>
 
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                      <TableDropdown postId={post.id} type={type} />
+                      <TableDropdown
+                        slug={post.slug}
+                        postId={post.id}
+                        type={type}
+                      />
                     </td>
                   </tr>
                 ))}

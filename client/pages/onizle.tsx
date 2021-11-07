@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import ArticleContent from "../components/ArticleContent";
 import { Decrypt } from "../lib/CRYPT";
 import axios from "axios";
+import { getSession } from "next-auth/client";
 
-function OnIzle({ lastData }) {
+function OnIzle({ lastData, session }) {
   const data = {
     title: "",
     content: "",
@@ -28,7 +29,7 @@ function OnIzle({ lastData }) {
         <div className="lg:grid lg:grid-cols-4 lg:space-x-4">
           <div className="hidden lg:grid lg:col-span-1 lg:pt-14"></div>
           <div className="lg:col-span-2">
-            <ArticleContent post={post} />
+            <ArticleContent post={post} session={session} />
           </div>
           <div className="lg:col-span-1 lg:pt-14"></div>
         </div>
@@ -36,9 +37,9 @@ function OnIzle({ lastData }) {
     </div>
   );
 }
-export async function getServerSideProps({ query }) {
-  const decryptedData = Decrypt(query.post.toString());
-  console.log(decryptedData);
+export async function getServerSideProps(ctx) {
+  const session = await getSession(ctx);
+  const decryptedData = Decrypt(ctx.query.post.toString());
   const lastData = await axios({
     params: {
       slug: decryptedData.slug,
@@ -52,6 +53,7 @@ export async function getServerSideProps({ query }) {
   return {
     props: {
       lastData,
+      session,
     },
   };
 }

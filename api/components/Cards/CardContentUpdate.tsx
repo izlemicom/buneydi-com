@@ -5,19 +5,22 @@ import { articleData } from "../../atoms/recoil";
 import ArticleTextEditor from "./ArticleTextEditor";
 import { UiFileInputButton } from "./UiFileInputButton";
 import Image from "next/image";
-import CryptoJS from "crypto-js";
 import { Encrypt } from "../../lib/CRYPT";
-import { Post } from ".prisma/client";
 
 // components
 
-export default function CardContentAdd({ user }) {
+export default function CardContentUpdate({ user, post }) {
+  let combinedTags = [];
+  post.tags.map((tag, index) => {
+    combinedTags.push(tag.content);
+  });
   const [data, setData] = useRecoilState(articleData);
-  const [progress, setProgress] = useState(0);
-  const [url, setUrl] = useState("");
-  const [title, setTitle] = useState("");
-  const [tags, setTags] = useState("");
-  const [draft, setDraft] = useState<any>();
+  setData(post.content);
+  const [progress, setProgress] = useState(100);
+  const [url, setUrl] = useState(post.mainImage);
+  const [title, setTitle] = useState(post.title);
+  const [tags, setTags] = useState(combinedTags.toString());
+  const [draft, setDraft] = useState<any>(post);
   let cDraft: any;
   async function onIzle() {
     const post = {
@@ -143,7 +146,7 @@ export default function CardContentAdd({ user }) {
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
         <div className="rounded-t bg-white mb-0 px-6 py-6">
           <div className="text-center flex justify-between">
-            <h6 className="text-blueGray-700 text-xl font-bold">İçerik Ekle</h6>
+            <h6 className="text-blueGray-700 text-xl font-bold">Güncelle</h6>
           </div>
         </div>
         <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
@@ -158,7 +161,7 @@ export default function CardContentAdd({ user }) {
                   type="text"
                   placeholder="Başlığınızı yazınız..."
                   className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                  defaultValue=""
+                  defaultValue={post.title}
                   required
                 />
               </div>
@@ -177,7 +180,7 @@ export default function CardContentAdd({ user }) {
                   type="text"
                   placeholder="Etiketleri virgül ile ayırınız..."
                   className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                  defaultValue=""
+                  defaultValue={combinedTags.toString()}
                   required
                 />
               </div>
@@ -200,7 +203,7 @@ export default function CardContentAdd({ user }) {
                           onClick={deletePhoto}
                           className="absolute right-0 rounded-full focus:outline-none focus:scale-105 active:text-red-600 text-4xl text-red-500 z-10"
                         >
-                          <i className="fas fa-minus-circle"></i>
+                          <i className="fas fa-minus-circle rounded-full"></i>
                         </button>
                       )}
                       <Image
@@ -210,7 +213,6 @@ export default function CardContentAdd({ user }) {
                         alt=""
                       />
                     </div>
-
                     <div className="relative pt-1">
                       <div className="overflow-hidden h-2 mb-4 text-lg flex rounded bg-indigo-200">
                         <div
@@ -238,7 +240,7 @@ export default function CardContentAdd({ user }) {
           <div className="flex flex-wrap">
             <div className="w-full lg:w-12/12 px-4">
               <div className="relative w-full mb-3">
-                <ArticleTextEditor initData="" />
+                <ArticleTextEditor initData={post.content} />
               </div>
             </div>
           </div>

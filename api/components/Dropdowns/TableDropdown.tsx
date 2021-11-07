@@ -1,8 +1,9 @@
 import React from "react";
 import { createPopper } from "@popperjs/core";
 import axios from "axios";
+import { Encrypt } from "../../lib/CRYPT";
 
-const NotificationDropdown = ({ postId, type }) => {
+const NotificationDropdown = ({ postId, type, slug }) => {
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
@@ -32,6 +33,12 @@ const NotificationDropdown = ({ postId, type }) => {
     });
     dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();
   }
+  async function Guncelle(e) {
+    dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();
+    e.preventDefault();
+    const encoded = Encrypt({ slug, type });
+    window.open(`/guncelle?post=${encoded}`);
+  }
   return (
     <>
       <a
@@ -55,7 +62,7 @@ const NotificationDropdown = ({ postId, type }) => {
           className={
             "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer"
           }
-          onClick={(e) => e.preventDefault()}
+          onClick={Guncelle}
         >
           <i className="fas fa-pen text-emerald-500"></i> Güncelle
         </a>
