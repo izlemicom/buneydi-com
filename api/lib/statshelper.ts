@@ -4,7 +4,7 @@ export function percentageHelper(firstCount, lastCount) {
   const difference = ltotal - ftotal;
   let percentage = (difference * 100) / ftotal;
   if (!isFinite(percentage)) percentage = 0;
-  return percentage.toString();
+  return percentage.toFixed(1).toString();
 }
 export function arrowsHelper(firstCount, lastCount) {
   const ftotal = firstCount.reduce((a, b) => a + b, 0);

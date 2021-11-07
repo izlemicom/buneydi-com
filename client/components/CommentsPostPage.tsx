@@ -36,7 +36,7 @@ function CommentsPostPage({ commentsCount, firstComments, postId, session }) {
 
   return (
     <div>
-      {comments.length > 0 && (
+      {(comments.length > 0 || addedComments) && (
         <div>
           <div className="flex items-center py-2 text-xl border-b space-x-2">
             <i className="fas fa-comments"></i>
