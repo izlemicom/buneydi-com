@@ -11,7 +11,13 @@ import { getSession } from "next-auth/client";
 
 // layout for page
 
-export default function Icerikler({ session, data, isAuthor }) {
+export default function Icerikler({
+  session,
+  data,
+  isAuthor,
+  firstPosts,
+  firstDrafts,
+}) {
   const router = useRouter();
   const [authorstats, setAllAuthorStats] = useState(data);
   const { total, firstWeek, lastWeek } = authorstats;
@@ -36,10 +42,21 @@ export default function Icerikler({ session, data, isAuthor }) {
             <div className="px-4 md:px-10 mx-auto w-full -m-24">
               <div className="flex flex-wrap mt-4">
                 <div className="w-full mb-12 px-4">
-                  <CardTable />
+                  <CardTable
+                    title="İçerikler"
+                    firstPosts={firstPosts}
+                    session={session}
+                    type="post"
+                  />
                 </div>
                 <div className="w-full mb-12 px-4">
-                  <CardTable color="dark" />
+                  <CardTable
+                    color="dark"
+                    title="Taslaklar"
+                    firstPosts={firstDrafts}
+                    session={session}
+                    type="draft"
+                  />
                 </div>
               </div>
               <FooterAdmin />
@@ -76,9 +93,37 @@ export async function getServerSideProps(ctx) {
       return response.data;
     });
   }
+  const firstPosts = await axios({
+    params: {
+      take: 5,
+      cursor: "pointer",
+      isfirst: true,
+      authorId: session.id,
+    },
+    method: "GET",
+    url: `/author/posts`,
+    baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
+  }).then(function (response) {
+    return response.data;
+  });
+  const firstDrafts = await axios({
+    params: {
+      take: 5,
+      cursor: "pointer",
+      isfirst: true,
+      authorId: session.id,
+    },
+    method: "GET",
+    url: `/author/drafts`,
+    baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
+  }).then(function (response) {
+    return response.data;
+  });
   isAuthor = true;
   return {
     props: {
+      firstPosts,
+      firstDrafts,
       isAuthor,
       session,
       data,

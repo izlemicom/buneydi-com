@@ -6,9 +6,7 @@ let postCount = 0;
 const api = handler();
 
 api.get(async (req, res) => {
-  console.log(req.query);
   let { isfirst, take, cursor, type, tagSlug } = req.query;
-  console.log(req.query);
   switch (type) {
     case "latest":
       res.status(200).send(await latestPosts(isfirst, take, cursor, tagSlug));
@@ -125,8 +123,7 @@ async function latestPosts(isfirst, take, cursor, tagSlug) {
       },
     },
   });
-  console.log({ tag: posts[0].tags[0], postCount });
-  return { tag: posts[0].tags[0], posts, postCount };
+  return { tag: posts[0]?.tags[0], posts, postCount };
 }
 
 async function mostLikedPosts(isfirst, take, cursor, tagSlug) {
@@ -235,9 +232,8 @@ async function mostLikedPosts(isfirst, take, cursor, tagSlug) {
       },
     },
   });
-  console.log({ tag: posts[0].tags[0], postCount });
 
-  return { tag: posts[0].tags[0], posts, postCount };
+  return { tag: posts[0]?.tags[0], posts, postCount };
 }
 
 async function mostTalkedPosts(isfirst, take, cursor, tagSlug) {
@@ -347,9 +343,8 @@ async function mostTalkedPosts(isfirst, take, cursor, tagSlug) {
       },
     },
   });
-  console.log({ tag: posts[0].tags[0], postCount });
 
-  return { tag: posts[0].tags[0], posts, postCount };
+  return { tag: posts[0]?.tags[0], posts, postCount };
 }
 
 async function mostViewedPosts(isfirst, take, cursor, tagSlug) {
@@ -458,7 +453,6 @@ async function mostViewedPosts(isfirst, take, cursor, tagSlug) {
       },
     },
   });
-  console.log({ tag: posts[0].tags[0], postCount });
 
-  return { tag: posts[0].tags[0], posts, postCount };
+  return { tag: posts[0]?.tags[0], posts, postCount };
 }

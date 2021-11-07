@@ -85,7 +85,7 @@ function Tag({ data, tagSlug }) {
     <div>
       <NavBar />
       <main className="mx-10 xl:w-4/5 md:mx-32 lg:mx-5 xl:mx-auto">
-        <h1 className="text-4xl font-bold pt-4 uppercase">{tag.content}</h1>
+        <h1 className="text-4xl font-bold pt-4 uppercase">{tag?.content}</h1>
         <div className="lg:grid lg:grid-cols-4 lg:space-x-4">
           <div className="lg:grid lg:col-span-1">
             <div className="flex flex-col">

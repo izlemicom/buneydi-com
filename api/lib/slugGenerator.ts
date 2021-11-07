@@ -3,8 +3,10 @@ export default function slugGenerator(str: string) {
   str = str.toLowerCase();
 
   // remove accents, swap ñ for n, etc
-  var from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
-  var to = "aaaaeeeeiiiioooouuuunc------";
+  var from =
+    "ÁÄÂÀÃÅČÇĆĎÉĚËÈÊẼĔȆĞÍÌÎÏİŇÑÓÖÒÔÕØŘŔŠŞŤÚŮÜÙÛÝŸŽáäâàãåčçćďéěëèêẽĕȇğíìîïıňñóöòôõøðřŕšşťúůüùûýÿžþÞĐđßÆa·/_,:;";
+  var to =
+    "AAAAAACCCDEEEEEEEEGIIIIINNOOOOOORRSSTUUUUUYYZaaaaaacccdeeeeeeeegiiiiinnooooooorrsstuuuuuyyzbBDdBAa------";
   for (var i = 0, l = from.length; i < l; i++) {
     str = str.replace(new RegExp(from.charAt(i), "g"), to.charAt(i));
   }

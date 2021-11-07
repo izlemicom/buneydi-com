@@ -206,5 +206,40 @@ api.patch(async (req, res) => {
   await Promise.all(promises).then(function (results) {});
   res.status(200).json(post);
 });
+api.delete(async (req, res) => {
+  const { postId } = req.body;
+  if (!postId) throw new Error("Veri eklenmemiş.");
+  const postViews = await prisma.postViews.deleteMany({
+    where: { postId: postId },
+  });
+  const comments = await prisma.comment.findMany({
+    where: {
+      postId: postId,
+    },
+    select: {
+      id: true,
+    },
+  });
+  const commentLikes = comments?.map((comment) => {
+    const deleted = prisma.commentLike
+      .deleteMany({
+        where: { commentId: comment.id },
+      })
+      .then((data) => {
+        return data;
+      });
+  });
+  await Promise.all(commentLikes).then(function (response) {});
+  const deletedcomments = await prisma.comment.deleteMany({
+    where: { postId: postId },
+  });
+  const postLikes = await prisma.postLike.deleteMany({
+    where: { postId: postId },
+  });
+  const post = await prisma.post.delete({
+    where: { id: postId },
+  });
+  res.status(200).json(post);
+});
 
 export default api;

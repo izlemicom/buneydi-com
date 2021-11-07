@@ -32,6 +32,7 @@ async function latestPosts(isfirst, take, cursor, authorId) {
         content: true,
         mainImage: true,
         createdAt: true,
+        _count: true,
         user: {
           select: {
             id: true,
@@ -58,6 +59,7 @@ async function latestPosts(isfirst, take, cursor, authorId) {
         content: true,
         mainImage: true,
         createdAt: true,
+        _count: true,
         user: {
           select: {
             id: true,
