@@ -1,6 +1,7 @@
 import moment from "moment";
 import "moment/locale/tr";
 import Link from "next/link";
+import htmlToTextBuneydi from "../lib/htmlToTextBuneydi";
 
 function PostCardText({ post }) {
   const date = new Date(post.createdAt);
@@ -17,7 +18,7 @@ function PostCardText({ post }) {
           </a>
         </Link>
         <div className="font-normal text-gray-700 mt-2 line-clamp-2">
-          <article dangerouslySetInnerHTML={{ __html: post.content }}></article>
+          <article>{htmlToTextBuneydi(post.content)}</article>
         </div>
       </div>
     </div>

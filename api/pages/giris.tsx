@@ -15,7 +15,7 @@ export default function Giris({ providers }) {
               <div className="rounded-t mb-0 px-6 py-6">
                 <div className="text-center mb-3">
                   <h6 className="text-blueGray-500 text-sm font-bold">
-                    Sign in with
+                    Mevcut hesaplarınla giriş yap
                   </h6>
                 </div>
                 <div className="btn-wrapper text-center">
@@ -46,7 +46,7 @@ export default function Giris({ providers }) {
               </div>
               <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                 <div className="text-blueGray-400 text-center mb-3 font-bold">
-                  <small>Or sign in with credentials</small>
+                  <small>Veya e-posta ile giriş yap</small>
                 </div>
                 <form>
                   <div className="relative w-full mb-3">
@@ -54,12 +54,12 @@ export default function Giris({ providers }) {
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                       htmlFor="grid-password"
                     >
-                      Email
+                      E-posta
                     </label>
                     <input
                       type="email"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Email"
+                      placeholder="E-posta"
                     />
                   </div>
 
@@ -68,12 +68,12 @@ export default function Giris({ providers }) {
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                       htmlFor="grid-password"
                     >
-                      Password
+                      Şifre
                     </label>
                     <input
                       type="password"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Password"
+                      placeholder="Şifre"
                     />
                   </div>
                   <div>
@@ -84,7 +84,7 @@ export default function Giris({ providers }) {
                         className="form-checkbox border-0 rounded text-blueGray-700 ml-1 w-5 h-5 ease-linear transition-all duration-150"
                       />
                       <span className="ml-2 text-sm font-semibold text-blueGray-600">
-                        Remember me
+                        Beni hatırla
                       </span>
                     </label>
                   </div>
@@ -94,7 +94,7 @@ export default function Giris({ providers }) {
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
                       type="button"
                     >
-                      Sign In
+                      Giriş Yap
                     </button>
                   </div>
                 </form>
@@ -107,13 +107,13 @@ export default function Giris({ providers }) {
                   onClick={(e) => e.preventDefault()}
                   className="text-blueGray-200"
                 >
-                  <small>Forgot password?</small>
+                  <small>Şifremi unuttum.</small>
                 </a>
               </div>
               <div className="w-1/2 text-right">
-                <Link href="/auth/register">
-                  <a href="#pablo" className="text-blueGray-200">
-                    <small>Create new account</small>
+                <Link href="/kayitol">
+                  <a className="text-blueGray-200">
+                    <small>Yazar Ol!</small>
                   </a>
                 </Link>
               </div>

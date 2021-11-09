@@ -5,9 +5,7 @@ export default function FooterSmall(props) {
     <>
       <footer
         className={
-          (props.absolute
-            ? "absolute w-full bottom-0 bg-blueGray-800"
-            : "relative") + " pb-6"
+          (props.absolute ? "fixed w-full bottom-0" : "relative") + " pb-6"
         }
       >
         <div className="container mx-auto px-4">
@@ -18,7 +16,7 @@ export default function FooterSmall(props) {
                 Copyright © {new Date().getFullYear()}{" "}
                 <a
                   href="https://www.buneydi.com"
-                  className="text-white hover:text-blueGray-300 text-sm font-semibold py-1"
+                  className=" text-sm font-semibold py-1"
                 >
                   www.buneydi.com
                 </a>
@@ -27,34 +25,22 @@ export default function FooterSmall(props) {
             <div className="w-full md:w-8/12 px-4">
               <ul className="flex flex-wrap list-none md:justify-end  justify-center">
                 <li>
-                  <a
-                    href="/"
-                    className="text-white hover:text-blueGray-300 text-sm font-semibold block py-1 px-3"
-                  >
+                  <a href="/" className="text-sm font-semibold block py-1 px-3">
                     <i className="fab fa-facebook-f"></i>
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="/"
-                    className="text-white hover:text-blueGray-300 text-sm font-semibold block py-1 px-3"
-                  >
+                  <a href="/" className="text-sm font-semibold block py-1 px-3">
                     <i className="fab fa-twitter"></i>
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="/"
-                    className="text-white hover:text-blueGray-300 text-sm font-semibold block py-1 px-3"
-                  >
+                  <a href="/" className="text-sm font-semibold block py-1 px-3">
                     <i className="fab fa-linkedin-in"></i>
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="/"
-                    className="text-white hover:text-blueGray-300 text-sm font-semibold block py-1 px-3"
-                  >
+                  <a href="/" className="text-sm font-semibold block py-1 px-3">
                     <i className="fab fa-instagram-square"></i>
                   </a>
                 </li>

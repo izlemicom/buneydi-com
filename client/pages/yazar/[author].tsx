@@ -1,10 +1,10 @@
 import axios from "axios";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
-import CardProfile from "../components/CardProfile";
-import Footer from "../components/Footer";
-import NavBar from "../components/NavBar";
-import PostCardWide from "../components/PostCardWide";
+import CardProfile from "../../components/CardProfile";
+import Footer from "../../components/Footer";
+import NavBar from "../../components/NavBar";
+import PostCardWide from "../../components/PostCardWide";
 
 function Author({ data, author }) {
   let { posts, postCount } = data;
