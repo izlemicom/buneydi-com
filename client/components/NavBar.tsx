@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/client";
 import User from "./User";
 import Link from "next/link";
+import UserDropdown from "./UserDropdown";
 
 function NavBar() {
   const [session, loading] = useSession();
@@ -84,7 +85,7 @@ function NavBar() {
               </Link>
             </div>
           )}
-          {open && session && <User user={session.user} />}
+          {open && session && <UserDropdown />}
         </div>
       </nav>
       <div className="py-8"></div>

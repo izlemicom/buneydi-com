@@ -19,25 +19,26 @@ const UserDropdown = () => {
     setDropdownPopoverShow(false);
   };
   return (
-    <>
+    <div className="items-center md:flex">
       <a
-        className="text-blueGray-500 block"
-        href="#pablo"
+        className="text-blueGray-500 block cursor-pointer"
         ref={btnDropdownRef}
         onClick={(e) => {
           e.preventDefault();
           dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();
         }}
       >
-        <div className="items-center flex">
-          <span className="w-12 h-12 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full">
+        <div className="items-center md:flex">
+          <span className="w-12 h-12 text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full">
             <img
-              alt="..."
+              alt={session.user.name}
               className="w-full rounded-full align-middle border-none shadow-lg"
               src={session.user.image}
             />
           </span>
-          <span className="ml-2">{session.user.name}</span>
+          <span className="ml-2 font-medium text-lg hidden lg:flex">
+            {session.user.name}
+          </span>
         </div>
       </a>
       <div
@@ -47,7 +48,7 @@ const UserDropdown = () => {
           "bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48"
         }
       >
-        <Link href="/ayarlar">
+        <Link href="/hesabim">
           <a
             className={
               "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent"
@@ -70,7 +71,7 @@ const UserDropdown = () => {
           <i className="fas fa-sign-out-alt"></i> Oturumu Kapat
         </a>
       </div>
-    </>
+    </div>
   );
 };
 
