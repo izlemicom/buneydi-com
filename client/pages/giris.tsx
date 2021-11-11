@@ -1,11 +1,17 @@
-import { getProviders, signIn, signOut, useSession } from "next-auth/client";
+import { getProviders, signIn } from "next-auth/react";
 import NavBar from "../components/NavBar";
 import Link from "next/link";
 import FooterSmall from "../components/FooterSmall";
 
 export default function Giris({ providers }) {
-  const [session, loading] = useSession();
-
+  function handleSubmit(e) {
+    e.preventDefault();
+    signIn("credentials", {
+      username: e.target.email.value,
+      password: e.target.password.value,
+      type: "login",
+    });
+  }
   return (
     <>
       <NavBar />
@@ -30,21 +36,20 @@ export default function Giris({ providers }) {
                         <img alt="..." className="w-5 mr-1" src="/github.svg" />
                         Github
                       </button>
-                      {Object.values(providers).map((provider: any) => (
-                        <button
-                          onClick={() => signIn(provider.id)}
-                          key={provider.name}
-                          className="px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
-                          type="button"
-                        >
-                          <img
-                            alt="..."
-                            className="w-5 mr-1"
-                            src="/google.svg"
-                          />
-                          {provider.name}
-                        </button>
-                      ))}
+
+                      <button
+                        onClick={() => signIn(providers.google.id)}
+                        key={providers.google.name}
+                        className="px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
+                        type="button"
+                      >
+                        <img
+                          alt={providers.google.name}
+                          className="w-5 mr-1"
+                          src="/google.svg"
+                        />
+                        {providers.google.name}
+                      </button>
                     </div>
                     <hr className="mt-6 border-b-1" />
                   </div>
@@ -52,7 +57,7 @@ export default function Giris({ providers }) {
                     <div className="text-center mb-3 font-bold">
                       <small>Veya e-posta ile giriş yap</small>
                     </div>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                       <div className="relative w-full mb-3">
                         <label
                           className="block uppercase text-xs font-bold mb-2"
@@ -65,6 +70,8 @@ export default function Giris({ providers }) {
                           className="border-0 px-3 py-3 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                           placeholder="E-posta"
                           required
+                          autoComplete="username"
+                          name="email"
                         />
                       </div>
 
@@ -80,6 +87,8 @@ export default function Giris({ providers }) {
                           className="border-0 px-3 py-3 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                           placeholder="Şifre"
                           required
+                          autoComplete="password"
+                          name="password"
                         />
                       </div>
                       <div>

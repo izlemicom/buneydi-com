@@ -1,10 +1,20 @@
+import { getProviders, signIn } from "next-auth/react";
 import React from "react";
 import FooterSmall from "../components/FooterSmall";
 import NavBar from "../components/NavBar";
 
 // layout for page
 
-export default function KayitOl() {
+export default function KayitOl({ providers }) {
+  function handleSubmit(e) {
+    e.preventDefault();
+    signIn("credentials", {
+      username: e.target.email.value,
+      password: e.target.password.value,
+      name: e.target.name.value,
+      type: "register",
+    });
+  }
   return (
     <>
       <NavBar />
@@ -29,11 +39,17 @@ export default function KayitOl() {
                         Github
                       </button>
                       <button
+                        onClick={() => signIn(providers.google.id)}
+                        key={providers.google.name}
                         className="px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
                         type="button"
                       >
-                        <img alt="..." className="w-5 mr-1" src="/google.svg" />
-                        Google
+                        <img
+                          alt={providers.google.name}
+                          className="w-5 mr-1"
+                          src="/google.svg"
+                        />
+                        {providers.google.name}
                       </button>
                     </div>
                     <hr className="mt-6 border-b-1" />
@@ -42,7 +58,7 @@ export default function KayitOl() {
                     <div className="text-center mb-3 font-bold">
                       <small>Veya e-posta ile kayıt ol</small>
                     </div>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                       <div className="relative w-full mb-3">
                         <label
                           className="block uppercase text-xs font-bold mb-2"
@@ -54,6 +70,8 @@ export default function KayitOl() {
                           type="text"
                           className="border-0 px-3 py-3 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                           placeholder="Ad Soyad"
+                          autoComplete=""
+                          name="name"
                           required
                         />
                       </div>
@@ -69,6 +87,8 @@ export default function KayitOl() {
                           type="email"
                           className="border-0 px-3 py-3 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                           placeholder="E-posta"
+                          autoComplete="username"
+                          name="email"
                           required
                         />
                       </div>
@@ -84,6 +104,8 @@ export default function KayitOl() {
                           type="password"
                           className="border-0 px-3 py-3 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                           placeholder="Şifre"
+                          autoComplete="password"
+                          name="password"
                           required
                         />
                       </div>
@@ -128,4 +150,12 @@ export default function KayitOl() {
       </main>
     </>
   );
+}
+export async function getServerSideProps() {
+  const providers = await getProviders();
+  return {
+    props: {
+      providers,
+    },
+  };
 }

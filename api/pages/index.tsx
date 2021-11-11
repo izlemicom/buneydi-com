@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import CardBarChart from "../components/Cards/CardBarChart";
 import CardLineChart from "../components/Cards/CardLineChart";
 import Admin from "../layouts/Admin";
-import { getSession } from "next-auth/client";
+import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useRecoilState } from "recoil";
@@ -22,7 +22,7 @@ export default function Home({ session, data, isAuthor }) {
   const { total, firstWeek, lastWeek } = authorstats;
   useEffect(() => {
     if (!session) router.push("/giris");
-    if (!isAuthor) router.push("/kayitol");
+    if (!isAuthor) router.push("/yazarol");
   }, []);
 
   return (
@@ -91,7 +91,6 @@ export default function Home({ session, data, isAuthor }) {
   );
 }
 export async function getServerSideProps(ctx) {
-  console.log();
   const session = await getSession(ctx);
   let isAuthor: boolean = false;
   let data = {};
@@ -103,7 +102,7 @@ export async function getServerSideProps(ctx) {
         data,
       },
     };
-  if (session.role !== "AUTHOR")
+  if (session?.role !== "AUTHOR")
     return {
       props: {
         isAuthor,

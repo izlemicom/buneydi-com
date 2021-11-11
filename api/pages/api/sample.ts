@@ -13,4 +13,4 @@ api.get((req, res) => {
   });
 });
 
-export default handler;
+export default api;

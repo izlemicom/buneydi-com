@@ -71,23 +71,12 @@ api.get(async (req, res) => {
 api.use(authorize);
 api.use(authorizeAuthor);
 api.patch(async (req, res) => {
-  const {
-    userId,
-    userName,
-    mahlas,
-    name,
-    adress,
-    city,
-    country,
-    postalCode,
-    iban,
-    bio,
-  } = req.body;
+  const { userId, mahlas, name, adress, city, country, postalCode, iban, bio } =
+    req.body;
   if (!userId) throw new Error("Veri eklenmemiş.");
   const updatedUser = await prisma.user.update({
     where: { id: userId.toString() },
     data: {
-      userName: userName,
       mahlas: mahlas,
       name: name,
       adress: adress,

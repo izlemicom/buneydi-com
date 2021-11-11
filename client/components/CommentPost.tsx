@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useSession } from "next-auth/client";
 import { useRecoilState } from "recoil";
 import { commentsAdd } from "../atoms/recoil";
 

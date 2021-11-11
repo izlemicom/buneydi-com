@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 import User from "./User";
 import Link from "next/link";
 import UserDropdown from "./UserDropdown";
 
 function NavBar() {
-  const [session, loading] = useSession();
+  const { data, status } = useSession();
+  const session = data;
   const [open, setOpen] = useState(true);
   useEffect(() => {
     if (window.innerWidth < 768) setOpen(false);

@@ -28,7 +28,7 @@ function PostCardWide({ post }) {
         <div className="flex items-center pt-3">
           <div className="flex items-center">
             <img
-              className="h-10 w-10 rounded-full"
+              className="h-10 w-10 rounded-full object-cover"
               src={post.user.image}
               alt={post.user.name}
             />

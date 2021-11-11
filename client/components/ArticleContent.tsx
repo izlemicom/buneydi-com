@@ -1,10 +1,9 @@
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 import PostPageTopBar from "./PostPageTopBar";
 
 function ArticleContent({ post, session }) {
   const content = post.content;
   let isRender = content.search("<h1>") < 0 ? true : false;
-
   return (
     <article>
       <div className="flex flex-col items-center">

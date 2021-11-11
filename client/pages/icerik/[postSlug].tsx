@@ -9,7 +9,7 @@ import SimilarPosts from "../../components/SimilarPosts";
 import { useState } from "react";
 import CommentsPostPage from "../../components/CommentsPostPage";
 import Head from "next/head";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 
 function PostPage({ post, relatedPosts, firstComments, session }) {
   const isServer = typeof window === "undefined";

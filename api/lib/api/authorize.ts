@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 
 export interface BuneydiRequest extends NextApiRequest {
   role: string | null;
@@ -13,6 +13,6 @@ export default async function authorize(
   req.role = "USER";
   const session = await getSession({ req });
   if (!session) return next(new Error("Yetkiniz yok."));
-  req.role = session.role;
+  req.role = session.role.toString();
   next();
 }

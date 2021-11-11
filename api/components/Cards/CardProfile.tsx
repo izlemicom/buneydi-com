@@ -1,11 +1,42 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 import { authorInfo } from "../../atoms/recoil";
+import { UiFileInputButton } from "./UiFileInputButton";
 
 // components
 
-export default function CardProfile({ user, total }) {
+export default function CardProfile({ session, author, total }) {
+  const [progress, setProgress] = useState(0);
+  const [url, setUrl] = useState("");
   const [authorinfo, setAuthorInfo] = useRecoilState(authorInfo);
+  const onChange = async (formData) => {
+    const config = {
+      withCredentials: true,
+      headers: { "content-type": "multipart/form-data" },
+      onUploadProgress: (event) => {
+        setProgress(Math.round((event.loaded * 100) / event.total));
+      },
+    };
+
+    const response: any = await axios.post(
+      "/api/image/image",
+      formData,
+      config
+    );
+    setUrl(response.data.url);
+    const user = await axios({
+      withCredentials: true,
+      data: {
+        image: response.data.url,
+        userId: session.id,
+      },
+      method: "PATCH",
+      url: "/api/author/image",
+    }).then(function (response) {
+      return response.data;
+    });
+  };
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16">
@@ -14,15 +45,29 @@ export default function CardProfile({ user, total }) {
             <div className="w-full px-4 flex justify-center">
               <div className="relative">
                 <img
-                  alt={user.name}
+                  alt={author.name}
                   width="800"
                   height="800"
-                  src={user.image}
-                  className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
+                  src={url ? url : author.image}
+                  className="shadow-xl w-48 h-48 object-cover rounded-full align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
                 />
               </div>
             </div>
             <div className="w-full px-4 text-center mt-20">
+              <div className="flex flex-col justify-center items-center mt-16">
+                <span>Profil Fotoğrafını Değiştir</span>
+                <div className="flex justify-center border-2 items-center rounded-full w-12 h-12 font-bold">
+                  <UiFileInputButton
+                    acceptedFileTypes="image/*"
+                    label={
+                      <i className="fas fa-camera text-4xl text-black"></i>
+                    }
+                    uploadFileName="upload"
+                    onChange={onChange}
+                  />
+                </div>
+              </div>
+
               <div className="flex justify-center py-4 lg:pt-4 pt-8">
                 <div className="mr-4 p-3 text-center">
                   <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
@@ -55,22 +100,22 @@ export default function CardProfile({ user, total }) {
           </div>
           <div className="text-center mt-12">
             <h3 className="text-xl font-semibold leading-normal text-blueGray-700 mb-2">
-              {authorinfo ? authorinfo.name : user.name}
+              {authorinfo ? authorinfo.name : author.name}
             </h3>
             <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
               <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>{" "}
-              {authorinfo ? authorinfo.city : user.city}
+              {authorinfo ? authorinfo.city : author.city}
             </div>
             <div className="mb-2 text-blueGray-600 mt-10">
               <i className="fas fa-user-tag mr-2 text-lg text-blueGray-400"></i>
-              {authorinfo ? authorinfo.mahlas : user.mahlas}
+              {authorinfo ? authorinfo.mahlas : author.mahlas}
             </div>
           </div>
           <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
             <div className="flex flex-wrap justify-center">
               <div className="w-full lg:w-9/12 px-4">
                 <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                  {authorinfo ? authorinfo.bio : user.bio}
+                  {authorinfo ? authorinfo.bio : author.bio}
                 </p>
               </div>
             </div>

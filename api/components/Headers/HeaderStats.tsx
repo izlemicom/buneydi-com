@@ -1,4 +1,4 @@
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 import React from "react";
 import {
   arrowsColorHelper,
@@ -10,7 +10,8 @@ import CardStats from "../Cards/CardStats";
 // components
 
 export default function HeaderStats({ total, firstWeek, lastWeek }) {
-  const [session, loading] = useSession();
+  const { data, status } = useSession();
+  const session = data;
   return (
     <>
       {/* Header */}

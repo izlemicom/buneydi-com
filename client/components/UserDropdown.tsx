@@ -1,11 +1,11 @@
 import React from "react";
 import { createPopper } from "@popperjs/core";
-import { signOut, useSession } from "next-auth/client";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
 const UserDropdown = () => {
-  const [session, loading] = useSession();
-  // dropdown props
+  const { data, status } = useSession();
+  const session = data; // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
   const popoverDropdownRef = React.createRef();
@@ -32,7 +32,7 @@ const UserDropdown = () => {
           <span className="w-12 h-12 text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full">
             <img
               alt={session.user.name}
-              className="w-full rounded-full align-middle border-none shadow-lg"
+              className="w-12 h-12 rounded-full object-cover align-middle border-none shadow-lg"
               src={session.user.image}
             />
           </span>

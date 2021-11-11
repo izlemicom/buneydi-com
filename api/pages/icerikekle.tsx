@@ -4,7 +4,7 @@ import HeaderStats from "../components/Headers/HeaderStats";
 import Sidebar from "../components/Sidebar/Sidebar";
 import AdminNavbar from "../components/Navbars/AdminNavbar";
 import { useRouter } from "next/router";
-import { getSession } from "next-auth/client";
+import { getSession, useSession } from "next-auth/react";
 import axios from "axios";
 import CardContentAdd from "../components/Cards/CardContentAdd";
 // components
@@ -18,7 +18,7 @@ export default function IcerikEkle({ session, data, isAuthor }) {
 
   useEffect(() => {
     if (!session) router.push("/giris");
-    if (!isAuthor) router.push("/kayitol");
+    if (!isAuthor) router.push("/yazarol");
   }, []);
   return (
     <>
@@ -36,7 +36,7 @@ export default function IcerikEkle({ session, data, isAuthor }) {
             <div className="px-4 md:px-10 mx-auto w-full -m-24">
               <div className="flex flex-wrap">
                 <div className="w-full px-4">
-                  <CardContentAdd user={session.user} />
+                  <CardContentAdd session={session} />
                 </div>
               </div>
 
@@ -52,11 +52,11 @@ export async function getServerSideProps(ctx) {
   const session = await getSession(ctx);
   let isAuthor: boolean = false;
   let data = {};
-  if (session.role !== "AUTHOR")
+  if (session?.role !== "AUTHOR")
     return {
       props: {
-        isAuthor,
         session,
+        isAuthor,
         data,
       },
     };
@@ -77,8 +77,8 @@ export async function getServerSideProps(ctx) {
   isAuthor = true;
   return {
     props: {
-      isAuthor,
       session,
+      isAuthor,
       data,
     },
   };

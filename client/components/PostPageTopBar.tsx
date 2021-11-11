@@ -3,7 +3,6 @@ import moment from "moment";
 import "moment/locale/tr";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useSession } from "next-auth/client";
 
 function PostPageTopBar({ user, _count, createdAt, postId, session }) {
   const date = new Date(createdAt);

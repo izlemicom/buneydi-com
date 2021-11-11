@@ -6,7 +6,7 @@ import Sidebar from "../components/Sidebar/Sidebar";
 import AdminNavbar from "../components/Navbars/AdminNavbar";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { getSession } from "next-auth/client";
+import { getSession, useSession } from "next-auth/react";
 // components
 
 // layout for page
@@ -24,7 +24,7 @@ export default function Icerikler({
 
   useEffect(() => {
     if (!session) router.push("/giris");
-    if (!isAuthor) router.push("/kayitol");
+    if (!isAuthor) router.push("/yazarol");
   }, []);
   return (
     <>
@@ -71,7 +71,7 @@ export async function getServerSideProps(ctx) {
   const session = await getSession(ctx);
   let isAuthor: boolean = false;
   let data = {};
-  if (session.role !== "AUTHOR")
+  if (session?.role !== "AUTHOR")
     return {
       props: {
         isAuthor,
@@ -122,10 +122,10 @@ export async function getServerSideProps(ctx) {
   isAuthor = true;
   return {
     props: {
+      session,
       firstPosts,
       firstDrafts,
       isAuthor,
-      session,
       data,
     },
   };

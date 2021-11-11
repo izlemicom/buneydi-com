@@ -13,10 +13,8 @@ export default function CardProfile({ data }) {
               <div className="relative">
                 <img
                   alt={user.name}
-                  width="100"
-                  height="100"
                   src={user.image}
-                  className="shadow-xl rounded-full"
+                  className="shadow-xl w-40 h-40 rounded-full object-cover"
                 />
               </div>
             </div>

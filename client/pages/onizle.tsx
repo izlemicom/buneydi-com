@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ArticleContent from "../components/ArticleContent";
 import { Decrypt } from "../lib/CRYPT";
 import axios from "axios";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 
 function OnIzle({ lastData, session }) {
   const data = {

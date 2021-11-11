@@ -8,7 +8,7 @@ import { RecoilRoot } from "recoil";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "../styles/tailwind.css";
 import PageChange from "../components/PageChange/PageChange";
-import { Provider } from "next-auth/client";
+import { SessionProvider } from "next-auth/react";
 
 Router.events.on("routeChangeStart", (url) => {
   console.log(`Yükleniyor: ${url}`);
@@ -38,7 +38,10 @@ export default class MyApp extends App {
     return { pageProps };
   }
   render() {
-    const { Component, pageProps } = this.props;
+    const {
+      Component,
+      pageProps: { ...pageProps },
+    } = this.props;
 
     const Layout: any = Component.layout || (({ children }) => <>{children}</>);
 
@@ -51,13 +54,13 @@ export default class MyApp extends App {
           />
           <title>Bu Neydi?</title>
         </Head>
-        <Provider session={pageProps.session}>
+        <SessionProvider>
           <RecoilRoot>
             <Layout>
               <Component {...pageProps} />
             </Layout>
           </RecoilRoot>
-        </Provider>
+        </SessionProvider>
       </React.Fragment>
     );
   }

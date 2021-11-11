@@ -4,7 +4,7 @@ import HeaderStats from "../components/Headers/HeaderStats";
 import Sidebar from "../components/Sidebar/Sidebar";
 import AdminNavbar from "../components/Navbars/AdminNavbar";
 import { useRouter } from "next/router";
-import { getSession } from "next-auth/client";
+import { getSession, useSession } from "next-auth/react";
 import axios from "axios";
 import CardContentUpdate from "../components/Cards/CardContentUpdate";
 import { Decrypt } from "../lib/CRYPT";
@@ -19,7 +19,7 @@ export default function Guncelle({ session, data, isAuthor, postData }) {
 
   useEffect(() => {
     if (!session) router.push("/giris");
-    if (!isAuthor) router.push("/kayitol");
+    if (!isAuthor) router.push("/yazarol");
   }, []);
   return (
     <>
@@ -54,7 +54,7 @@ export async function getServerSideProps(ctx) {
   const post = Decrypt(ctx.query.post);
   let isAuthor: boolean = false;
   let data = {};
-  if (session.role !== "AUTHOR")
+  if (session?.role !== "AUTHOR")
     return {
       props: {
         isAuthor,

@@ -11,7 +11,7 @@ import { Post } from ".prisma/client";
 
 // components
 
-export default function CardContentAdd({ user }) {
+export default function CardContentAdd({ session }) {
   const [data, setData] = useRecoilState(articleData);
   const [progress, setProgress] = useState(0);
   const [url, setUrl] = useState("");
@@ -25,7 +25,7 @@ export default function CardContentAdd({ user }) {
       content: data,
       mainImage: url,
       tags: tags,
-      userId: user.id,
+      userId: session.id,
     };
     if (draft) {
       cDraft = await axios({
@@ -35,7 +35,7 @@ export default function CardContentAdd({ user }) {
           content: data,
           mainImage: url,
           tags: tags,
-          userId: user.id,
+          userId: session.id,
           id: draft.id,
         },
         method: "PATCH",
@@ -70,7 +70,7 @@ export default function CardContentAdd({ user }) {
       content: data,
       mainImage: url,
       tags: tags,
-      userId: user.id,
+      userId: session.id,
     };
     if (draft) {
       cDraft = await axios({
@@ -80,7 +80,7 @@ export default function CardContentAdd({ user }) {
           content: data,
           mainImage: url,
           tags: tags,
-          userId: user.id,
+          userId: session.id,
           id: draft.id,
         },
         method: "PATCH",
