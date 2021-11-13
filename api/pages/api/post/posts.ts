@@ -6,7 +6,6 @@ let postCount = 0;
 const api = handler();
 
 api.get(async (req, res) => {
-  console.log(req.query);
   let { isfirst, take, cursor, tagSlug, postId, type } = req.query;
   switch (type) {
     case "related":
@@ -24,10 +23,44 @@ api.get(async (req, res) => {
     case "mostTalked":
       res.status(200).send(await mostTalkedPosts(isfirst, take, cursor));
       break;
+    case "somePosts":
+      res.status(200).send(await somePosts(take));
+      break;
+    case "allPosts":
+      res.status(200).send(await allPosts());
+      break;
   }
 });
 
 export default api;
+
+async function allPosts() {
+  posts = await prisma.post.findMany({
+    select: {
+      slug: true,
+      updatedAt: true,
+    },
+  });
+
+  return posts;
+}
+
+async function somePosts(take) {
+  if (!take) throw new Error("Veri eklenmemiş.");
+  postCount = await prisma.post.count({});
+  const skip = Math.floor(Math.random() * postCount);
+  posts = await prisma.post.findMany({
+    skip: skip,
+    take: parseInt(take.toString()),
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+    },
+  });
+
+  return posts;
+}
 
 async function relatedPosts(tagSlug, postId, take) {
   if (!tagSlug || !postId || !take) throw new Error("Veri eklenmemiş.");
@@ -36,8 +69,8 @@ async function relatedPosts(tagSlug, postId, take) {
     where: {
       tags: {
         some: {
-          slug: {
-            equals: tagSlug,
+          content: {
+            search: tagSlug,
           },
         },
       },
@@ -51,11 +84,16 @@ async function relatedPosts(tagSlug, postId, take) {
       slug: true,
       title: true,
     },
-    orderBy: {
-      postViews: {
-        _count: "desc",
+    orderBy: [
+      {
+        postViews: {
+          _count: "desc",
+        },
       },
-    },
+      {
+        createdAt: "desc",
+      },
+    ],
   });
   return posts;
 }

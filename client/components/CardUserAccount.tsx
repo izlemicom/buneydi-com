@@ -11,6 +11,7 @@ export default function CardUserAccount({ session }) {
   const [url, setUrl] = useState("");
   const router = useRouter();
   const onChange = async (formData) => {
+    console.log(formData);
     const config = {
       withCredentials: true,
       baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,

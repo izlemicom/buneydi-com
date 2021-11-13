@@ -14,10 +14,41 @@ api.get(async (req, res) => {
     case "mostMentioned":
       res.status(200).send(await mostMentionedTags(isfirst, take, cursor));
       break;
+    case "someTags":
+      res.status(200).send(await someTags(take));
+      break;
+    case "allTags":
+      res.status(200).send(await allTags());
+      break;
   }
 });
 
 export default api;
+
+async function allTags() {
+  tags = await prisma.tag.findMany({
+    select: {
+      slug: true,
+    },
+  });
+  return tags;
+}
+
+async function someTags(take) {
+  if (!take) throw new Error("Veri eklenmemiş.");
+  tagsCount = await prisma.tag.count({});
+  const skip = Math.floor(Math.random() * tagsCount);
+  tags = await prisma.tag.findMany({
+    skip: skip,
+    take: parseInt(take.toString()),
+    select: {
+      id: true,
+      content: true,
+      slug: true,
+    },
+  });
+  return tags;
+}
 
 async function latestTags(isfirst, take, cursor) {
   if (!cursor || !take) throw new Error("Veri eklenmemiş.");
@@ -69,11 +100,16 @@ async function mostMentionedTags(isfirst, take, cursor) {
         content: true,
         createdAt: true,
       },
-      orderBy: {
-        posts: {
-          _count: "desc",
+      orderBy: [
+        {
+          posts: {
+            _count: "desc",
+          },
         },
-      },
+        {
+          createdAt: "desc",
+        },
+      ],
     });
   if (isfirst)
     tags = await prisma.tag.findMany({
@@ -85,11 +121,16 @@ async function mostMentionedTags(isfirst, take, cursor) {
         content: true,
         createdAt: true,
       },
-      orderBy: {
-        posts: {
-          _count: "desc",
+      orderBy: [
+        {
+          posts: {
+            _count: "desc",
+          },
         },
-      },
+        {
+          createdAt: "desc",
+        },
+      ],
     });
   tagsCount = await prisma.tag.count();
   return { tags, tagsCount };

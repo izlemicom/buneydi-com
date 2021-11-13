@@ -78,7 +78,7 @@ function CommentByUser({ comment, session }) {
     <div className="relative flex flex-row border-2  rounded-lg px-1 py-3 my-2">
       <div className="flex justify-start items-center">
         <img
-          className="h-10 w-10 rounded-full ml-2"
+          className="h-10 w-10 rounded-full ml-2 object-cover"
           src={comment.user.image}
           alt={comment.user.name}
         />

@@ -206,7 +206,7 @@ export default function CardContentAdd({ session }) {
                       <Image
                         width="960"
                         height="540"
-                        src={url ? url : "/img/placeholder.png"}
+                        src={url ? url : "/img/placeholder.webp"}
                         alt=""
                       />
                     </div>

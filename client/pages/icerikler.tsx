@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import PostCardWide from "../components/PostCardWide";
 
-function Icerikler({ data }) {
+function Icerikler({ somePosts, latestTags, someTags, data }) {
   let { posts, postCount } = data;
   let a = "";
   if (postCount > 5) {
@@ -160,7 +160,11 @@ function Icerikler({ data }) {
           </div>
         </div>
       </main>
-      <Footer />
+      <Footer
+        someTags={someTags}
+        latestTags={latestTags?.tags}
+        somePosts={somePosts}
+      />
     </div>
   );
 }
@@ -179,8 +183,50 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }).then(function (response) {
     return response.data;
   });
+  const someTags = await axios({
+    params: {
+      take: 10,
+      cursor: "pointer",
+      isfirst: true,
+      type: "someTags",
+    },
+    method: "GET",
+    url: `/tag/tags`,
+    baseURL: process.env.BASE_API_URL,
+  }).then(function (response) {
+    return response.data;
+  });
+  const latestTags = await axios({
+    params: {
+      take: 10,
+      cursor: "pointer",
+      isfirst: true,
+      type: "latest",
+    },
+    method: "GET",
+    url: `/tag/tags`,
+    baseURL: process.env.BASE_API_URL,
+  }).then(function (response) {
+    return response.data;
+  });
+  const somePosts = await axios({
+    params: {
+      take: 6,
+      cursor: "pointer",
+      isfirst: true,
+      type: "somePosts",
+    },
+    method: "GET",
+    url: `/post/posts`,
+    baseURL: process.env.BASE_API_URL,
+  }).then(function (response) {
+    return response.data;
+  });
   return {
     props: {
+      somePosts,
+      latestTags,
+      someTags,
       data,
     },
   };

@@ -11,7 +11,15 @@ import CommentsPostPage from "../../components/CommentsPostPage";
 import Head from "next/head";
 import { getSession } from "next-auth/react";
 
-function PostPage({ post, relatedPosts, firstComments, session }) {
+function PostPage({
+  somePosts,
+  latestTags,
+  someTags,
+  post,
+  relatedPosts,
+  firstComments,
+  session,
+}) {
   const isServer = typeof window === "undefined";
 
   async function getClientIp(url: string) {
@@ -69,7 +77,11 @@ function PostPage({ post, relatedPosts, firstComments, session }) {
           </div>
         </div>
       </main>
-      <Footer />
+      <Footer
+        someTags={someTags}
+        latestTags={latestTags?.tags}
+        somePosts={somePosts}
+      />
     </div>
   );
 }
@@ -95,12 +107,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
   let relatedPosts;
-  if (!post.tags) {
+  if (post.tags) {
+    let combinedTags = [];
+    post.tags.map((tag) => {
+      combinedTags.push(tag.content);
+    });
+    console.log(combinedTags.join(" ").replace(/ /g, " | "));
     relatedPosts = await axios({
       params: {
-        tagSlug: post.tags[0].slug ? post.tags[0].slug : new Date().toISOString,
+        tagSlug: combinedTags.join(" ").replace(/ /g, " | "),
         postId: post.id,
-        take: 6,
+        take: 20,
         type: "related",
       },
       method: "GET",
@@ -124,8 +141,51 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }).then(function (response) {
     return response.data;
   });
+
+  const someTags = await axios({
+    params: {
+      take: 10,
+      cursor: "pointer",
+      isfirst: true,
+      type: "someTags",
+    },
+    method: "GET",
+    url: `/tag/tags`,
+    baseURL: process.env.BASE_API_URL,
+  }).then(function (response) {
+    return response.data;
+  });
+  const latestTags = await axios({
+    params: {
+      take: 10,
+      cursor: "pointer",
+      isfirst: true,
+      type: "latest",
+    },
+    method: "GET",
+    url: `/tag/tags`,
+    baseURL: process.env.BASE_API_URL,
+  }).then(function (response) {
+    return response.data;
+  });
+  const somePosts = await axios({
+    params: {
+      take: 6,
+      cursor: "pointer",
+      isfirst: true,
+      type: "somePosts",
+    },
+    method: "GET",
+    url: `/post/posts`,
+    baseURL: process.env.BASE_API_URL,
+  }).then(function (response) {
+    return response.data;
+  });
   return {
     props: {
+      somePosts,
+      latestTags,
+      someTags,
       post,
       relatedPosts,
       firstComments,

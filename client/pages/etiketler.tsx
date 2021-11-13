@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import Tag from "../components/Tag";
 
-function Etiketler({ data }) {
+function Etiketler({ somePosts, latestTags, someTags, data }) {
   let { tags, tagsCount } = data;
   let a = "";
   if (tagsCount > 20) {
@@ -128,7 +128,11 @@ function Etiketler({ data }) {
           Daha Fazla Etiket Yükle
         </button>
       </main>
-      <Footer />
+      <Footer
+        someTags={someTags}
+        latestTags={latestTags?.tags}
+        somePosts={somePosts}
+      />
     </div>
   );
 }
@@ -147,8 +151,51 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }).then(function (response) {
     return response.data;
   });
+
+  const someTags = await axios({
+    params: {
+      take: 10,
+      cursor: "pointer",
+      isfirst: true,
+      type: "someTags",
+    },
+    method: "GET",
+    url: `/tag/tags`,
+    baseURL: process.env.BASE_API_URL,
+  }).then(function (response) {
+    return response.data;
+  });
+  const latestTags = await axios({
+    params: {
+      take: 10,
+      cursor: "pointer",
+      isfirst: true,
+      type: "latest",
+    },
+    method: "GET",
+    url: `/tag/tags`,
+    baseURL: process.env.BASE_API_URL,
+  }).then(function (response) {
+    return response.data;
+  });
+  const somePosts = await axios({
+    params: {
+      take: 6,
+      cursor: "pointer",
+      isfirst: true,
+      type: "somePosts",
+    },
+    method: "GET",
+    url: `/post/posts`,
+    baseURL: process.env.BASE_API_URL,
+  }).then(function (response) {
+    return response.data;
+  });
   return {
     props: {
+      somePosts,
+      latestTags,
+      someTags,
       data,
     },
   };

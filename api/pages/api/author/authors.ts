@@ -1,14 +1,30 @@
 import { prisma } from "../../../lib/db";
-
 import handler from "../../../lib/api/handler";
+
+let authors;
+
 const api = handler();
 
 api.get(async (req, res) => {
-  const { take, cursor, isfirst } = req.query;
+  const { take, cursor, isfirst, type } = req.query;
+  if (type) return res.status(200).json(await allAuthors());
+  return res.status(200).json(await someAuthors(take, cursor, isfirst));
+});
 
+export default api;
+
+async function allAuthors() {
+  authors = await prisma.user.findMany({
+    where: { role: "AUTHOR" },
+    select: {
+      id: true,
+    },
+  });
+  return authors;
+}
+
+async function someAuthors(take, cursor, isfirst) {
   if (!take || !cursor) throw new Error("Veri eklenmemiş.");
-
-  let authors;
 
   if (!isfirst)
     authors = await prisma.user.findMany({
@@ -71,7 +87,5 @@ api.get(async (req, res) => {
       role: "AUTHOR",
     },
   });
-  return res.status(200).json({ authors, authorCount });
-});
-
-export default api;
+  return { authors, authorCount };
+}

@@ -1,10 +1,10 @@
 import Link from "next/link";
 import htmlToTextBuneydi from "../lib/htmlToTextBuneydi";
 
-function PostCardText({ post }) {
+function PostCardTextSearch({ post }) {
   return (
     <div className="mx-auto lg:flex lg:flex-row lg:h-auto my-3">
-      <div className="bg-white border p-3 rounded-bl-md rounded-br-md lg:rounded-bl-none lg:rounded-tr-md">
+      <div className="bg-white p-3 rounded-bl-md rounded-br-md lg:rounded-bl-none lg:rounded-tr-md">
         <Link href={`/icerik/${post.slug}`}>
           <a>
             <h2 className="text-2xl font-bold hover:underline line-clamp-1">
@@ -20,4 +20,4 @@ function PostCardText({ post }) {
   );
 }
 
-export default PostCardText;
+export default PostCardTextSearch;

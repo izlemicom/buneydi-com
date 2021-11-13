@@ -1,4 +1,28 @@
+import axios from "axios";
+import { useState } from "react";
+import PostCardTextSearch from "./PostCardTextSearch";
+
 function SearchBar() {
+  const [posts, setPosts] = useState([]);
+  async function textChange(e) {
+    e.preventDefault();
+    if (e.target.value === "") setPosts([]);
+    let text = e.target.value;
+    text = text.replace(/ /g, " & ");
+    const newPosts: any = await axios({
+      params: {
+        text: text,
+      },
+      method: "GET",
+      url: `/post/search`,
+      baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
+    })
+      .then(function (response) {
+        return response.data;
+      })
+      .catch((error) => console.log(error));
+    setPosts(newPosts);
+  }
   return (
     <div className="flex flex-col items-center justify-center md:h-80 h-40 rounded-xl bg-gradient-to-r from-gray-300 via-gray-500 to-gray-400">
       <div className="hidden md:flex md:flex-col  mx-auto py-2">
@@ -7,7 +31,7 @@ function SearchBar() {
           Neyin ne olduğunu öğrenin, öğretin ve yazın...
         </p>
       </div>
-      <div className="flex items-center mx-auto w-full p-2 md:p-6 space-x-2 md:space-x-6">
+      <div className="flex flex-col items-center mx-auto w-full p-2 md:p-6">
         <div className="flex bg-gray-100 p-4 w-full space-x-4 rounded-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -24,12 +48,23 @@ function SearchBar() {
             />
           </svg>
           <input
+            onChange={textChange}
             className="bg-gray-100 outline-none w-full"
             type="text"
             placeholder="Ne Neydi?"
           />
         </div>
+        {posts && (
+          <div className="relative w-full">
+            <div className="absolute top-0 w-full bg-white rounded-2xl z-10">
+              {posts.map((post) => (
+                <PostCardTextSearch post={post} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
+
       <div className="hidden md:flex items-center">
         <p className="text-gray-100 font-bold text-xl">
           Yazar olmak ister misiniz?
