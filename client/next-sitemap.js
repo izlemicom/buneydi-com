@@ -16,4 +16,10 @@ module.exports = {
     ],
   },
   exclude: ["/hesabim", "/onizle", "/server-sitemap.xml", "/admin"],
+  additionalPaths: async (config) => [
+    await config.transform(config, "/"),
+    await config.transform(config, "/yazarlar"),
+    await config.transform(config, "/icerikler"),
+    await config.transform(config, "/etiketler"),
+  ],
 };
