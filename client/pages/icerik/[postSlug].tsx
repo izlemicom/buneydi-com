@@ -106,16 +106,24 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-  let relatedPosts;
+  let relatedPosts = null;
   if (post.tags) {
     let combinedTags = [];
     post.tags.map((tag) => {
       combinedTags.push(tag.content);
     });
-    console.log(combinedTags.join(" ").replace(/ /g, " | "));
+    console.log(
+      combinedTags
+        .join(" ")
+        .replace(/[&\/\\#,+()$~%.'":*?<>{}!]/g, "")
+        .replace(/ /g, " | ")
+    );
     relatedPosts = await axios({
       params: {
-        tagSlug: combinedTags.join(" ").replace(/ /g, " | "),
+        tagSlug: combinedTags
+          .join(" ")
+          .replace(/[&\/\\#,+()$~%.'":*?<>{}!]/g, "")
+          .replace(/ /g, " | "),
         postId: post.id,
         take: 20,
         type: "related",
@@ -123,9 +131,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       method: "GET",
       url: `/post/posts`,
       baseURL: process.env.BASE_API_URL,
-    }).then(function (response) {
-      return response.data;
-    });
+    })
+      .then(function (response) {
+        return response.data;
+      })
+      .catch(function (error) {
+        console.error(error.response.data.error);
+      });
+    if (!relatedPosts) {
+      relatedPosts = null;
+    }
   } else relatedPosts = null;
 
   const firstComments = await axios({

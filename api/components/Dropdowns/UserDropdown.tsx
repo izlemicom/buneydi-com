@@ -21,8 +21,7 @@ const UserDropdown = () => {
   return (
     <>
       <a
-        className="text-blueGray-500 block"
-        href="#pablo"
+        className="text-blueGray-500 block cursor-pointer"
         ref={btnDropdownRef}
         onClick={(e) => {
           e.preventDefault();

@@ -37,7 +37,7 @@ export default function Guncelle({ session, data, isAuthor, postData }) {
             <div className="px-4 md:px-10 mx-auto w-full -m-24">
               <div className="flex flex-wrap">
                 <div className="w-full px-4">
-                  <CardContentUpdate user={session.user} post={postData} />
+                  <CardContentUpdate session={session} post={postData} />
                 </div>
               </div>
 

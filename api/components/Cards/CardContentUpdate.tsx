@@ -6,16 +6,16 @@ import ArticleTextEditor from "./ArticleTextEditor";
 import { UiFileInputButton } from "./UiFileInputButton";
 import Image from "next/image";
 import { Encrypt } from "../../lib/CRYPT";
+import { toast } from "react-toastify";
 
 // components
 
-export default function CardContentUpdate({ user, post }) {
+export default function CardContentUpdate({ session, post }) {
   let combinedTags = [];
   post.tags.map((tag, index) => {
     combinedTags.push(tag.content);
   });
   const [data, setData] = useRecoilState(articleData);
-  setData(post.content);
   const [progress, setProgress] = useState(100);
   const [url, setUrl] = useState(post.mainImage);
   const [title, setTitle] = useState(post.title);
@@ -23,12 +23,13 @@ export default function CardContentUpdate({ user, post }) {
   const [draft, setDraft] = useState<any>(post);
   let cDraft: any;
   async function onIzle() {
+    console.log(data);
     const post = {
       title: title,
       content: data,
       mainImage: url,
       tags: tags,
-      userId: user.id,
+      userId: session.id,
     };
     if (draft) {
       cDraft = await axios({
@@ -38,42 +39,48 @@ export default function CardContentUpdate({ user, post }) {
           content: data,
           mainImage: url,
           tags: tags,
-          userId: user.id,
+          userId: session.id,
           id: draft.id,
         },
         method: "PATCH",
         url: "/api/post/draft",
-      }).then(function (response) {
-        return response.data;
-      });
-      console.log(cDraft);
+      })
+        .then(function (response) {
+          return response.data;
+        })
+        .catch(function (error) {
+          console.error(error.response.data.error);
+          toast.error(error.response.data.error);
+        });
       setDraft(cDraft);
-      console.log(draft);
     } else {
       cDraft = await axios({
         withCredentials: true,
         data: post,
         method: "POST",
         url: "/api/post/draft",
-      }).then(function (response) {
-        return response.data;
-      });
-      console.log(cDraft);
+      })
+        .then(function (response) {
+          return response.data;
+        })
+        .catch(function (error) {
+          console.error(error.response.data.error);
+          toast.error(error.response.data.error);
+        });
       setDraft(cDraft);
-      console.log(draft);
     }
-    console.log(draft);
+    if (!cDraft) return;
     const encoded = Encrypt({ slug: cDraft.slug });
-    console.log(draft);
     window.open(`http://localhost:3005/onizle?post=${encoded}`, "_blank");
   }
   async function publishPost() {
+    console.log(data);
     const post = {
       title: title,
       content: data,
       mainImage: url,
       tags: tags,
-      userId: user.id,
+      userId: session.id,
     };
     if (draft) {
       cDraft = await axios({
@@ -83,32 +90,37 @@ export default function CardContentUpdate({ user, post }) {
           content: data,
           mainImage: url,
           tags: tags,
-          userId: user.id,
+          userId: session.id,
           id: draft.id,
         },
         method: "PATCH",
         url: "/api/post/post",
-      }).then(function (response) {
-        return response.data;
-      });
-      console.log(cDraft);
+      })
+        .then(function (response) {
+          return response.data;
+        })
+        .catch(function (error) {
+          console.error(error.response.data.error);
+          toast.error(error.response.data.error);
+        });
       setDraft(cDraft);
-      console.log(draft);
     } else {
       cDraft = await axios({
         withCredentials: true,
         data: post,
         method: "POST",
         url: "/api/post/post",
-      }).then(function (response) {
-        return response.data;
-      });
-      console.log(cDraft);
+      })
+        .then(function (response) {
+          return response.data;
+        })
+        .catch(function (error) {
+          console.error(error.response.data.error);
+          toast.error(error.response.data.error);
+        });
       setDraft(cDraft);
-      console.log(draft);
     }
-    console.log(draft);
-    console.log(draft);
+    if (!cDraft) return;
     window.open(`http://localhost:3005/icerik/${cDraft.slug}`, "_blank");
   }
   const onChange = async (formData) => {
@@ -120,11 +132,13 @@ export default function CardContentUpdate({ user, post }) {
       },
     };
 
-    const response: any = await axios.post(
-      "/api/image/image",
-      formData,
-      config
-    );
+    const promise = axios.post("/api/image/image", formData, config);
+    toast.promise(promise, {
+      pending: "Kapak fotoğrafı yükleniyor...",
+      success: "Kapak fotoğrafı başarılı bir şekilde yüklendi",
+      error: "Kapak fotoğrafı yüklenemedi.",
+    });
+    const response: any = await promise;
     setUrl(response.data.url);
   };
   async function deletePhoto() {
@@ -135,9 +149,15 @@ export default function CardContentUpdate({ user, post }) {
       },
       method: "DELETE",
       url: `/api/image/image`,
-    }).then(function (response) {
-      return response.data;
-    });
+    })
+      .then(function (response) {
+        toast.success("Kapak fotoğrafı başarılı bir şekilde kaldırıldı.");
+        return response.data;
+      })
+      .catch(function (error) {
+        console.error(error.response.data.error);
+        toast.error(error.response.data.error);
+      });
     setProgress(0);
     setUrl("");
   }

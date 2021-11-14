@@ -5,9 +5,8 @@ import { articleData } from "../../atoms/recoil";
 import ArticleTextEditor from "./ArticleTextEditor";
 import { UiFileInputButton } from "./UiFileInputButton";
 import Image from "next/image";
-import CryptoJS from "crypto-js";
 import { Encrypt } from "../../lib/CRYPT";
-import { Post } from ".prisma/client";
+import { toast } from "react-toastify";
 
 // components
 
@@ -40,28 +39,33 @@ export default function CardContentAdd({ session }) {
         },
         method: "PATCH",
         url: "/api/post/draft",
-      }).then(function (response) {
-        return response.data;
-      });
-      console.log(cDraft);
+      })
+        .then(function (response) {
+          return response.data;
+        })
+        .catch(function (error) {
+          console.error(error.response.data.error);
+          toast.error(error.response.data.error);
+        });
       setDraft(cDraft);
-      console.log(draft);
     } else {
       cDraft = await axios({
         withCredentials: true,
         data: post,
         method: "POST",
         url: "/api/post/draft",
-      }).then(function (response) {
-        return response.data;
-      });
-      console.log(cDraft);
+      })
+        .then(function (response) {
+          return response.data;
+        })
+        .catch(function (error) {
+          console.error(error.response.data.error);
+          toast.error(error.response.data.error);
+        });
       setDraft(cDraft);
-      console.log(draft);
     }
-    console.log(draft);
+    if (!cDraft) return;
     const encoded = Encrypt({ slug: cDraft.slug });
-    console.log(draft);
     window.open(`http://localhost:3005/onizle?post=${encoded}`, "_blank");
   }
   async function publishPost() {
@@ -85,27 +89,32 @@ export default function CardContentAdd({ session }) {
         },
         method: "PATCH",
         url: "/api/post/post",
-      }).then(function (response) {
-        return response.data;
-      });
-      console.log(cDraft);
+      })
+        .then(function (response) {
+          return response.data;
+        })
+        .catch(function (error) {
+          console.error(error.response.data.error);
+          toast.error(error.response.data.error);
+        });
       setDraft(cDraft);
-      console.log(draft);
     } else {
       cDraft = await axios({
         withCredentials: true,
         data: post,
         method: "POST",
         url: "/api/post/post",
-      }).then(function (response) {
-        return response.data;
-      });
-      console.log(cDraft);
+      })
+        .then(function (response) {
+          return response.data;
+        })
+        .catch(function (error) {
+          console.error(error.response.data.error);
+          toast.error(error.response.data.error);
+        });
       setDraft(cDraft);
-      console.log(draft);
     }
-    console.log(draft);
-    console.log(draft);
+    if (!cDraft) return;
     window.open(`http://localhost:3005/icerik/${cDraft.slug}`, "_blank");
   }
   const onChange = async (formData) => {
@@ -117,11 +126,13 @@ export default function CardContentAdd({ session }) {
       },
     };
 
-    const response: any = await axios.post(
-      "/api/image/image",
-      formData,
-      config
-    );
+    const promise = axios.post("/api/image/image", formData, config);
+    toast.promise(promise, {
+      pending: "Kapak fotoğrafı yükleniyor...",
+      success: "Kapak fotoğrafı başarılı bir şekilde yüklendi",
+      error: "Kapak fotoğrafı yüklenemedi.",
+    });
+    const response: any = await promise;
     setUrl(response.data.url);
   };
   async function deletePhoto() {
@@ -132,9 +143,15 @@ export default function CardContentAdd({ session }) {
       },
       method: "DELETE",
       url: `/api/image/image`,
-    }).then(function (response) {
-      return response.data;
-    });
+    })
+      .then(function (response) {
+        toast.success("Kapak fotoğrafı başarılı bir şekilde kaldırıldı.");
+        return response.data;
+      })
+      .catch(function (error) {
+        console.error(error.response.data.error);
+        toast.error(error.response.data.error);
+      });
     setProgress(0);
     setUrl("");
   }

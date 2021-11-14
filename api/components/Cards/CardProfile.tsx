@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 import { authorInfo } from "../../atoms/recoil";
 import { UiFileInputButton } from "./UiFileInputButton";
+import { toast } from "react-toastify";
 
 // components
 
@@ -19,11 +20,13 @@ export default function CardProfile({ session, author, total }) {
       },
     };
 
-    const response: any = await axios.post(
-      "/api/image/image",
-      formData,
-      config
-    );
+    const promise = axios.post("/api/image/image", formData, config);
+    toast.promise(promise, {
+      pending: "Profil fotoğrafı yükleniyor...",
+      success: "Profil fotoğrafı başarılı bir şekilde yüklendi",
+      error: "Profil fotoğrafı yüklenemedi.",
+    });
+    const response: any = await promise;
     setUrl(response.data.url);
     const user = await axios({
       withCredentials: true,
@@ -33,9 +36,14 @@ export default function CardProfile({ session, author, total }) {
       },
       method: "PATCH",
       url: "/api/author/image",
-    }).then(function (response) {
-      return response.data;
-    });
+    })
+      .then(function (response) {
+        return response.data;
+      })
+      .catch(function (error) {
+        console.error(error.response.data.error);
+        toast.error(error.response.data.error);
+      });
   };
   return (
     <>

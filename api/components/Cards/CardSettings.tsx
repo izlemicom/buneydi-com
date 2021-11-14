@@ -2,9 +2,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { authorInfo } from "../../atoms/recoil";
-import GreenAlert from "../Alerts/GreenAlert";
-import RedAlert from "../Alerts/RedAlert";
-
+import { toast } from "react-toastify";
 // components
 
 export default function CardSettings({ author, session }) {
@@ -33,9 +31,15 @@ export default function CardSettings({ author, session }) {
       data: authorinfo,
       method: "PATCH",
       url: "/api/author/author",
-    }).then(function (response) {
-      return response.data;
-    });
+    })
+      .then(function (response) {
+        toast.success("Güncelleme başarılı.");
+        return response.data;
+      })
+      .catch(function (error) {
+        console.error(error.response.data.error);
+        toast.error(error.response.data.error);
+      });
   }
   async function passChange(e) {
     e.preventDefault();
@@ -48,10 +52,17 @@ export default function CardSettings({ author, session }) {
         },
         method: "PATCH",
         url: "/api/author/pass",
-      }).then(function (response) {
-        return response.data;
-      });
+      })
+        .then(function (response) {
+          toast.success("Şifre başarılı bir şekilde değiştirildi.");
+          return response.data;
+        })
+        .catch(function (error) {
+          console.error(error.response.data.error);
+          toast.error(error.response.data.error);
+        });
     } else {
+      toast.error("Şifreler eşleşmiyor.");
       e.target.confirm.setCustomValidity("Şifreler eşleşmiyor");
     }
   }

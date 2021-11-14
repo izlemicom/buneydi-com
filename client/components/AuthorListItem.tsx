@@ -5,7 +5,7 @@ function AuthorListItem({ author, index }) {
     <Link href={`/yazar/${author.id}`}>
       <div className="relative cursor-pointer flex border-2 rounded-lg justify-center px-4 py-2 mx-3 my-3 items-center">
         <img
-          className="h-10 w-10 rounded-full"
+          className="h-10 w-10 rounded-full object-cover"
           src={author.image}
           alt={author.name}
         />

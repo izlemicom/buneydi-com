@@ -2,6 +2,8 @@ import React from "react";
 import { createPopper } from "@popperjs/core";
 import axios from "axios";
 import { Encrypt } from "../../lib/CRYPT";
+import { toast } from "react-toastify";
+import router from "next/router";
 
 const NotificationDropdown = ({ postId, type, slug }) => {
   // dropdown props
@@ -28,15 +30,23 @@ const NotificationDropdown = ({ postId, type, slug }) => {
       method: "DELETE",
       url: `/post/${type}`,
       baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
-    }).then(function (response) {
-      return response.data;
-    });
+    })
+      .then(function (response) {
+        toast.success("İçerik başarılı bir şekilde silindi.");
+        router.push("/icerikler");
+        return response.data;
+      })
+      .catch(function (error) {
+        console.error(error.response.data.error);
+        toast.error(error.response.data.error);
+      });
     dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();
   }
   async function Guncelle(e) {
     dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();
     e.preventDefault();
     const encoded = Encrypt({ slug, type });
+    dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();
     window.open(`/guncelle?post=${encoded}`);
   }
   return (

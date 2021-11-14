@@ -50,9 +50,9 @@ function ArticleTextEditor({ initData }) {
             });
           }}
           onChange={(event, editor) => {
-            const data = editor.getData();
-            console.log(data);
-            setData(data);
+            const dataofeditor = editor.getData();
+            console.log(dataofeditor);
+            setData(dataofeditor);
           }}
         />
       ) : (

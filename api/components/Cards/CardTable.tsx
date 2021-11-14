@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 
 // components
 import TableDropdown from "../Dropdowns/TableDropdown";
@@ -26,15 +27,18 @@ export default function CardTable({ color, title, firstPosts, session, type }) {
       method: "GET",
       url: `/author/${type}s`,
       baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
-    }).then(function (response) {
-      return response.data;
-    });
+    })
+      .then(function (response) {
+        return response.data;
+      })
+      .catch(function (error) {
+        console.error(error.response.data.error);
+        toast.error(error.response.data.error);
+      });
     let newPosts = morePosts.posts;
     postCount = morePosts.postCount;
     if (newPosts.length === 5) setCursor(newPosts[4].id);
-    console.log(newPosts);
     newPosts = allPosts.concat(newPosts);
-    console.log(newPosts);
     setAllPosts(newPosts);
   }
   return (
@@ -117,7 +121,7 @@ export default function CardTable({ color, title, firstPosts, session, type }) {
             <tbody>
               {allPosts &&
                 allPosts.map((post) => (
-                  <tr>
+                  <tr key={post.id}>
                     <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
                       <img
                         width="100"

@@ -9,6 +9,8 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "../styles/tailwind.css";
 import PageChange from "../components/PageChange/PageChange";
 import { SessionProvider } from "next-auth/react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 Router.events.on("routeChangeStart", (url) => {
   console.log(`Yükleniyor: ${url}`);
@@ -58,6 +60,15 @@ export default class MyApp extends App {
           <RecoilRoot>
             <Layout>
               <Component {...pageProps} />
+              <ToastContainer
+                position="top-right"
+                autoClose={8000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                draggable={false}
+                closeOnClick
+                pauseOnHover
+              />
             </Layout>
           </RecoilRoot>
         </SessionProvider>

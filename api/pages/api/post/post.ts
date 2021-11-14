@@ -248,7 +248,7 @@ api.delete(async (req, res) => {
   try {
     await unlink(`./public/images/${file}`);
   } catch (error) {
-    throw new Error("Bir şeyler ters gitti." + error);
+    throw new Error(error);
   }
   res.status(200).json(post);
 });
