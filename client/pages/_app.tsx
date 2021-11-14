@@ -2,6 +2,7 @@ import "tailwindcss/tailwind.css";
 import "../styles/font-awesome/css/all.min.css";
 import { SessionProvider } from "next-auth/react";
 import { RecoilRoot } from "recoil";
+import Script from "next/script";
 
 // import App from "next/app";
 import type { AppProps /*, AppContext */ } from "next/app";
@@ -10,6 +11,21 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <SessionProvider>
       <RecoilRoot>
+        <Script
+          strategy="lazyOnload"
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+        />
+
+        <Script strategy="lazyOnload">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
+              page_path: window.location.pathname,
+            });
+                `}
+        </Script>
         <Component {...pageProps} />
       </RecoilRoot>
     </SessionProvider>
