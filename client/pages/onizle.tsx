@@ -5,22 +5,6 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 
 function OnIzle({ lastData, session }) {
-  const data = {
-    title: "",
-    content: "",
-    createdAt: new Date(),
-    mainImage: "/placeholder.png",
-    user: {
-      image: "/placeholder.png",
-      name: "",
-    },
-    _count: {
-      postLikes: 0,
-      comments: 0,
-      postViews: 0,
-    },
-  };
-
   const [post, setPost] = useState(lastData);
 
   return (
