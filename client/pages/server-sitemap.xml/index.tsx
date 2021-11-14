@@ -39,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const postFields: ISitemapField[] = posts.map((post) => ({
     loc: `https://www.buneydi.com/icerik/${post.slug}`,
-    lastmod: post.updatedAt,
+    lastmod: new Date().toISOString(),
   }));
 
   const tagFields: ISitemapField[] = tags.map((tag) => ({
