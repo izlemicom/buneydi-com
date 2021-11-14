@@ -1,0 +1,22 @@
+# *
+User-agent: *
+Disallow: /hesabim
+
+# *
+User-agent: *
+Disallow: /onizle
+
+# *
+User-agent: *
+Disallow: /admin
+
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.buneydi.com
+
+# Sitemaps
+Sitemap: https://www.buneydi.com/sitemap.xml
+Sitemap: https://www.buneydi.com/server-sitemap.xml
