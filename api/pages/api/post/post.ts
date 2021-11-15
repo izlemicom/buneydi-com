@@ -137,7 +137,7 @@ api.patch(async (req, res) => {
     where: { id: id },
     select: { slug: true },
   });
-  if (!findSlug) throw new Error("Taslak bulunamadı.");
+  if (!findSlug) throw new Error("İçerik bulunamadı.");
 
   const post = await prisma.post.update({
     where: { id: id },
@@ -153,7 +153,6 @@ api.patch(async (req, res) => {
         },
       },
     },
-    select: { slug: true, id: true },
   });
 
   const promises = tagArray.map((tag) => {

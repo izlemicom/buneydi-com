@@ -76,7 +76,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
     method: "GET",
     url: `/tag/tags`,
-    baseURL: process.env.BASE_API_URL,
+    baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
   }).then(function (response) {
     return response.data;
   });
@@ -89,7 +89,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
     method: "GET",
     url: `/tag/tags`,
-    baseURL: process.env.BASE_API_URL,
+    baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
   }).then(function (response) {
     return response.data;
   });
@@ -102,7 +102,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
     method: "GET",
     url: `/post/posts`,
-    baseURL: process.env.BASE_API_URL,
+    baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
   }).then(function (response) {
     return response.data;
   });

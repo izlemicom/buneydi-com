@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import { UiFileInputButton } from "./UiFileInputButton";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
+import { toast } from "react-toastify";
 
 // components
 
 export default function CardUserAccount({ session }) {
   const [progress, setProgress] = useState(0);
   const [url, setUrl] = useState("");
-  const router = useRouter();
   const onChange = async (formData) => {
     console.log(formData);
     const config = {
@@ -21,7 +21,13 @@ export default function CardUserAccount({ session }) {
       },
     };
 
-    const response: any = await axios.post("/image/image", formData, config);
+    const promise = axios.post("/image/image", formData, config);
+    toast.promise(promise, {
+      pending: "Profil fotoğrafı yükleniyor...",
+      success: "Profil fotoğrafı başarılı bir şekilde yüklendi",
+      error: "Profil fotoğrafı yüklenemedi.",
+    });
+    const response: any = await promise;
     setUrl(response.data.url);
     const user = await axios({
       withCredentials: true,
@@ -32,9 +38,14 @@ export default function CardUserAccount({ session }) {
       method: "PATCH",
       baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
       url: "/user/image",
-    }).then(function (response) {
-      return response.data;
-    });
+    })
+      .then(function (response) {
+        return response.data;
+      })
+      .catch(function (error) {
+        console.error(error.response.data.error);
+        toast.error(error.response.data.error);
+      });
   };
   async function handleSubmit(e) {
     e.preventDefault();
@@ -51,11 +62,16 @@ export default function CardUserAccount({ session }) {
         method: "PATCH",
         url: "/user/pass",
         baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
-      }).then(function (response) {
-        return response.data;
-      });
+      })
+        .then(function (response) {
+          toast.success("Güncelleme başarılı.");
+          return response.data;
+        })
+        .catch(function (error) {
+          console.error(error.response.data.error);
+          toast.error(error.response.data.error);
+        });
       signOut();
-      router.push("/giris");
     } else {
       e.target.confirm.setCustomValidity("Şifreler eşleşmiyor");
     }

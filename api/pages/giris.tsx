@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import Auth from "../layouts/Auth";
 import { getProviders, signIn } from "next-auth/react";
+import { toast } from "react-toastify";
 
 // layout for page
 
-export default function Giris({ providers }) {
+export default function Giris({ providers, error }) {
   function handleSubmit(e) {
     e.preventDefault();
     console.log(e.target.email.value);
@@ -16,6 +17,12 @@ export default function Giris({ providers }) {
       type: "login",
     });
   }
+  useEffect(() => {
+    if (error)
+      toast.error(
+        "E-posta veya şifre hatalı. E-posta başkası tarafından kullanılıyor olabilir."
+      );
+  }, []);
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -139,14 +146,12 @@ export default function Giris({ providers }) {
 
 Giris.layout = Auth;
 
-export async function getServerSideProps() {
+export async function getServerSideProps(ctx) {
+  const error = ctx.query.error ? ctx.query.error : null;
   const providers = await getProviders();
-  providers.credentials.id;
-  providers.google.id;
-  providers.google.name;
-
   return {
     props: {
+      error,
       providers,
     },
   };

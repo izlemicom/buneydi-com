@@ -2,8 +2,10 @@ import { getProviders, signIn } from "next-auth/react";
 import NavBar from "../components/NavBar";
 import Link from "next/link";
 import FooterSmall from "../components/FooterSmall";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
-export default function Giris({ providers }) {
+export default function Giris({ providers, error }) {
   function handleSubmit(e) {
     e.preventDefault();
     signIn("credentials", {
@@ -12,6 +14,12 @@ export default function Giris({ providers }) {
       type: "login",
     });
   }
+  useEffect(() => {
+    if (error)
+      toast.error(
+        "E-posta veya şifre hatalı. E-posta başkası tarafından kullanılıyor olabilir."
+      );
+  }, []);
   return (
     <>
       <NavBar />
@@ -142,10 +150,12 @@ export default function Giris({ providers }) {
     </>
   );
 }
-export async function getServerSideProps() {
+export async function getServerSideProps(ctx) {
+  const error = ctx.query.error ? ctx.query.error : null;
   const providers = await getProviders();
   return {
     props: {
+      error,
       providers,
     },
   };

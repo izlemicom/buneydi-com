@@ -19,109 +19,38 @@ export default function CardContentUpdate({ session, post }) {
   const [progress, setProgress] = useState(100);
   const [url, setUrl] = useState(post.mainImage);
   const [title, setTitle] = useState(post.title);
-  const [tags, setTags] = useState(combinedTags.toString());
+  const [tags, setTags] = useState(combinedTags.toString().toLowerCase());
   const [draft, setDraft] = useState<any>(post);
-  let cDraft: any;
-  async function onIzle() {
-    console.log(data);
-    const post = {
-      title: title,
-      content: data,
-      mainImage: url,
-      tags: tags,
-      userId: session.id,
-    };
-    if (draft) {
-      cDraft = await axios({
-        withCredentials: true,
-        data: {
-          title: title,
-          content: data,
-          mainImage: url,
-          tags: tags,
-          userId: session.id,
-          id: draft.id,
-        },
-        method: "PATCH",
-        url: "/api/post/draft",
-      })
-        .then(function (response) {
-          return response.data;
-        })
-        .catch(function (error) {
-          console.error(error.response.data.error);
-          toast.error(error.response.data.error);
-        });
-      setDraft(cDraft);
-    } else {
-      cDraft = await axios({
-        withCredentials: true,
-        data: post,
-        method: "POST",
-        url: "/api/post/draft",
-      })
-        .then(function (response) {
-          return response.data;
-        })
-        .catch(function (error) {
-          console.error(error.response.data.error);
-          toast.error(error.response.data.error);
-        });
-      setDraft(cDraft);
-    }
-    if (!cDraft) return;
-    const encoded = Encrypt({ slug: cDraft.slug });
-    window.open(`http://localhost:3005/onizle?post=${encoded}`, "_blank");
-  }
+
   async function publishPost() {
-    console.log(data);
-    const post = {
-      title: title,
-      content: data,
-      mainImage: url,
-      tags: tags,
-      userId: session.id,
-    };
-    if (draft) {
-      cDraft = await axios({
-        withCredentials: true,
-        data: {
-          title: title,
-          content: data,
-          mainImage: url,
-          tags: tags,
-          userId: session.id,
-          id: draft.id,
-        },
-        method: "PATCH",
-        url: "/api/post/post",
+    let content;
+    if (!data) content = post.content;
+    else content = data;
+
+    const updatedPost: any = await axios({
+      withCredentials: true,
+      data: {
+        title: title,
+        content: content,
+        mainImage: url,
+        tags: tags,
+        userId: session.id,
+        id: draft.id,
+      },
+      method: "PATCH",
+      url: "/api/post/post",
+    })
+      .then(function (response) {
+        return response.data;
       })
-        .then(function (response) {
-          return response.data;
-        })
-        .catch(function (error) {
-          console.error(error.response.data.error);
-          toast.error(error.response.data.error);
-        });
-      setDraft(cDraft);
-    } else {
-      cDraft = await axios({
-        withCredentials: true,
-        data: post,
-        method: "POST",
-        url: "/api/post/post",
-      })
-        .then(function (response) {
-          return response.data;
-        })
-        .catch(function (error) {
-          console.error(error.response.data.error);
-          toast.error(error.response.data.error);
-        });
-      setDraft(cDraft);
-    }
-    if (!cDraft) return;
-    window.open(`http://localhost:3005/icerik/${cDraft.slug}`, "_blank");
+      .catch(function (error) {
+        console.error(error.response.data.error);
+        toast.error(error.response.data.error);
+      });
+    setDraft(updatedPost);
+
+    if (!updatedPost) return;
+    window.open(`http://localhost:3005/icerik/${updatedPost.slug}`, "_blank");
   }
   const onChange = async (formData) => {
     const config = {
@@ -268,25 +197,7 @@ export default function CardContentUpdate({ session, post }) {
           <hr className="mt-6 border-b-1 border-blueGray-300" />
 
           <h6 className="text-blueGray-600 text-sm mt-3 mb-6 font-bold uppercase">
-            Önizleme
-          </h6>
-          <div className="flex flex-wrap">
-            <div className="w-full mx-auto lg:w-12/12 px-4">
-              <div className="relative mb-3">
-                <button
-                  onClick={onIzle}
-                  className="w-full bg-lightBlue-500 rounded text-white font-bold focus:outline-none px-3 py-3"
-                >
-                  ÖNİZLE
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <hr className="mt-6 border-b-1 border-blueGray-300" />
-
-          <h6 className="text-blueGray-600 text-sm mt-3 mb-6 font-bold uppercase">
-            İçeriği Yükle
+            Güncelle
           </h6>
           <div className="flex flex-wrap">
             <div className="w-full mx-auto lg:w-12/12 px-4">
@@ -295,7 +206,7 @@ export default function CardContentUpdate({ session, post }) {
                   onClick={publishPost}
                   className="w-full bg-emerald-500 rounded text-white font-bold focus:outline-none px-3 py-3"
                 >
-                  İÇERİĞİ YÜKLE
+                  Güncelle
                 </button>
               </div>
             </div>

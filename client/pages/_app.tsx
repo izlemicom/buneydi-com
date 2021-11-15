@@ -6,6 +6,8 @@ import Script from "next/script";
 
 // import App from "next/app";
 import type { AppProps /*, AppContext */ } from "next/app";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -27,6 +29,15 @@ function MyApp({ Component, pageProps }: AppProps) {
                 `}
         </Script>
         <Component {...pageProps} />
+        <ToastContainer
+          position="top-right"
+          autoClose={8000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          draggable={false}
+          closeOnClick
+          pauseOnHover
+        />
       </RecoilRoot>
     </SessionProvider>
   );

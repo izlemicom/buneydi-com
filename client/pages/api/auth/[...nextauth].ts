@@ -68,7 +68,6 @@ export default NextAuth({
           // Any object returned will be saved in `user` property of the JWT
           return user;
         } else {
-          console.log(error);
           throw new Error(error);
 
           // If you return null or false then the credentials will be rejected
