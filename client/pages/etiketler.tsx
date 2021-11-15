@@ -4,8 +4,16 @@ import { useState } from "react";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import Tag from "../components/Tag";
+import { NextSeo } from "next-seo";
 
 function Etiketler({ somePosts, latestTags, someTags, data }) {
+  const SEO = {
+    title: "Etiketler | BuNeydi - İçerik Platformu",
+    description: "BuNeydi İçerik Platformunda bulunan tüm etiketler.",
+    openGraph: {
+      url: "https://www.buneydi.com/etiketler",
+    },
+  };
   let { tags, tagsCount } = data;
   let a = "";
   if (tagsCount > 20) {
@@ -75,6 +83,7 @@ function Etiketler({ somePosts, latestTags, someTags, data }) {
 
   return (
     <div>
+      <NextSeo {...SEO} />
       <NavBar />
       <main className="mx-10 xl:w-4/5 md:mx-32 lg:mx-5 xl:mx-auto">
         <h1 className="text-4xl font-bold pt-4">Etiketler</h1>

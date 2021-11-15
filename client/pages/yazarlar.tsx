@@ -4,8 +4,16 @@ import { useState } from "react";
 import AuthorListItem from "../components/AuthorListItem";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
+import { NextSeo } from "next-seo";
 
 function Yazarlar({ somePosts, latestTags, someTags, data }) {
+  const SEO = {
+    title: "Yazarlar | BuNeydi - İçerik Platformu",
+    description: "BuNeydi İçerik Platformunda bulunan tüm yazarlar.",
+    openGraph: {
+      url: "https://www.buneydi.com/yazarlar",
+    },
+  };
   const { authors, authorCount } = data;
 
   let a = "";
@@ -33,6 +41,7 @@ function Yazarlar({ somePosts, latestTags, someTags, data }) {
 
   return (
     <div>
+      <NextSeo {...SEO} />
       <NavBar />
       <main className="mx-2 xl:w-4/5 md:mx-32 lg:mx-5 xl:mx-auto">
         <h1 className="text-4xl font-bold py-2">Yazarlar</h1>

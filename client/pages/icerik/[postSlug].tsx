@@ -10,6 +10,8 @@ import { useState } from "react";
 import CommentsPostPage from "../../components/CommentsPostPage";
 import Head from "next/head";
 import { getSession } from "next-auth/react";
+import htmlToTextBuneydi from "../../lib/htmlToTextBuneydi";
+import { NextSeo } from "next-seo";
 
 function PostPage({
   somePosts,
@@ -20,15 +22,46 @@ function PostPage({
   firstComments,
   session,
 }) {
+  const description = htmlToTextBuneydi(post.content).replace(/\r?\n|\r/g, " ");
+  let combinedTags = [];
+  post.tags.map((tag) => {
+    combinedTags.push(tag.content);
+  });
+  const SEO = {
+    title: post.title,
+    description:
+      description.split(".")[0] + "." + description.split(".")[1] + ".",
+    openGraph: {
+      type: "article",
+      article: {
+        publishedTime: post.createdAt,
+        modifiedTime: post.updatedAt,
+        authors: ["https://www.buneydi.com/yazar/" + post.user.id],
+        tags: combinedTags,
+      },
+      locale: "tr_TR",
+      images: [
+        {
+          url: post.mainImage,
+          alt: post.title,
+        },
+      ],
+      url: "https://www.buneydi.com/icerik/" + post.slug,
+      site_name: "BuNeydi",
+    },
+  };
+
   const isServer = typeof window === "undefined";
 
   async function getClientIp(url: string) {
     return await axios({
       method: "GET",
       url: url,
-    }).then(function (response) {
-      return response.data;
-    });
+    })
+      .then(function (response) {
+        return response.data;
+      })
+      .catch(function (err) {});
   }
 
   async function setView() {
@@ -49,7 +82,7 @@ function PostPage({
         return response.data;
       })
       .catch(function (err) {
-        console.log(err);
+        console.log(err.response.data.error);
       });
   }
   if (!isServer) {
@@ -58,6 +91,7 @@ function PostPage({
 
   return (
     <div>
+      <NextSeo {...SEO} />
       <NavBar />
       <main className="mx-10 xl:w-4/5 md:mx-32 lg:mx-5 xl:mx-auto">
         <div className="lg:grid lg:grid-cols-4 lg:space-x-4">

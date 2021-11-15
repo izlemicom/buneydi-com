@@ -3,10 +3,18 @@ import React, { useRef } from "react";
 import FooterSmall from "../components/FooterSmall";
 import NavBar from "../components/NavBar";
 import ReCAPTCHA from "react-google-recaptcha";
+import { NextSeo } from "next-seo";
 
 // layout for page
 
 export default function KayitOl({ providers }) {
+  const SEO = {
+    title: "Kayıt Ol | BuNeydi - İçerik Platformu",
+    description: "BuNeydi İçerik Platformuna kayıt ol.",
+    openGraph: {
+      url: "https://www.buneydi.com/kayitol",
+    },
+  };
   const reRef = useRef<ReCAPTCHA>();
   async function handleSubmit(e) {
     e.preventDefault();
@@ -22,6 +30,7 @@ export default function KayitOl({ providers }) {
   }
   return (
     <>
+      <NextSeo {...SEO} />
       <NavBar />
       <main>
         <section className="relative w-full h-full py-40 min-h-screen">

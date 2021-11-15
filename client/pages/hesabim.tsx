@@ -4,10 +4,19 @@ import { getSession } from "next-auth/react";
 import CardUserAccount from "../components/CardUserAccount";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
+import { NextSeo } from "next-seo";
 
 function Hesabim({ somePosts, latestTags, someTags, session }) {
+  const SEO = {
+    title: "Hesabım | BuNeydi - İçerik Platformu",
+    description: "BuNeydi İçerik Platformu hesabım.",
+    openGraph: {
+      url: "https://www.buneydi.com/hesabim",
+    },
+  };
   return (
     <div>
+      <NextSeo {...SEO} />
       <NavBar />
       <main className="lg:w-4/5 mx-5 lg:mx-auto">
         <CardUserAccount session={session} />

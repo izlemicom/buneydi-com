@@ -5,8 +5,31 @@ import CardProfile from "../../components/CardProfile";
 import Footer from "../../components/Footer";
 import NavBar from "../../components/NavBar";
 import PostCardWide from "../../components/PostCardWide";
+import { NextSeo } from "next-seo";
 
 function Author({ data, author, someTags, somePosts, latestTags }) {
+  const names = author.user.name.split(" ");
+  const SEO = {
+    title: author.user.name + " - BuNeydi Yazarı",
+    description: author.user.bio,
+    openGraph: {
+      type: "profile",
+      profile: {
+        firstName: names[0],
+        lastName: names[1],
+        username: author.user.mahlas,
+      },
+      locale: "tr_TR",
+      images: [
+        {
+          url: author.user.image,
+          alt: author.user.name,
+        },
+      ],
+      url: "https://www.buneydi.com/yazar/" + author.user.id,
+      site_name: "BuNeydi",
+    },
+  };
   let { posts, postCount } = data;
   let a = "";
   if (postCount > 5) {
@@ -39,6 +62,7 @@ function Author({ data, author, someTags, somePosts, latestTags }) {
   }
   return (
     <div>
+      <NextSeo {...SEO} />
       <NavBar />
       <main className="lg:w-4/5 mx-5 lg:mx-auto">
         <CardProfile data={author} />

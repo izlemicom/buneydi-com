@@ -5,8 +5,16 @@ import FooterSmall from "../components/FooterSmall";
 import { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import ReCAPTCHA from "react-google-recaptcha";
+import { NextSeo } from "next-seo";
 
 export default function Giris({ providers, error }) {
+  const SEO = {
+    title: "Giriş | BuNeydi - İçerik Platformu",
+    description: "BuNeydi İçerik Platformuna giriş yap.",
+    openGraph: {
+      url: "https://www.buneydi.com/giris",
+    },
+  };
   const reRef = useRef<ReCAPTCHA>();
   async function handleSubmit(e) {
     e.preventDefault();
@@ -27,6 +35,7 @@ export default function Giris({ providers, error }) {
   }, []);
   return (
     <>
+      <NextSeo {...SEO} />
       <NavBar />
       <main>
         <section className="relative w-full h-full py-40 min-h-screen">

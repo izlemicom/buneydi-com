@@ -53,7 +53,11 @@ export default class MyApp extends App {
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
           />
-          <title>Yazar Yönetim Paneli | BuNeydi</title>
+          <title>Yazar Yönetim Paneli - BuNeydi</title>
+          <meta
+            name="description"
+            content="Neyin ne olduğunu öğrenin, öğretin ve yazın. En yeni ve güncel içeriklere erişin ve paylaşın."
+          />
         </Head>
         <SessionProvider>
           <RecoilRoot>

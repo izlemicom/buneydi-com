@@ -8,11 +8,14 @@ import Script from "next/script";
 import type { AppProps /*, AppContext */ } from "next/app";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { DefaultSeo } from "next-seo";
+import SEO from "../next-seo.config";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <SessionProvider>
       <RecoilRoot>
+        <DefaultSeo {...SEO} />
         <Script
           strategy="lazyOnload"
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}

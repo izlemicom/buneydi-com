@@ -27,13 +27,13 @@ export default function CardUserAccount({ session }) {
       success: "Profil fotoğrafı başarılı bir şekilde yüklendi",
       error: "Profil fotoğrafı yüklenemedi.",
     });
-    const response: any = await promise;
-    setUrl(response.data.url);
+    const response: any = await promise.catch(() => {});
+    setUrl(response?.data?.url);
     const user = await axios({
       withCredentials: true,
       data: {
-        image: response.data.url,
-        userId: session.id,
+        image: response?.data?.url,
+        userId: session?.id,
       },
       method: "PATCH",
       baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
@@ -43,7 +43,6 @@ export default function CardUserAccount({ session }) {
         return response.data;
       })
       .catch(function (error) {
-        console.error(error.response.data.error);
         toast.error(error.response.data.error);
       });
   };

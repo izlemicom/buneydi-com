@@ -4,8 +4,16 @@ import { useState } from "react";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import PostCardWide from "../components/PostCardWide";
+import { NextSeo } from "next-seo";
 
 function Icerikler({ somePosts, latestTags, someTags, data }) {
+  const SEO = {
+    title: "İçerikler | BuNeydi - İçerik Platformu",
+    description: "BuNeydi İçerik Platformunda bulunan tüm içerikler.",
+    openGraph: {
+      url: "https://www.buneydi.com/icerikler",
+    },
+  };
   let { posts, postCount } = data;
   let a = "";
   if (postCount > 5) {
@@ -81,6 +89,7 @@ function Icerikler({ somePosts, latestTags, someTags, data }) {
 
   return (
     <div>
+      <NextSeo {...SEO} />
       <NavBar />
       <main className="mx-10 xl:w-4/5 md:mx-32 lg:mx-5 xl:mx-auto">
         <h1 className="text-4xl font-bold pt-4">İçerikler</h1>

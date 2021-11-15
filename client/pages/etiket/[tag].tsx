@@ -4,9 +4,27 @@ import { useState } from "react";
 import Footer from "../../components/Footer";
 import NavBar from "../../components/NavBar";
 import PostCardWide from "../../components/PostCardWide";
+import { NextSeo } from "next-seo";
 
 function Tag({ data, tagSlug, someTags, somePosts, latestTags }) {
   let { tag, posts, postCount } = data;
+
+  const SEO = {
+    title:
+      tag.content.charAt(0).toUpperCase() +
+      tag.content.slice(1) +
+      " Etiketi - BuNeydi",
+    description:
+      tag.content.charAt(0).toUpperCase() +
+      tag.content.slice(1) +
+      " etiketi ile paylaşılmış tüm içerikler.",
+    openGraph: {
+      type: "website",
+      locale: "tr_TR",
+      url: "https://www.buneydi.com/etiket/" + tag.slug,
+      site_name: "BuNeydi",
+    },
+  };
 
   let a = "";
   if (postCount > 5) {
@@ -83,6 +101,7 @@ function Tag({ data, tagSlug, someTags, somePosts, latestTags }) {
   }
   return (
     <div>
+      <NextSeo {...SEO} />
       <NavBar />
       <main className="mx-10 xl:w-4/5 md:mx-32 lg:mx-5 xl:mx-auto">
         <h1 className="text-4xl font-bold pt-4 uppercase">{tag?.content}</h1>
