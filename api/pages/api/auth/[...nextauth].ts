@@ -23,12 +23,32 @@ export default NextAuth({
         username: { label: "E-posta", type: "email" },
         password: { label: "Şifre", type: "password" },
         name: { label: "Ad Soyad", type: "text" },
+        token: { label: "Token", type: "text" },
         type: { label: "type", type: "text" },
       },
       async authorize(credentials, req) {
         // Add logic here to look up the user from the credentials supplied
         let user = null;
         let error = null;
+        const response: any = await axios({
+          params: {
+            secret: process.env.RECAPTCHA_SECRET_KEY,
+            response: credentials.token,
+          },
+          method: "POST",
+          baseURL: "https://www.google.com",
+          url: "/recaptcha/api/siteverify",
+        })
+          .then(function (response) {
+            return response.data;
+          })
+          .catch(function (err) {
+            error = err.response.data.error;
+            console.error(error);
+          });
+
+        if (!response.success) return user;
+
         if (credentials.type === "login") {
           user = await axios({
             data: {
@@ -68,7 +88,6 @@ export default NextAuth({
           // Any object returned will be saved in `user` property of the JWT
           return user;
         } else {
-          console.log(error);
           throw new Error(error);
 
           // If you return null or false then the credentials will be rejected

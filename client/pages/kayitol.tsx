@@ -1,17 +1,22 @@
 import { getProviders, signIn } from "next-auth/react";
-import React from "react";
+import React, { useRef } from "react";
 import FooterSmall from "../components/FooterSmall";
 import NavBar from "../components/NavBar";
+import ReCAPTCHA from "react-google-recaptcha";
 
 // layout for page
 
 export default function KayitOl({ providers }) {
-  function handleSubmit(e) {
+  const reRef = useRef<ReCAPTCHA>();
+  async function handleSubmit(e) {
     e.preventDefault();
+    const token = await reRef.current.executeAsync();
+    reRef.current.reset();
     signIn("credentials", {
+      name: e.target.name.value,
       username: e.target.email.value,
       password: e.target.password.value,
-      name: e.target.name.value,
+      token: token,
       type: "register",
     });
   }
@@ -130,7 +135,11 @@ export default function KayitOl({ providers }) {
                           </span>
                         </label>
                       </div>
-
+                      <ReCAPTCHA
+                        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                        size="invisible"
+                        ref={reRef}
+                      />
                       <div className="text-center mt-6">
                         <button
                           className="text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"

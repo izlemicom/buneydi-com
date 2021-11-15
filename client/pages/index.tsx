@@ -20,10 +20,6 @@ export default function Home({
 }) {
   return (
     <div>
-      <Head>
-        <title>BuNeydi.com</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <NavBar />
       <main className="lg:w-4/5 mx-5 lg:mx-auto">
         <TrendLine posts={latestPostsData.posts} />

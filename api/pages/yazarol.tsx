@@ -2,7 +2,6 @@ import { getSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import Auth from "../layouts/Auth";
-import UserDropdown from "../components/Dropdowns/UserDropdown";
 import axios from "axios";
 import { toast } from "react-toastify";
 

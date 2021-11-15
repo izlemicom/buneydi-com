@@ -1,19 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import Auth from "../layouts/Auth";
 import { getProviders, signIn } from "next-auth/react";
 import { toast } from "react-toastify";
+import ReCAPTCHA from "react-google-recaptcha";
 
 // layout for page
 
 export default function Giris({ providers, error }) {
-  function handleSubmit(e) {
+  const reRef = useRef<ReCAPTCHA>();
+  async function handleSubmit(e) {
     e.preventDefault();
-    console.log(e.target.email.value);
-    console.log(e.target.password.value);
+    const token = await reRef.current.executeAsync();
+    reRef.current.reset();
     signIn("credentials", {
       username: e.target.email.value,
       password: e.target.password.value,
+      token: token,
       type: "login",
     });
   }
@@ -107,7 +110,11 @@ export default function Giris({ providers, error }) {
                       </span>
                     </label>
                   </div>
-
+                  <ReCAPTCHA
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                    size="invisible"
+                    ref={reRef}
+                  />
                   <div className="text-center mt-6">
                     <button
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"

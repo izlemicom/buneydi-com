@@ -2,6 +2,7 @@ import axios from "axios";
 import moment from "moment";
 import "moment/locale/tr";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 function CommentByUser({ comment, session }) {
   const date = new Date(comment.createdAt);
@@ -13,7 +14,10 @@ function CommentByUser({ comment, session }) {
   const [likeId, setLikeId] = useState();
 
   async function like() {
-    if (!session) return;
+    if (!session) {
+      toast.error("Giriş yapmalısınız.");
+      return;
+    }
 
     if (liked) {
       const like: any = await axios({

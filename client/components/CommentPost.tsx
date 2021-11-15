@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { commentsAdd } from "../atoms/recoil";
 
@@ -7,7 +8,10 @@ function CommentPost({ postid, session }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!session) return;
+    if (!session) {
+      toast.error("Giriş yapmalısınız.");
+      return;
+    }
     const content = e.target.elements.body.value;
     const userId = session.id;
     const postId = postid;
@@ -26,7 +30,8 @@ function CommentPost({ postid, session }) {
         return response.data;
       })
       .catch(function (err) {
-        console.log(err);
+        toast.error(err.response.data.error);
+        console.log(err.response.data.error);
       });
     let newComments = [];
     newComments.push(response);
