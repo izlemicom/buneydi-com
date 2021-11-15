@@ -1,9 +1,10 @@
-import { getSession } from "next-auth/react";
+import { getSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import Auth from "../layouts/Auth";
 import UserDropdown from "../components/Dropdowns/UserDropdown";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 // layout for page
 
@@ -35,12 +36,18 @@ export default function YazarOl({ session }) {
       baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
     })
       .then((response) => {
+        toast.success("Yazar oldunuz, tekrar giriş yapınız.");
         return response.data;
       })
       .catch((error) => {
-        console.error(error);
+        toast.error(error.response.data.error);
+        console.error(error.response.data.error);
       });
-    if (author) router.push("/giris");
+    if (author) {
+      setTimeout(() => {
+        signOut();
+      }, 4000);
+    }
   }
   return (
     <>

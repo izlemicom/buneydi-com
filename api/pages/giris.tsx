@@ -130,7 +130,7 @@ export default function Giris({ providers, error }) {
                 </a>
               </div>
               <div className="w-1/2 text-right">
-                <Link href="/kayitol">
+                <Link href="/yazarol">
                   <a className="text-blueGray-200">
                     <small>Yazar Ol!</small>
                   </a>
