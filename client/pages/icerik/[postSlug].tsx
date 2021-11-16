@@ -11,7 +11,7 @@ import CommentsPostPage from "../../components/CommentsPostPage";
 import Head from "next/head";
 import { getSession } from "next-auth/react";
 import htmlToTextBuneydi from "../../lib/htmlToTextBuneydi";
-import { NextSeo } from "next-seo";
+import { NewsArticleJsonLd, NextSeo } from "next-seo";
 
 function PostPage({
   somePosts,
@@ -23,7 +23,7 @@ function PostPage({
   session,
 }) {
   const description = htmlToTextBuneydi(post.content).replace(/\r?\n|\r/g, " ");
-  let combinedTags = [];
+  let combinedTags: string[] = [];
   post.tags.map((tag) => {
     combinedTags.push(tag.content);
   });
@@ -93,6 +93,23 @@ function PostPage({
   return (
     <div>
       <NextSeo {...SEO} />
+      <NewsArticleJsonLd
+        url={"https://www.buneydi.com/icerik/" + post.slug}
+        title={post.title}
+        images={[post.mainImage]}
+        section={post.tags[0] ? post.tags[0].content : "içerik"}
+        keywords={combinedTags.toString()}
+        dateCreated={post.createdAt}
+        datePublished={post.createdAt}
+        dateModified={post.updatedAt}
+        authorName={post.user.name}
+        publisherName="BuNeydi"
+        publisherLogo="https://www.buneydi.com/android-chrome-512x512.png"
+        description={
+          description.split(".")[0] + "." + description.split(".")[1] + "."
+        }
+        body={description}
+      />
       <NavBar />
       <main className="mx-10 xl:w-4/5 md:mx-32 lg:mx-5 xl:mx-auto">
         <div className="lg:grid lg:grid-cols-4 lg:space-x-4">

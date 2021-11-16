@@ -5,7 +5,7 @@ import CardProfile from "../../components/CardProfile";
 import Footer from "../../components/Footer";
 import NavBar from "../../components/NavBar";
 import PostCardWide from "../../components/PostCardWide";
-import { NextSeo } from "next-seo";
+import { NextSeo, SocialProfileJsonLd } from "next-seo";
 
 function Author({ data, author, someTags, somePosts, latestTags }) {
   const names = author.user.name.split(" ");
@@ -64,6 +64,12 @@ function Author({ data, author, someTags, somePosts, latestTags }) {
   return (
     <div>
       <NextSeo {...SEO} />
+      <SocialProfileJsonLd
+        type="Person"
+        name={author.user.name}
+        url={"https://www.buneydi.com/yazar/" + author.user.id}
+        sameAs={[`https://www.buneydi.com/yazar/${author.user.id}`]}
+      />
       <NavBar />
       <main className="lg:w-4/5 mx-5 lg:mx-auto">
         <CardProfile data={author} />
