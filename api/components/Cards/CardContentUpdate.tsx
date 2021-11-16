@@ -156,7 +156,7 @@ export default function CardContentUpdate({ session, post }) {
                       <Image
                         width="960"
                         height="540"
-                        src={url ? url : "/img/placeholder.png"}
+                        src={url ? url : "/img/placeholder.webp"}
                         alt=""
                       />
                     </div>

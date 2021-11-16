@@ -148,11 +148,11 @@ model Tag {
 }
 
 model Image {
-  id      String @id @default(cuid())
-  url     String
-  post    Post   @relation(fields: [postId], references: [id])
-  postId  String
-  addedBy User   @relation(fields: [userId], references: [id])
+  id      String  @id
+  url     String  @unique
+  post    Post?   @relation(fields: [postId], references: [id])
+  postId  String?
+  addedBy User    @relation(fields: [userId], references: [id])
   userId  String
 }
 

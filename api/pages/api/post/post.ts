@@ -4,6 +4,7 @@ import handler from "../../../lib/api/handler";
 import slugGenerator from "../../../lib/slugGenerator";
 import authorize from "../../../lib/api/authorize";
 import authorizeAuthor from "../../../lib/api/authorizeauthor";
+import imageExtracter from "../../../lib/api/imageExtracter";
 const api = handler();
 
 api.get(async (req, res) => {
@@ -71,6 +72,43 @@ api.post(async (req, res) => {
     select: { slug: true, id: true },
   });
 
+  const url = mainImage;
+  const arr = url.split("/");
+  const file = arr[arr.length - 1];
+  const image = await prisma.image.update({
+    where: {
+      url: file,
+    },
+    data: {
+      post: {
+        connect: {
+          id: post.id,
+        },
+      },
+    },
+  });
+  const urls = await imageExtracter(content);
+
+  const images = urls.map((url) => {
+    const image = prisma.image
+      .update({
+        where: {
+          url: url,
+        },
+        data: {
+          post: {
+            connect: {
+              id: post.id,
+            },
+          },
+        },
+      })
+      .then((data) => {
+        return data;
+      });
+  });
+  await Promise.all(images).then(function (results) {});
+
   const promises = tagArray.map((tag) => {
     const slug = slugGenerator(tag);
     if (!slug) return;
@@ -130,6 +168,8 @@ api.patch(async (req, res) => {
   if (!title || !content || !mainImage || !userId || !id)
     throw new Error("Veri eklenmemiş.");
 
+  const urls = await imageExtracter(content);
+
   let tagArray = tags.toLowerCase().split(",");
   let slug = slugGenerator(title);
   const findSlug = await prisma.post.findUnique({
@@ -154,6 +194,41 @@ api.patch(async (req, res) => {
     },
   });
 
+  const url = mainImage;
+  const arr = url.split("/");
+  const file = arr[arr.length - 1];
+  const image = await prisma.image.update({
+    where: {
+      url: file,
+    },
+    data: {
+      post: {
+        connect: {
+          id: post.id,
+        },
+      },
+    },
+  });
+
+  const images = urls.map((url) => {
+    const image = prisma.image
+      .update({
+        where: {
+          url: url,
+        },
+        data: {
+          post: {
+            connect: {
+              id: post.id,
+            },
+          },
+        },
+      })
+      .then((data) => {
+        return data;
+      });
+  });
+  await Promise.all(images).then(function (results) {});
   const promises = tagArray.map((tag) => {
     const slug = slugGenerator(tag);
     if (!slug) return;
@@ -247,6 +322,33 @@ api.delete(async (req, res) => {
   } catch (error) {
     throw new Error(error);
   }
+  const deletedImage = await prisma.image.delete({
+    where: {
+      url: file,
+    },
+  });
+
+  const urls = await imageExtracter(post.content);
+
+  const images = urls.map((url) => {
+    unlink(`./public/images/${url}`).then(function (response) {
+      const image = prisma.image
+        .delete({
+          where: {
+            url: url,
+          },
+        })
+        .then((data) => {
+          return data;
+        });
+    });
+  });
+  await Promise.all(images)
+    .then(function (results) {})
+    .catch(function (err) {
+      throw new Error(err);
+    });
+
   res.status(200).json(post);
 });
 export default api;

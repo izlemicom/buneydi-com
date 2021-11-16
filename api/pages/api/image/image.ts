@@ -4,6 +4,7 @@ import path from "path";
 import authorize from "../../../lib/api/authorize";
 import authorizeAuthor from "../../../lib/api/authorizeauthor";
 import handler from "../../../lib/api/handler";
+import { prisma } from "../../../lib/db";
 import { unlink } from "fs/promises";
 import imagemin from "imagemin";
 import imageminPngquant from "imagemin-pngquant";
@@ -15,6 +16,7 @@ import imageminSvgo from "imagemin-svgo";
 import { NextApiRequest } from "next";
 
 export interface ImageRequest extends NextApiRequest {
+  id: string | null;
   file: {
     fieldname: string | null;
     originalname: string | null;
@@ -48,19 +50,6 @@ const upload = multer({
 });
 
 api.use(authorize);
-api.use(authorizeAuthor);
-
-api.delete(async (req, res) => {
-  const { url } = req.query;
-  const arr = url.toString().split("/");
-  const file = arr[arr.length - 1];
-  try {
-    await unlink(`./public/images/${file}`);
-  } catch (error) {
-    throw new Error("Bir şeyler ters gitti." + error);
-  }
-  res.status(200).json({ success: "Başarılı bir şekilde silindi." });
-});
 
 api.use(upload.single("upload"));
 
@@ -120,9 +109,39 @@ api.post(async (req: ImageRequest, res) => {
       ],
     });
   }
+  const uploadedImage = await prisma.image.create({
+    data: {
+      id: fName.split(".")[0],
+      url: fName,
+      addedBy: {
+        connect: {
+          id: req.id,
+        },
+      },
+    },
+  });
   res.status(200).json({
     url: process.env.BASE_IMAGE_URL + "/images/" + fName,
   });
+});
+
+api.use(authorizeAuthor);
+
+api.delete(async (req, res) => {
+  const { url } = req.query;
+  const arr = url.toString().split("/");
+  const file = arr[arr.length - 1];
+  try {
+    await unlink(`./public/images/${file}`);
+  } catch (error) {
+    throw new Error("Bir şeyler ters gitti." + error);
+  }
+  const deletedImage = await prisma.image.delete({
+    where: {
+      url: file,
+    },
+  });
+  res.status(200).json({ success: "Başarılı bir şekilde silindi." });
 });
 
 export default api;

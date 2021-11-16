@@ -3,6 +3,7 @@ import { getSession } from "next-auth/react";
 
 export interface BuneydiRequest extends NextApiRequest {
   role: string | null;
+  id: string | null;
 }
 
 export default async function authorize(
@@ -14,5 +15,6 @@ export default async function authorize(
   const session = await getSession({ req });
   if (!session) return next(new Error("Yetkiniz yok."));
   req.role = session.role.toString();
+  req.id = session.id.toString();
   next();
 }
