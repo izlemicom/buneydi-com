@@ -4,13 +4,12 @@ function Footer({ someTags, latestTags, somePosts }) {
     <footer className="text-gray-700 body-font bg-gray-100 my-2">
       <div className="container border-t px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
         <div className="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
-          <a
-            href=""
-            className="flex title-font font-bold items-center md:justify-start justify-center text-gray-900 hover:text-indigo-500"
-          >
-            <i className="fas fa-glasses fa-lg"></i>
-            <span className="ml-3 text-xl">Bu Neydi?</span>
-          </a>
+          <Link href="/">
+            <a className="flex title-font font-bold items-center md:justify-start justify-center text-gray-900 hover:text-indigo-500">
+              <i className="fas fa-glasses fa-lg"></i>
+              <span className="ml-3 text-xl">Bu Neydi?</span>
+            </a>
+          </Link>
           <p className="mt-2 text-sm text-gray-700">
             Neyin ne olduğunu öğrenin, öğretin ve yazın...
           </p>

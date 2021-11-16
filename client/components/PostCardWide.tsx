@@ -9,11 +9,13 @@ function PostCardWide({ post }) {
   const formatedDate = moment(date, "YYYYMMDD").fromNow();
   return (
     <div className="mx-auto lg:flex lg:flex-row lg:h-auto my-3">
-      <img
-        className="rounded-tr-md rounded-tl-md h-48 w-full lg:h-auto lg:w-4/12 lg:rounded-bl-md lg:rounded-tr-none object-cover object-center"
-        src={post.mainImage}
-        alt={post.title}
-      />
+      <Link href={`/icerik/${post.slug}`}>
+        <img
+          className="rounded-tr-md rounded-tl-md h-48 w-full lg:h-auto lg:w-4/12 lg:rounded-bl-md lg:rounded-tr-none object-cover object-center cursor-pointer"
+          src={post.mainImage}
+          alt={post.title}
+        />
+      </Link>
       <div className="bg-white border p-8 rounded-bl-md rounded-br-md lg:rounded-bl-none lg:rounded-tr-md">
         <Link href={`/icerik/${post.slug}`}>
           <a>
@@ -27,11 +29,15 @@ function PostCardWide({ post }) {
         </div>
         <div className="flex items-center pt-3">
           <div className="flex items-center">
-            <img
-              className="h-10 w-10 rounded-full object-cover"
-              src={post.user.image}
-              alt={post.user.name}
-            />
+            <Link href={`/yazar/${post.user.id}`}>
+              <a>
+                <img
+                  className="h-10 w-10 rounded-full object-cover"
+                  src={post.user.image}
+                  alt={post.user.name}
+                />
+              </a>
+            </Link>
             <div className="ml-4">
               <Link href={`/yazar/${post.user.id}`}>
                 <a>

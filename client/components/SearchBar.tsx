@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import PostCardTextSearch from "./PostCardTextSearch";
+import Link from "next/link";
 
 function SearchBar() {
   const [posts, setPosts] = useState([]);
@@ -69,12 +70,11 @@ function SearchBar() {
         <p className="text-gray-100 font-bold text-xl">
           Yazar olmak ister misiniz?
         </p>
-        <a
-          className="text-gray-100 bg-red-700 hover:bg-red-800 font-bold rounded-lg text-xl mx-3 px-3 py-2 text-center inline-flex items-center"
-          href="#"
-        >
-          Yazar Ol!
-        </a>
+        <Link href={process.env.NEXT_PUBLIC_BASE_AUTHOR_URL}>
+          <a className="text-gray-100 bg-red-700 hover:bg-red-800 font-bold rounded-lg text-xl mx-3 px-3 py-2 text-center inline-flex items-center">
+            Yazar Ol!
+          </a>
+        </Link>
       </div>
     </div>
   );
