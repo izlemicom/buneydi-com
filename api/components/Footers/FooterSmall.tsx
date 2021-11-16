@@ -28,7 +28,7 @@ export default function FooterSmall(props) {
               <ul className="flex flex-wrap list-none md:justify-end  justify-center">
                 <li>
                   <a
-                    href="/"
+                    href="https://www.facebook.com/buneydiweb"
                     className="text-white hover:text-blueGray-300 text-sm font-semibold block py-1 px-3"
                   >
                     <i className="fab fa-facebook-f"></i>
@@ -36,7 +36,7 @@ export default function FooterSmall(props) {
                 </li>
                 <li>
                   <a
-                    href="/"
+                    href="https://twitter.com/buneydicom"
                     className="text-white hover:text-blueGray-300 text-sm font-semibold block py-1 px-3"
                   >
                     <i className="fab fa-twitter"></i>
@@ -44,15 +44,7 @@ export default function FooterSmall(props) {
                 </li>
                 <li>
                   <a
-                    href="/"
-                    className="text-white hover:text-blueGray-300 text-sm font-semibold block py-1 px-3"
-                  >
-                    <i className="fab fa-linkedin-in"></i>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/"
+                    href="https://www.instagram.com/buneydicom/"
                     className="text-white hover:text-blueGray-300 text-sm font-semibold block py-1 px-3"
                   >
                     <i className="fab fa-instagram-square"></i>

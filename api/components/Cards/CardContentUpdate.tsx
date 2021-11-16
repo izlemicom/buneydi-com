@@ -67,7 +67,7 @@ export default function CardContentUpdate({ session, post }) {
       success: "Kapak fotoğrafı başarılı bir şekilde yüklendi",
       error: "Kapak fotoğrafı yüklenemedi.",
     });
-    const response: any = await promise;
+    const response: any = await promise.catch(() => {});
     setUrl(response.data.url);
   };
   async function deletePhoto() {

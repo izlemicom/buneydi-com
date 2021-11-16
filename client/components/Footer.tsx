@@ -77,19 +77,22 @@ function Footer({ someTags, latestTags, somePosts }) {
             </a>
           </p>
           <span className="inline-flex sm:ml-auto sm:mt-0 mt-2 justify-center sm:justify-start">
-            <a href="" className="text-gray-500">
+            <a
+              href="https://www.facebook.com/buneydiweb"
+              className="text-gray-500"
+            >
               <i className="fab fa-facebook-f"></i>
             </a>
-            <a href="" className="ml-3 text-gray-500">
+            <a
+              href="https://twitter.com/buneydicom"
+              className="ml-3 text-gray-500"
+            >
               <i className="fab fa-twitter"></i>
             </a>
-            <a href="" className="ml-3 text-gray-500">
-              <i className="fab fa-linkedin-in"></i>
-            </a>
-            <a href="" className="ml-3 text-gray-500">
-              <i className="fab fa-youtube"></i>
-            </a>
-            <a href="" className="ml-3 text-gray-500">
+            <a
+              href="https://www.instagram.com/buneydicom/"
+              className="ml-3 text-gray-500"
+            >
               <i className="fab fa-instagram-square"></i>
             </a>
           </span>

@@ -26,7 +26,7 @@ export default function CardProfile({ session, author, total }) {
       success: "Profil fotoğrafı başarılı bir şekilde yüklendi",
       error: "Profil fotoğrafı yüklenemedi.",
     });
-    const response: any = await promise;
+    const response: any = await promise.catch(() => {});
     setUrl(response.data.url);
     const user = await axios({
       withCredentials: true,
