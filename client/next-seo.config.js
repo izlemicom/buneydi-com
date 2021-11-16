@@ -2,6 +2,7 @@ export default {
   title: "BuNeydi - İçerik Platformu",
   description:
     "Neyin ne olduğunu öğrenin, öğretin ve yazın. Tamamı bağımsız yazarlar tarafından oluşturulan tarafsız, yeni ve güncel içeriklere erişin ve paylaşın.",
+  canonical: "https://www.buneydi.com/",
   openGraph: {
     type: "website",
     locale: "tr_TR",

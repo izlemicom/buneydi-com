@@ -11,6 +11,7 @@ export default function Giris({ providers, error }) {
   const SEO = {
     title: "Giriş | BuNeydi - İçerik Platformu",
     description: "BuNeydi İçerik Platformuna giriş yap.",
+    canonical: "https://www.buneydi.com/giris",
     openGraph: {
       url: "https://www.buneydi.com/giris",
     },

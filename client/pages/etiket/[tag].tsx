@@ -18,6 +18,7 @@ function Tag({ data, tagSlug, someTags, somePosts, latestTags }) {
       tag.content.charAt(0).toUpperCase() +
       tag.content.slice(1) +
       " etiketi ile paylaşılmış tüm içerikler.",
+    canonical: "https://www.buneydi.com/etiket/" + tag.slug,
     openGraph: {
       type: "website",
       locale: "tr_TR",

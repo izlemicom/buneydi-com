@@ -11,6 +11,7 @@ export default function KayitOl({ providers }) {
   const SEO = {
     title: "Kayıt Ol | BuNeydi - İçerik Platformu",
     description: "BuNeydi İçerik Platformuna kayıt ol.",
+    canonical: "https://www.buneydi.com/kayitol",
     openGraph: {
       url: "https://www.buneydi.com/kayitol",
     },

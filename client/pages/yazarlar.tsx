@@ -10,6 +10,7 @@ function Yazarlar({ somePosts, latestTags, someTags, data }) {
   const SEO = {
     title: "Yazarlar | BuNeydi - İçerik Platformu",
     description: "BuNeydi İçerik Platformunda bulunan tüm yazarlar.",
+    canonical: "https://www.buneydi.com/yazarlar",
     openGraph: {
       url: "https://www.buneydi.com/yazarlar",
     },

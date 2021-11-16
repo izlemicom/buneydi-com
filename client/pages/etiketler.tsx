@@ -10,6 +10,7 @@ function Etiketler({ somePosts, latestTags, someTags, data }) {
   const SEO = {
     title: "Etiketler | BuNeydi - İçerik Platformu",
     description: "BuNeydi İçerik Platformunda bulunan tüm etiketler.",
+    canonical: "https://www.buneydi.com/etiketler",
     openGraph: {
       url: "https://www.buneydi.com/etiketler",
     },

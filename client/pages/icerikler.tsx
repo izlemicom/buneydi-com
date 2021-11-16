@@ -10,6 +10,7 @@ function Icerikler({ somePosts, latestTags, someTags, data }) {
   const SEO = {
     title: "İçerikler | BuNeydi - İçerik Platformu",
     description: "BuNeydi İçerik Platformunda bulunan tüm içerikler.",
+    canonical: "https://www.buneydi.com/icerikler",
     openGraph: {
       url: "https://www.buneydi.com/icerikler",
     },

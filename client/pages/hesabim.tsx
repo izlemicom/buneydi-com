@@ -10,6 +10,7 @@ function Hesabim({ somePosts, latestTags, someTags, session }) {
   const SEO = {
     title: "Hesabım | BuNeydi - İçerik Platformu",
     description: "BuNeydi İçerik Platformu hesabım.",
+    canonical: "https://www.buneydi.com/hesabim",
     openGraph: {
       url: "https://www.buneydi.com/hesabim",
     },

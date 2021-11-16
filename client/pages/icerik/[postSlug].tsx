@@ -31,6 +31,7 @@ function PostPage({
     title: post.title,
     description:
       description.split(".")[0] + "." + description.split(".")[1] + ".",
+    canonical: "https://www.buneydi.com/icerik/" + post.slug,
     openGraph: {
       type: "article",
       article: {

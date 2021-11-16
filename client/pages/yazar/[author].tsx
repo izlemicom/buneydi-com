@@ -12,6 +12,7 @@ function Author({ data, author, someTags, somePosts, latestTags }) {
   const SEO = {
     title: author.user.name + " - BuNeydi Yazarı",
     description: author.user.bio,
+    canonical: "https://www.buneydi.com/yazar/" + author.user.id,
     openGraph: {
       type: "profile",
       profile: {
