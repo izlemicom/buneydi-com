@@ -6,7 +6,7 @@ let postCount = 0;
 const api = handler();
 
 api.get(async (req, res) => {
-  console.log(req.query);
+  req.query;
   let { isfirst, take, cursor, authorId } = req.query;
   res.status(200).send(await latestPosts(isfirst, take, cursor, authorId));
 });

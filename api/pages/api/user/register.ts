@@ -11,7 +11,6 @@ api.post(async (req, res) => {
   const user = await prisma.user.findUnique({ where: { email: username } });
   if (user) throw new Error("Daha önceden kayıt yapılmış.");
   var hash = CryptoJS.AES.encrypt(password, process.env.SECRET_KEY);
-  console.log(hash);
   const newUser = await prisma.user.create({
     data: {
       name: name,

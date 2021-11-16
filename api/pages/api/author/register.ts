@@ -7,7 +7,6 @@ const api = handler();
 api.use(authorize);
 
 api.post(async (req, res) => {
-  console.log(req.body);
   const { userId, name, mahlas, bio, adress, city, country, postalCode } =
     req.body;
   if (

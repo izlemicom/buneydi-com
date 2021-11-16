@@ -44,7 +44,6 @@ export default function CardContentAdd({ session }) {
           return response.data;
         })
         .catch(function (error) {
-          console.error(error.response.data.error);
           toast.error(error.response.data.error);
         });
       setDraft(cDraft);
@@ -59,7 +58,6 @@ export default function CardContentAdd({ session }) {
           return response.data;
         })
         .catch(function (error) {
-          console.error(error.response.data.error);
           toast.error(error.response.data.error);
         });
       setDraft(cDraft);
@@ -94,7 +92,6 @@ export default function CardContentAdd({ session }) {
           return response.data;
         })
         .catch(function (error) {
-          console.error(error.response.data.error);
           toast.error(error.response.data.error);
         });
       setDraft(cDraft);
@@ -109,7 +106,6 @@ export default function CardContentAdd({ session }) {
           return response.data;
         })
         .catch(function (error) {
-          console.error(error.response.data.error);
           toast.error(error.response.data.error);
         });
       setDraft(cDraft);
@@ -149,7 +145,6 @@ export default function CardContentAdd({ session }) {
         return response.data;
       })
       .catch(function (error) {
-        console.error(error.response.data.error);
         toast.error(error.response.data.error);
       });
     setProgress(0);

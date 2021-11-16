@@ -11,7 +11,6 @@ export default function CardUserAccount({ session }) {
   const [progress, setProgress] = useState(0);
   const [url, setUrl] = useState("");
   const onChange = async (formData) => {
-    console.log(formData);
     const config = {
       withCredentials: true,
       baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
@@ -67,7 +66,6 @@ export default function CardUserAccount({ session }) {
           return response.data;
         })
         .catch(function (error) {
-          console.error(error.response.data.error);
           toast.error(error.response.data.error);
         });
       signOut();

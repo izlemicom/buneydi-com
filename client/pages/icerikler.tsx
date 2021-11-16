@@ -41,9 +41,7 @@ function Icerikler({ somePosts, latestTags, someTags, data }) {
     let newPosts = morePosts.posts;
     postCount = morePosts.postCount;
     if (newPosts.length === 5) setCursor(newPosts[4].id);
-    console.log(newPosts);
     newPosts = allPosts.concat(newPosts);
-    console.log(newPosts);
     setAllPosts(newPosts);
   }
   async function getFirstPosts(option) {

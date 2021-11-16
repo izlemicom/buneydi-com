@@ -119,7 +119,6 @@ api.post(async (req, res) => {
           return added;
         }
       });
-    console.log(findSlug);
   });
   await Promise.all(promises).then(function (results) {});
   res.status(200).json(post);
@@ -203,7 +202,6 @@ api.patch(async (req, res) => {
           return added;
         }
       });
-    console.log(findSlug);
   });
   await Promise.all(promises).then(function (results) {});
   res.status(200).json(post);

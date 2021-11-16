@@ -86,12 +86,10 @@ function ArticleTextEditor() {
           data={data}
           onReady={(editor) => {
             // You can store the "editor" and use when it is needed.
-            console.log(editor);
           }}
           onChange={(event, editor) => {
             const data = editor.getData();
             setData(data);
-            console.log(data);
           }}
         />
       ) : (

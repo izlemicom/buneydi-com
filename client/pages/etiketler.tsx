@@ -41,9 +41,7 @@ function Etiketler({ somePosts, latestTags, someTags, data }) {
     let newPosts = morePosts.posts;
     tagsCount = morePosts.tagsCount;
     if (newPosts.length === 5) setCursor(newPosts[4].id);
-    console.log(newPosts);
     newPosts = allTags.concat(newPosts);
-    console.log(newPosts);
     setAllTags(newPosts);
   }
   async function getFirstTags(option) {

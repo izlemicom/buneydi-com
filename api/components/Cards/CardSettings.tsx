@@ -37,7 +37,6 @@ export default function CardSettings({ author, session }) {
         return response.data;
       })
       .catch(function (error) {
-        console.error(error.response.data.error);
         toast.error(error.response.data.error);
       });
   }
@@ -58,7 +57,6 @@ export default function CardSettings({ author, session }) {
           return response.data;
         })
         .catch(function (error) {
-          console.error(error.response.data.error);
           toast.error(error.response.data.error);
         });
     } else {

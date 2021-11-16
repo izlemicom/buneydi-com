@@ -44,7 +44,6 @@ export default function CardContentUpdate({ session, post }) {
         return response.data;
       })
       .catch(function (error) {
-        console.error(error.response.data.error);
         toast.error(error.response.data.error);
       });
     setDraft(updatedPost);
@@ -84,7 +83,6 @@ export default function CardContentUpdate({ session, post }) {
         return response.data;
       })
       .catch(function (error) {
-        console.error(error.response.data.error);
         toast.error(error.response.data.error);
       });
     setProgress(0);

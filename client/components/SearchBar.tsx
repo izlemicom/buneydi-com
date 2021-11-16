@@ -21,7 +21,7 @@ function SearchBar() {
       .then(function (response) {
         return response.data;
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {});
     setPosts(newPosts);
   }
   return (

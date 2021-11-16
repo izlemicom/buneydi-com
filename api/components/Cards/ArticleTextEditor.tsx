@@ -51,7 +51,6 @@ function ArticleTextEditor({ initData }) {
           }}
           onChange={(event, editor) => {
             const dataofeditor = editor.getData();
-            console.log(dataofeditor);
             setData(dataofeditor);
           }}
         />

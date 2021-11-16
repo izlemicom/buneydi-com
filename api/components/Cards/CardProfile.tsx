@@ -41,7 +41,6 @@ export default function CardProfile({ session, author, total }) {
         return response.data;
       })
       .catch(function (error) {
-        console.error(error.response.data.error);
         toast.error(error.response.data.error);
       });
   };

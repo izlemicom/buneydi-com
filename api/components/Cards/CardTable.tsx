@@ -32,7 +32,6 @@ export default function CardTable({ color, title, firstPosts, session, type }) {
         return response.data;
       })
       .catch(function (error) {
-        console.error(error.response.data.error);
         toast.error(error.response.data.error);
       });
     let newPosts = morePosts.posts;

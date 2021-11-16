@@ -37,7 +37,6 @@ const NotificationDropdown = ({ postId, type, slug }) => {
         return response.data;
       })
       .catch(function (error) {
-        console.error(error.response.data.error);
         toast.error(error.response.data.error);
       });
     dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();

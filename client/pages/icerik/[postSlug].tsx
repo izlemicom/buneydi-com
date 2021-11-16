@@ -82,9 +82,7 @@ function PostPage({
       .then(function (response) {
         return response.data;
       })
-      .catch(function (err) {
-        console.log(err.response.data.error);
-      });
+      .catch(function (err) {});
   }
   if (!isServer) {
     setView();
@@ -164,12 +162,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     post.tags.map((tag) => {
       combinedTags.push(tag.content);
     });
-    console.log(
-      combinedTags
-        .join(" ")
-        .replace(/[&\/\\#,+()$~%.'":*?<>{}!]/g, "")
-        .replace(/ /g, " | ")
-    );
+
     relatedPosts = await axios({
       params: {
         tagSlug: combinedTags

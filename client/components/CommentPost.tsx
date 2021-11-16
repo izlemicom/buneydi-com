@@ -31,7 +31,6 @@ function CommentPost({ postid, session }) {
       })
       .catch(function (err) {
         toast.error(err.response.data.error);
-        console.log(err.response.data.error);
       });
     let newComments = [];
     newComments.push(response);

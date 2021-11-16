@@ -40,7 +40,6 @@ export default function YazarOl({ session }) {
       })
       .catch((error) => {
         toast.error(error.response.data.error);
-        console.error(error.response.data.error);
       });
     if (author) {
       setTimeout(() => {

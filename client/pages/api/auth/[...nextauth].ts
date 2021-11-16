@@ -63,6 +63,7 @@ export default NextAuth({
             })
             .catch(function (err) {
               error = err.response.data.error;
+              console.error(error);
             });
         }
         if (credentials.type === "register") {
