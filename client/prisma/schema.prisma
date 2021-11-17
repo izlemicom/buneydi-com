@@ -149,11 +149,17 @@ model Tag {
 
 model Image {
   id      String  @id
-  url     String
+  url     String  @unique
   post    Post?   @relation(fields: [postId], references: [id])
   postId  String?
   addedBy User    @relation(fields: [userId], references: [id])
   userId  String
+}
+
+model VerificationCode {
+  id               String @id @default(cuid())
+  email            String @unique
+  verificationCode Int
 }
 
 model Ad {

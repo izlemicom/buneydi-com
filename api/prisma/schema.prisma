@@ -156,6 +156,12 @@ model Image {
   userId  String
 }
 
+model VerificationCode {
+  id               String @id @default(cuid())
+  email            String @unique
+  verificationCode Int
+}
+
 model Ad {
   id          String  @id @default(cuid())
   imageUrl    String
