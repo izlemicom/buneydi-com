@@ -113,7 +113,6 @@ export default function KayitOl({ providers }) {
     });
     toast.promise(promise, {
       pending: `${username} doğrulanıyor.`,
-      error: "Bir şeyler ters gitti.",
       success: `${username} doğrulandı.`,
     });
     const sent: any = await promise
