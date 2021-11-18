@@ -157,9 +157,10 @@ model Image {
 }
 
 model VerificationCode {
-  id               String @id @default(cuid())
-  email            String @unique
+  id               String   @id @default(cuid())
+  email            String   @unique
   verificationCode Int
+  createdAt        DateTime @default(now())
 }
 
 model Ad {

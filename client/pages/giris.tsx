@@ -39,21 +39,21 @@ export default function Giris({ providers, error }) {
       <NextSeo {...SEO} />
       <NavBar />
       <main>
+        <div className="w-full h-full absolute bg-gray-100"></div>
         <section className="relative w-full h-full py-40 min-h-screen">
-          <div className="absolute top-0 w-full h-full"></div>
           <div className="container mx-auto px-4 h-full">
             <div className="flex content-center items-center justify-center h-full">
               <div className="w-full lg:w-4/12 px-4">
-                <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg border-0">
+                <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg border-0 bg-gray-300">
                   <div className="rounded-t mb-0 px-6 py-6">
                     <div className="text-center mb-3">
                       <h6 className="text-sm font-bold">
                         Mevcut hesaplarınla giriş yap
                       </h6>
                     </div>
-                    <div className="btn-wrapper text-center">
+                    <div className="text-center">
                       <button
-                        className="px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
+                        className="px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear bg-gray-100 transition-all duration-150"
                         type="button"
                       >
                         <img alt="..." className="w-5 mr-1" src="/github.svg" />
@@ -63,7 +63,7 @@ export default function Giris({ providers, error }) {
                       <button
                         onClick={() => signIn(providers.google.id)}
                         key={providers.google.name}
-                        className="px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
+                        className="px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear bg-gray-100 transition-all duration-150"
                         type="button"
                       >
                         <img
@@ -114,6 +114,7 @@ export default function Giris({ providers, error }) {
                           name="password"
                         />
                       </div>
+
                       <div>
                         <label className="inline-flex items-center cursor-pointer">
                           <input
@@ -133,7 +134,7 @@ export default function Giris({ providers, error }) {
                       />
                       <div className="text-center mt-6">
                         <button
-                          className="text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
+                          className="text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear text-white bg-gray-600 transition-all duration-150"
                           type="submit"
                         >
                           Giriş Yap

@@ -75,7 +75,7 @@ export default function CardUserAccount({ session }) {
   }
   return (
     <>
-      <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-8">
+      <div className="relative flex flex-col min-w-0 break-words bg-gray-300 w-full mb-6 shadow-xl rounded-lg mt-8">
         <div className="px-6">
           <div className="flex flex-wrap justify-center">
             <div className="w-full px-4 flex justify-center">
@@ -90,7 +90,7 @@ export default function CardUserAccount({ session }) {
             <div className="w-full px-4 text-center mt-2">
               <div className="flex flex-col justify-center items-center mt-5">
                 <span>Profil Fotoğrafını Değiştir</span>
-                <div className="flex justify-center border-2 items-center rounded-full w-12 h-12 font-bold">
+                <div className="flex justify-center border-2 items-center bg-gray-50 rounded-full w-12 h-12 font-bold">
                   <UiFileInputButton
                     acceptedFileTypes="image/*"
                     label={
@@ -165,7 +165,7 @@ export default function CardUserAccount({ session }) {
 
                         <div className="text-center mt-6">
                           <button
-                            className=" font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
+                            className=" font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear bg-gray-600 text-white transition-all duration-150"
                             type="submit"
                           >
                             Güncelle

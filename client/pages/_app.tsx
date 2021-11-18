@@ -8,6 +8,7 @@ import Script from "next/script";
 import type { AppProps /*, AppContext */ } from "next/app";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 import {
   BreadcrumbJsonLd,
   DefaultSeo,

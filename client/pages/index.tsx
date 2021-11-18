@@ -1,14 +1,13 @@
-import Head from "next/head";
 import Link from "next/link";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
-import PostCard from "../components/PostCard";
 import SearchBar from "../components/SearchBar";
 import TrendLine from "../components/TrendLine";
 import PostCardWide from "../components/PostCardWide";
 import { GetServerSideProps } from "next";
 import PostCardText from "../components/PostCardText";
 import axios from "axios";
+
 export default function Home({
   latestTags,
   somePosts,
