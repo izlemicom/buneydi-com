@@ -83,13 +83,15 @@ export default function CardUserAccount({ session }) {
                 <img
                   alt={session?.user?.name}
                   src={url ? url : session?.user?.image}
-                  className="shadow-xl w-40 h-40 rounded-full object-cover"
+                  className="shadow-xl w-40 h-40 mt-3 rounded-full object-cover"
                 />
               </div>
             </div>
             <div className="w-full px-4 text-center mt-2">
               <div className="flex flex-col justify-center items-center mt-5">
-                <span>Profil Fotoğrafını Değiştir</span>
+                <span className="font-medium mb-3">
+                  Profil Fotoğrafını Değiştir
+                </span>
                 <div className="flex justify-center border-2 items-center bg-gray-50 rounded-full w-12 h-12 font-bold">
                   <UiFileInputButton
                     acceptedFileTypes="image/*"

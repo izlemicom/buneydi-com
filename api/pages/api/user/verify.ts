@@ -2,12 +2,33 @@ import handler from "../../../lib/api/handler";
 import { prisma } from "../../../lib/db";
 import nodemailer from "nodemailer";
 import emailVerificationTemplate from "../../../lib/emailVerificationTemplate";
+import axios from "axios";
 
 const api = handler();
 
 api.get(async (req, res) => {
-  const { email, verificationCode } = req.query;
+  const { email, verificationCode, token } = req.query;
   if (!email || !verificationCode) throw new Error("Veri eklenmemiş.");
+
+  const response: any = await axios({
+    params: {
+      secret: process.env.RECAPTCHA_SECRET_KEY,
+      response: token,
+    },
+    method: "POST",
+    baseURL: "https://www.google.com",
+    url: "/recaptcha/api/siteverify",
+  })
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (err) {
+      const error = err.response.data.error;
+      console.error(error);
+      throw new Error(error);
+    });
+  console.log(response);
+  if (!response.success) throw new Error("Çok fazla giriş yaptınız.");
 
   const getCode = await prisma.verificationCode
     .findUnique({
@@ -22,11 +43,6 @@ api.get(async (req, res) => {
 
   if (!getCode)
     throw new Error("E-posta adresinize gönderilen kodun süresi doldu.");
-
-  console.log(new Date().getTime() - getCode.createdAt.getTime());
-  console.log(new Date().getTime());
-  console.log(getCode.createdAt.getTime());
-  console.log(new Date().getTime() - getCode.createdAt.getTime() < 180);
 
   if (
     getCode.verificationCode === parseInt(verificationCode.toString()) &&
@@ -65,8 +81,30 @@ api.get(async (req, res) => {
 });
 
 api.post(async (req, res) => {
-  const { email } = req.body;
+  const { email, token } = req.body;
   if (!email) throw new Error("Veri eklenmemiş.");
+  const user = await prisma.user.findUnique({ where: { email: email } });
+  if (user) throw new Error("Daha önceden kayıt yapılmış.");
+  const response: any = await axios({
+    params: {
+      secret: process.env.RECAPTCHA_SECRET_KEY,
+      response: token,
+    },
+    method: "POST",
+    baseURL: "https://www.google.com",
+    url: "/recaptcha/api/siteverify",
+  })
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (err) {
+      const error = err.response.data.error;
+      console.error(error);
+      throw new Error(error);
+    });
+  console.log(response);
+
+  if (!response.success) throw new Error("Çok fazla giriş yaptınız.");
 
   const verificationCode = Math.floor(100000 + Math.random() * 900000);
 

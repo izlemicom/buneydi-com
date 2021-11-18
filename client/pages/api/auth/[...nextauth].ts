@@ -46,6 +46,7 @@ export default NextAuth({
             error = err.response.data.error;
             console.error(error);
           });
+
         if (!response.success) return user;
 
         if (credentials.type === "login") {
@@ -63,7 +64,6 @@ export default NextAuth({
             })
             .catch(function (err) {
               error = err.response.data.error;
-              console.error(error);
             });
         }
         if (credentials.type === "register") {
@@ -108,10 +108,12 @@ export default NextAuth({
     },
     async session({ session, user, token }) {
       if (user) {
+        session.emailVerified = user.emailVerified;
         session.id = user.id;
         session.role = user.role;
       }
       if (!user && token) {
+        session.emailVerified = token.emailVerified;
         session.id = token.id;
         session.role = token.role;
       }
@@ -119,6 +121,7 @@ export default NextAuth({
     },
     async jwt({ token, user, account, profile, isNewUser }) {
       if (user) {
+        token.emailVerified = user.emailVerified;
         token.id = user.id;
         token.role = user.role;
       }

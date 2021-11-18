@@ -29,10 +29,7 @@ export default function Giris({ providers, error }) {
     });
   }
   useEffect(() => {
-    if (error)
-      toast.error(
-        "E-posta veya şifre hatalı. E-posta başkası tarafından kullanılıyor olabilir."
-      );
+    if (error) toast.error("E-posta veya şifre hatalı.");
   }, []);
   return (
     <>

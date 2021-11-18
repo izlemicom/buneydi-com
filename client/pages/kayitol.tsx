@@ -4,7 +4,10 @@ import FooterSmall from "../components/FooterSmall";
 import NavBar from "../components/NavBar";
 import ReCAPTCHA from "react-google-recaptcha";
 import { NextSeo } from "next-seo";
-import ReactCodeInput, { ReactCodeInputProps } from "react-code-input";
+import { ReactCodeInputProps } from "react-code-input";
+import dynamic from "next/dynamic";
+
+const ReactCodeInput = dynamic(import("react-code-input"));
 import Modal from "react-modal";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
@@ -24,6 +27,7 @@ export default function KayitOl({ providers }) {
   const reRef = useRef<ReCAPTCHA>();
 
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [time, setTime] = useState<number>();
 
   const [name, setName] = useRecoilState(nameAtom);
   const [username, setUsername] = useRecoilState(usernameAtom);
@@ -66,7 +70,6 @@ export default function KayitOl({ providers }) {
   const Completionist = () => (
     <div>
       <span>Süreniz doldu!</span>
-      <button>Tekrar Gönder</button>
     </div>
   );
 
@@ -86,9 +89,9 @@ export default function KayitOl({ providers }) {
   };
 
   function openModal() {
+    setTime(Date.now());
     setIsOpen(true);
   }
-
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
   }
@@ -99,13 +102,14 @@ export default function KayitOl({ providers }) {
 
   async function verificationCodeSubmit(e) {
     e.preventDefault();
-    const token = await reRef.current.executeAsync();
+    let token = await reRef.current.executeAsync();
     reRef.current.reset();
 
     const promise = axios({
       params: {
         email: username,
         verificationCode: verificationCode,
+        token: token,
       },
       method: "GET",
       url: `/user/verify`,
@@ -113,11 +117,13 @@ export default function KayitOl({ providers }) {
     });
     toast.promise(promise, {
       pending: `${username} doğrulanıyor.`,
+      error: `${username} doğrulanamadı.`,
       success: `${username} doğrulandı.`,
     });
     const sent: any = await promise
-      .then(function (response) {
-        response.data;
+      .then(async function (response) {
+        token = await reRef.current.executeAsync();
+        reRef.current.reset();
         signIn("credentials", {
           name,
           username,
@@ -127,6 +133,7 @@ export default function KayitOl({ providers }) {
         }).catch((error) => {
           toast.error(error);
         });
+        return response.data;
       })
       .catch(function (err) {
         toast.error(err.response.data.error);
@@ -138,9 +145,14 @@ export default function KayitOl({ providers }) {
     setName(e.target.name.value);
     setUsername(e.target.email.value);
     setPassword(e.target.password.value);
+
+    const token = await reRef.current.executeAsync();
+    reRef.current.reset();
+
     const promise = axios({
       data: {
         email: e.target.email.value,
+        token: token,
       },
       method: "POST",
       url: `/user/verify`,
@@ -148,12 +160,17 @@ export default function KayitOl({ providers }) {
     });
     toast.promise(promise, {
       pending: `${e.target.email.value} doğrulama kodu gönderiliyor.`,
+      error: `${e.target.email.value} doğrulanamadı.`,
       success: `${e.target.email.value} doğrulama kodu gönderildi.`,
     });
-    const sent: any = await promise.then(function (response) {
-      response.data;
-      openModal();
-    });
+    const sent: any = await promise
+      .then(function (response) {
+        response.data;
+        openModal();
+      })
+      .catch(function (error) {
+        toast.error(error.response.data.error);
+      });
   }
   return (
     <>
@@ -169,10 +186,11 @@ export default function KayitOl({ providers }) {
             onRequestClose={closeModal}
             style={customStyles}
             contentLabel="Example Modal"
+            ariaHideApp={false}
           >
             <div>
               <h2 className="text-center font-medium">
-                E-posta adresinize gelen doğrulama kodunu giriniz.
+                E-posta adresinize gönderilen doğrulama kodunu giriniz.
               </h2>
               <form
                 className="flex flex-col items-center"
@@ -181,14 +199,19 @@ export default function KayitOl({ providers }) {
                 <div className="py-3"></div>
 
                 <ReactCodeInput {...props} />
-                <div className="py-3 text-red-500">
+                <div className="py-3 font-extrabold text-lg text-red-500">
                   <Countdown
-                    date={Date.now() + 180000}
+                    onStart={(e) => {
+                      console.log("Start");
+                    }}
+                    onMount={(e) => {}}
+                    date={time + 180000}
                     renderer={renderer}
                     onComplete={() => {
                       toast.error("Süre doldu.");
                       closeModal();
                     }}
+                    autoStart={true}
                   />
                 </div>
                 <button
