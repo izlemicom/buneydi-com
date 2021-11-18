@@ -4,6 +4,7 @@ import authorize from "../../../lib/api/authorize";
 import authorizeAuthor from "../../../lib/api/authorizeauthor";
 
 import handler from "../../../lib/api/handler";
+import axios from "axios";
 const api = handler();
 
 api.get(async (req, res) => {
@@ -71,9 +72,40 @@ api.get(async (req, res) => {
 api.use(authorize);
 api.use(authorizeAuthor);
 api.patch(async (req, res) => {
-  const { userId, mahlas, name, adress, city, country, postalCode, iban, bio } =
-    req.body;
+  const {
+    userId,
+    mahlas,
+    name,
+    adress,
+    city,
+    country,
+    postalCode,
+    iban,
+    bio,
+    token,
+  } = req.body;
   if (!userId) throw new Error("Veri eklenmemiş.");
+
+  const response: any = await axios({
+    params: {
+      secret: process.env.RECAPTCHA_SECRET_KEY,
+      response: token,
+    },
+    method: "POST",
+    baseURL: "https://www.google.com",
+    url: "/recaptcha/api/siteverify",
+  })
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (err) {
+      const error = err.response.data.error;
+      console.error(error);
+      throw new Error(error);
+    });
+  console.log(response);
+  if (!response.success) throw new Error("Çok fazla giriş yaptınız.");
+
   const updatedUser = await prisma.user.update({
     where: { id: userId.toString() },
     data: {

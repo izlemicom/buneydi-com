@@ -1,8 +1,10 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { authorInfo } from "../../atoms/recoil";
 import { toast } from "react-toastify";
+import ReCAPTCHA from "react-google-recaptcha";
+
 // components
 
 export default function CardSettings({ author, session }) {
@@ -20,15 +22,22 @@ export default function CardSettings({ author, session }) {
   };
 
   const [authorinfo, setAuthorInfo] = useRecoilState(authorInfo);
+
+  const reRef = useRef<ReCAPTCHA>();
+  const reRefSecond = useRef<ReCAPTCHA>();
+
   useEffect(() => {
     setAuthorInfo(newUser);
   }, []);
 
   async function Guncelle(e) {
     e.preventDefault();
+    const token = await reRef.current.executeAsync();
+    reRef.current.reset();
+    const newUser = { ...authorinfo, token: token };
     const userBio = await axios({
       withCredentials: true,
-      data: authorinfo,
+      data: newUser,
       method: "PATCH",
       url: "/api/author/author",
     })
@@ -43,11 +52,14 @@ export default function CardSettings({ author, session }) {
   async function passChange(e) {
     e.preventDefault();
     if (e.target.confirm.value === e.target.password.value) {
+      const token = await reRefSecond.current.executeAsync();
+      reRefSecond.current.reset();
       const user = await axios({
         withCredentials: true,
         data: {
           password: e.target.confirm.value,
           userId: session.id,
+          token: token,
         },
         method: "PATCH",
         url: "/api/author/pass",
@@ -343,6 +355,11 @@ export default function CardSettings({ author, session }) {
                 </div>
               </div>
             </div>
+            <ReCAPTCHA
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+              size="invisible"
+              ref={reRef}
+            />
             <hr className="mt-6 border-b-1 border-blueGray-300" />
             <div className="flex flex-wrap">
               <div className="w-full lg:w-12/12 px-4">
@@ -399,6 +416,11 @@ export default function CardSettings({ author, session }) {
                 </div>
               </div>
             </div>
+            <ReCAPTCHA
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+              size="invisible"
+              ref={reRefSecond}
+            />
             <hr className="mt-6 border-b-1 border-blueGray-300" />
             <div className="flex flex-wrap">
               <div className="w-full lg:w-12/12 px-4">

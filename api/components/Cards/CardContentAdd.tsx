@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { articleData } from "../../atoms/recoil";
 import ArticleTextEditor from "./ArticleTextEditor";
@@ -7,6 +7,7 @@ import { UiFileInputButton } from "./UiFileInputButton";
 import Image from "next/image";
 import { Encrypt } from "../../lib/CRYPT";
 import { toast } from "react-toastify";
+import ReCAPTCHA from "react-google-recaptcha";
 
 // components
 
@@ -17,14 +18,19 @@ export default function CardContentAdd({ session }) {
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState("");
   const [draft, setDraft] = useState<any>();
+  const reRef = useRef<ReCAPTCHA>();
+
   let cDraft: any;
   async function onIzle() {
+    const token = await reRef.current.executeAsync();
+    reRef.current.reset();
     const post = {
       title: title,
       content: data,
       mainImage: url,
       tags: tags,
       userId: session.id,
+      token: token,
     };
     if (draft) {
       cDraft = await axios({
@@ -36,6 +42,7 @@ export default function CardContentAdd({ session }) {
           tags: tags,
           userId: session.id,
           id: draft.id,
+          token: token,
         },
         method: "PATCH",
         url: "/api/post/draft",
@@ -67,12 +74,15 @@ export default function CardContentAdd({ session }) {
     window.open(`http://localhost:3005/onizle?post=${encoded}`, "_blank");
   }
   async function publishPost() {
+    const token = await reRef.current.executeAsync();
+    reRef.current.reset();
     const post = {
       title: title,
       content: data,
       mainImage: url,
       tags: tags,
       userId: session.id,
+      token: token,
     };
     if (draft) {
       cDraft = await axios({
@@ -84,6 +94,7 @@ export default function CardContentAdd({ session }) {
           tags: tags,
           userId: session.id,
           id: draft.id,
+          token: token,
         },
         method: "PATCH",
         url: "/api/post/post",
@@ -254,6 +265,12 @@ export default function CardContentAdd({ session }) {
               </div>
             </div>
           </div>
+
+          <ReCAPTCHA
+            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+            size="invisible"
+            ref={reRef}
+          />
 
           <hr className="mt-6 border-b-1 border-blueGray-300" />
 

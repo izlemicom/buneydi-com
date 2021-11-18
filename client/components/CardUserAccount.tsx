@@ -1,13 +1,15 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { UiFileInputButton } from "./UiFileInputButton";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 import { toast } from "react-toastify";
+import ReCAPTCHA from "react-google-recaptcha";
 
 // components
 
 export default function CardUserAccount({ session }) {
+  const reRef = useRef<ReCAPTCHA>();
   const [progress, setProgress] = useState(0);
   const [url, setUrl] = useState("");
   const onChange = async (formData) => {
@@ -50,12 +52,15 @@ export default function CardUserAccount({ session }) {
     if (!session) return;
 
     if (e.target.confirm.value === e.target.password.value) {
+      const token = await reRef.current.executeAsync();
+      reRef.current.reset();
       const user = await axios({
         withCredentials: true,
         data: {
           name: e.target.name.value,
           password: e.target.confirm.value,
           userId: session.id,
+          token: token,
         },
         method: "PATCH",
         url: "/user/pass",
@@ -164,7 +169,11 @@ export default function CardUserAccount({ session }) {
                             name="confirm"
                           />
                         </div>
-
+                        <ReCAPTCHA
+                          sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                          size="invisible"
+                          ref={reRef}
+                        />
                         <div className="text-center mt-6">
                           <button
                             className=" font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear bg-gray-600 text-white transition-all duration-150"

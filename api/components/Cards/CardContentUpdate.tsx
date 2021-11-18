@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { articleData } from "../../atoms/recoil";
 import ArticleTextEditor from "./ArticleTextEditor";
@@ -7,6 +7,7 @@ import { UiFileInputButton } from "./UiFileInputButton";
 import Image from "next/image";
 import { Encrypt } from "../../lib/CRYPT";
 import { toast } from "react-toastify";
+import ReCAPTCHA from "react-google-recaptcha";
 
 // components
 
@@ -21,8 +22,11 @@ export default function CardContentUpdate({ session, post }) {
   const [title, setTitle] = useState(post.title);
   const [tags, setTags] = useState(combinedTags.toString().toLowerCase());
   const [draft, setDraft] = useState<any>(post);
+  const reRef = useRef<ReCAPTCHA>();
 
   async function publishPost() {
+    const token = await reRef.current.executeAsync();
+    reRef.current.reset();
     let content;
     if (!data) content = post.content;
     else content = data;
@@ -36,6 +40,7 @@ export default function CardContentUpdate({ session, post }) {
         tags: tags,
         userId: session.id,
         id: draft.id,
+        token: token,
       },
       method: "PATCH",
       url: "/api/post/post",
@@ -191,7 +196,11 @@ export default function CardContentUpdate({ session, post }) {
               </div>
             </div>
           </div>
-
+          <ReCAPTCHA
+            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+            size="invisible"
+            ref={reRef}
+          />
           <hr className="mt-6 border-b-1 border-blueGray-300" />
 
           <h6 className="text-blueGray-600 text-sm mt-3 mb-6 font-bold uppercase">

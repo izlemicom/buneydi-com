@@ -4,15 +4,37 @@ import authorize from "../../../lib/api/authorize";
 
 import handler from "../../../lib/api/handler";
 import CryptoJS from "crypto-js";
+import axios from "axios";
 
 const api = handler();
 
 api.use(authorize);
 
 api.patch(async (req, res) => {
-  const { userId, password, name } = req.body;
+  const { userId, password, name, token } = req.body;
   if (!password || !name) throw new Error("Veri eklenmemiş.");
   if (!userId) throw new Error("Kullanıcı bilgileri hatalı");
+
+  const response: any = await axios({
+    params: {
+      secret: process.env.RECAPTCHA_SECRET_KEY,
+      response: token,
+    },
+    method: "POST",
+    baseURL: "https://www.google.com",
+    url: "/recaptcha/api/siteverify",
+  })
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (err) {
+      const error = err.response.data.error;
+      console.error(error);
+      throw new Error(error);
+    });
+  console.log(response);
+  if (!response.success) throw new Error("Çok fazla giriş yaptınız.");
+
   var hash = CryptoJS.AES.encrypt(password, process.env.SECRET_KEY);
   const user = await prisma.user.update({
     where: {

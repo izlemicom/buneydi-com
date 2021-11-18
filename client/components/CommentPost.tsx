@@ -2,9 +2,12 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { commentsAdd } from "../atoms/recoil";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useRef } from "react";
 
 function CommentPost({ postid, session }) {
   const [addedComments, setAddedComments] = useRecoilState(commentsAdd);
+  const reRef = useRef<ReCAPTCHA>();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -12,6 +15,8 @@ function CommentPost({ postid, session }) {
       toast.error("Giriş yapmalısınız.");
       return;
     }
+    const token = await reRef.current.executeAsync();
+    reRef.current.reset();
     const content = e.target.elements.body.value;
     const userId = session.id;
     const postId = postid;
@@ -21,6 +26,7 @@ function CommentPost({ postid, session }) {
       url: "/comment/comment",
       baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
       data: {
+        token: token,
         content: content,
         postId: postId,
         userId: userId,
@@ -54,6 +60,11 @@ function CommentPost({ postid, session }) {
             required
           ></textarea>
         </div>
+        <ReCAPTCHA
+          sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+          size="invisible"
+          ref={reRef}
+        />
         <div className="w-full flex justify-end">
           <div className="-mr-1">
             <input

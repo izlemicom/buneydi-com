@@ -5,6 +5,7 @@ import slugGenerator from "../../../lib/slugGenerator";
 import authorize from "../../../lib/api/authorize";
 import authorizeAuthor from "../../../lib/api/authorizeauthor";
 import imageExtracter from "../../../lib/api/imageExtracter";
+import axios from "axios";
 const api = handler();
 
 api.get(async (req, res) => {
@@ -43,10 +44,30 @@ api.use(authorize);
 api.use(authorizeAuthor);
 
 api.post(async (req, res) => {
-  const { title, content, mainImage, tags, userId } = req.body;
+  const { title, content, mainImage, tags, userId, token } = req.body;
 
   if (!title || !content || !mainImage || !userId)
     throw new Error("Veri eklenmemiş.");
+
+  const response: any = await axios({
+    params: {
+      secret: process.env.RECAPTCHA_SECRET_KEY,
+      response: token,
+    },
+    method: "POST",
+    baseURL: "https://www.google.com",
+    url: "/recaptcha/api/siteverify",
+  })
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (err) {
+      const error = err.response.data.error;
+      console.error(error);
+      throw new Error(error);
+    });
+  console.log(response);
+  if (!response.success) throw new Error("Çok fazla giriş yaptınız.");
 
   let tagArray = tags.toLowerCase().split(",");
   let slug = slugGenerator(title);
@@ -161,10 +182,30 @@ api.post(async (req, res) => {
 });
 
 api.patch(async (req, res) => {
-  const { title, content, mainImage, tags, userId, id } = req.body;
+  const { title, content, mainImage, tags, userId, id, token } = req.body;
 
   if (!title || !content || !mainImage || !userId || !id)
     throw new Error("Veri eklenmemiş.");
+
+  const response: any = await axios({
+    params: {
+      secret: process.env.RECAPTCHA_SECRET_KEY,
+      response: token,
+    },
+    method: "POST",
+    baseURL: "https://www.google.com",
+    url: "/recaptcha/api/siteverify",
+  })
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (err) {
+      const error = err.response.data.error;
+      console.error(error);
+      throw new Error(error);
+    });
+  console.log(response);
+  if (!response.success) throw new Error("Çok fazla giriş yaptınız.");
 
   let tagArray = tags.toLowerCase().split(",");
   let slug = slugGenerator(title);
@@ -282,6 +323,7 @@ api.patch(async (req, res) => {
 api.delete(async (req, res) => {
   const { postId } = req.body;
   if (!postId) throw new Error("Veri eklenmemiş.");
+
   const postViews = await prisma.postViews.deleteMany({
     where: { postId: postId },
   });
