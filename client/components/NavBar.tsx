@@ -89,7 +89,8 @@ function NavBar() {
           {open && session && <UserDropdown />}
         </div>
       </nav>
-      <div className="py-8"></div>
+      {!session && <div className="py-6"></div>}
+      {session && <div className="py-8 bg-gray-100"></div>}
     </header>
   );
 }

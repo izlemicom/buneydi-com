@@ -21,10 +21,7 @@ export default function Giris({ providers, error }) {
     });
   }
   useEffect(() => {
-    if (error)
-      toast.error(
-        "E-posta veya şifre hatalı. E-posta başkası tarafından kullanılıyor olabilir."
-      );
+    if (error) toast.error("E-posta veya şifre hatalı.");
   }, []);
   return (
     <>
@@ -39,14 +36,6 @@ export default function Giris({ providers, error }) {
                   </h6>
                 </div>
                 <div className="btn-wrapper text-center">
-                  <button
-                    className="bg-white active:bg-blueGray-50 text-blueGray-700 px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
-                    type="button"
-                  >
-                    <img alt="..." className="w-5 mr-1" src="/img/github.svg" />
-                    Github
-                  </button>
-
                   <button
                     onClick={() => signIn(providers.google.id)}
                     key={providers.google.name}
@@ -128,13 +117,11 @@ export default function Giris({ providers, error }) {
             </div>
             <div className="flex flex-wrap mt-6 relative">
               <div className="w-1/2">
-                <a
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                  className="text-blueGray-200"
-                >
-                  <small>Şifremi unuttum.</small>
-                </a>
+                <Link href={`${process.env.NEXT_PUBLIC_BASE_SITE_URL}/sifre`}>
+                  <a className="text-blueGray-200">
+                    <small>Şifremi Unuttum!</small>
+                  </a>
+                </Link>
               </div>
               <div className="w-1/2 text-right">
                 <Link href="/yazarol">

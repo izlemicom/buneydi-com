@@ -21,7 +21,9 @@ export default function Home({
     <div>
       <NavBar />
       <main className="lg:w-4/5 mx-5 lg:mx-auto">
-        <TrendLine posts={latestPostsData.posts} />
+        <div className="pt-2">
+          <TrendLine posts={latestPostsData.posts} />
+        </div>
 
         <SearchBar />
         <div className="lg:grid lg:grid-cols-3 py-2">
