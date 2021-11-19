@@ -16,6 +16,10 @@ export const passwordAtom = atom({
   key: "password",
   default: "",
 });
+export const confirmAtom = atom({
+  key: "confirm",
+  default: "",
+});
 export const verificationCodeAtom = atom({
   key: "verificationCode",
   default: "",

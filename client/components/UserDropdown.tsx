@@ -49,20 +49,21 @@ const UserDropdown = () => {
         }
       >
         <Link href="/hesabim">
-          <a
-            className={
-              "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent"
-            }
-          >
+          <a className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent">
             <i className="fas fa-user-circle"></i> Hesabım
           </a>
         </Link>
+        {session?.role === "AUTHOR" && (
+          <Link href={`${process.env.NEXT_PUBLIC_AUTHOR_SITE_URL}`}>
+            <a className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent">
+              <i className="fas fa-tv"></i> Yazar Yönetim Paneli
+            </a>
+          </Link>
+        )}
 
         <div className="h-0 my-2 border border-solid border-blueGray-100" />
         <a
-          className={
-            "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap cursor-pointer bg-transparent"
-          }
+          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap cursor-pointer bg-transparent"
           onClick={(e) => {
             e.preventDefault();
             signOut();

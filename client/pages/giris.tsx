@@ -142,13 +142,11 @@ export default function Giris({ providers, error }) {
                 </div>
                 <div className="flex flex-wrap mt-6 relative">
                   <div className="w-1/2">
-                    <a
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      className=""
-                    >
-                      <small>Şifremi unuttum.</small>
-                    </a>
+                    <Link href="/sifre">
+                      <a className="">
+                        <small>Şifremi Unuttum!</small>
+                      </a>
+                    </Link>
                   </div>
                   <div className="w-1/2 text-right">
                     <Link href="/kayitol">

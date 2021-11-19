@@ -81,10 +81,15 @@ api.get(async (req, res) => {
 });
 
 api.post(async (req, res) => {
-  const { email, token } = req.body;
+  const { email, token, renewal } = req.body;
   if (!email) throw new Error("Veri eklenmemiş.");
   const user = await prisma.user.findUnique({ where: { email: email } });
-  if (user) throw new Error("Daha önceden kayıt yapılmış.");
+  console.log(req.body);
+  if (renewal) {
+    if (!user) throw new Error("Kaydınız bulunmamaktadır.");
+  } else {
+    if (user) throw new Error("Daha önceden kayıt yapılmış.");
+  }
   const response: any = await axios({
     params: {
       secret: process.env.RECAPTCHA_SECRET_KEY,
