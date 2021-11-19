@@ -44,7 +44,7 @@ export default class MyApp extends App {
       pageProps: { ...pageProps },
     } = this.props;
 
-    const Layout: any = Component.layout || (({ children }) => <>{children}</>);
+    const Layout = Component.layout || (({ children }) => <>{children}</>);
 
     return (
       <React.Fragment>

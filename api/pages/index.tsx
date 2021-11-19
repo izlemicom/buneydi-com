@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CardBarChart from "../components/Cards/CardBarChart";
 import CardLineChart from "../components/Cards/CardLineChart";
-import Admin from "../layouts/Admin";
-import { getSession, useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useRecoilState } from "recoil";
@@ -10,7 +9,6 @@ import FooterAdmin from "../components/Footers/FooterAdmin";
 import HeaderStats from "../components/Headers/HeaderStats";
 import Sidebar from "../components/Sidebar/Sidebar";
 import AdminNavbar from "../components/Navbars/AdminNavbar";
-import { authorStats } from "../atoms/recoil";
 
 // components
 

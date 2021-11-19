@@ -15,6 +15,19 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "pages/_app.jsx",
+    "components/Dropdowns/UserDropdown.jsx",
+    "components/Dropdowns/TableDropdown.jsx",
+    "components/Dropdowns/PagesDropdown.jsx",
+    "components/Dropdowns/NotificationDropdown.jsx",
+    "components/Dropdowns/IndexDropdown.jsx",
+    "components/Cards/CardLineChart.jsx",
+    "components/Cards/CardBarChart.jsx",
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "components/Cards/ArticleTextEditor.jsx"
+  ],
   "exclude": ["node_modules"]
 }

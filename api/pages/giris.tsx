@@ -105,7 +105,7 @@ export default function Giris({ providers, error }) {
             </div>
             <div className="flex flex-wrap mt-6 relative">
               <div className="w-1/2">
-                <Link href={`${process.env.NEXT_PUBLIC_BASE_SITE_URL}/sifre`}>
+                <Link href={`${process.env.NEXT_PUBLIC_BASE_SITE_URL}sifre`}>
                   <a className="text-blueGray-200">
                     <small>Şifremi Unuttum!</small>
                   </a>
