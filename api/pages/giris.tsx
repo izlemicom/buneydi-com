@@ -86,19 +86,7 @@ export default function Giris({ providers, error }) {
                       required
                     />
                   </div>
-                  <div>
-                    <label className="inline-flex items-center cursor-pointer">
-                      <input
-                        id="customCheckLogin"
-                        type="checkbox"
-                        className="form-checkbox border-0 rounded text-blueGray-700 ml-1 w-5 h-5 ease-linear transition-all duration-150"
-                        name="check"
-                      />
-                      <span className="ml-2 text-sm font-semibold text-blueGray-600">
-                        Beni hatırla
-                      </span>
-                    </label>
-                  </div>
+
                   <ReCAPTCHA
                     sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
                     size="invisible"

@@ -318,7 +318,7 @@ export default function KayitOl({ providers }) {
                           />
                           <span className="ml-2 text-sm font-semibold ">
                             <a
-                              href="#pablo"
+                              href="#"
                               className="text-indigo-500"
                               onClick={(e) => e.preventDefault()}
                             >
