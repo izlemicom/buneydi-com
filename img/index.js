@@ -13,6 +13,7 @@ app.get("/:image", (req, res) => {
       const stream = fs.createReadStream(image);
       stream.pipe(res);
     } else {
+      console.error(`${req.params.image} bulunamadi.`);
       res.end(`${req.params.image} bulunamadi.`);
     }
   } catch (e) {

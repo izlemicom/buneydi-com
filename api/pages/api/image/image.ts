@@ -59,12 +59,12 @@ api.post(async (req: ImageRequest, res) => {
     const files = await imagemin([`${req.file.path}`], {
       destination: `${req.file.destination}`,
       plugins: [
-        imageminMozjpeg({ quality: 50 }),
+        imageminMozjpeg({ quality: 80 }),
         imageminPngquant({
-          quality: [0.5, 0.6],
+          quality: [0.8, 0.9],
         }),
-        imageminGiflossy({ lossy: 50 }),
-        imageminWebp({ quality: 50 }),
+        imageminGiflossy({ lossy: 80 }),
+        imageminWebp({ quality: 80 }),
         imageminSvgo({
           plugins: [
             {
@@ -121,7 +121,7 @@ api.post(async (req: ImageRequest, res) => {
     },
   });
   res.status(200).json({
-    url: process.env.BASE_IMAGE_URL + "/images/" + fName,
+    url: process.env.BASE_IMAGE_URL + fName,
   });
 });
 
